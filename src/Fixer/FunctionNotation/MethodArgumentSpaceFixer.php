@@ -62,7 +62,6 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
             [
                 new CodeSample(
                     "<?php\nfunction sample(\$a=10,\$b=20,\$c=30) {}\nsample(1,  2);\n",
-                    null,
                 ),
                 new CodeSample(
                     "<?php\nfunction sample(\$a=10,\$b=20,\$c=30) {}\nsample(1,  2);\n",
@@ -134,6 +133,9 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound('(');
@@ -150,6 +152,9 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
         return 30;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $expectedTokens = [\T_LIST, \T_FUNCTION, CT::T_USE_LAMBDA, \T_FN, \T_CLASS];
@@ -214,7 +219,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
     /**
      * Fix arguments spacing for given function.
      *
-     * @param Tokens $tokens             Tokens to handle
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens Tokens to handle
      * @param int    $startFunctionIndex Start parenthesis position
      *
      * @return bool whether the function is multiline
@@ -228,10 +233,12 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
         $lastWhitespaceIndex = $this->findWhitespaceIndexAfterParenthesis($tokens, $endFunctionIndex, $startFunctionIndex);
 
         foreach ([$firstWhitespaceIndex, $lastWhitespaceIndex] as $index) {
-            if (null === $index || !Preg::match('/\R/', $tokens[$index]->getContent())) {
+            if (null === $index) {
                 continue;
             }
-
+            if (!Preg::match('/\R/', $tokens[$index]->getContent())) {
+                continue;
+            }
             if ('ensure_single_line' !== $this->configuration['on_multiline']) {
                 $isMultiline = true;
 
@@ -277,6 +284,9 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
         return $isMultiline;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function findWhitespaceIndexAfterParenthesis(Tokens $tokens, int $startParenthesisIndex, int $endParenthesisIndex): ?int
     {
         $direction = $endParenthesisIndex > $startParenthesisIndex ? 1 : -1;
@@ -300,6 +310,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
 
     /**
      * @return bool Whether newlines were removed from the whitespace token
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function ensureSingleLine(Tokens $tokens, int $index): bool
     {
@@ -316,6 +327,9 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
         return true;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function ensureFunctionFullyMultiline(Tokens $tokens, int $startFunctionIndex): void
     {
         // find out what the indentation is
@@ -400,7 +414,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
             }
         }
 
-        $this->fixNewline($tokens, $startFunctionIndex, $indentation, false);
+        $this->fixNewline($tokens, $startFunctionIndex, $indentation);
     }
 
     /**
@@ -408,9 +422,9 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
      *
      * @param int    $index       index of a comma
      * @param string $indentation the indentation that should be used
-     * @param bool   $override    whether to override the existing character or not
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
-    private function fixNewline(Tokens $tokens, int $index, string $indentation, bool $override = true): void
+    private function fixNewline(Tokens $tokens, int $index, string $indentation): void
     {
         if ($tokens[$index + 1]->isComment()) {
             return;
@@ -440,6 +454,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
 
     /**
      * Method to insert space after comma and remove space before comma.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixSpace(Tokens $tokens, int $index): void
     {
@@ -488,7 +503,7 @@ final class MethodArgumentSpaceFixer extends AbstractFixer implements Configurab
     /**
      * Check if last item of current line is a comment.
      *
-     * @param Tokens $tokens tokens to handle
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens tokens to handle
      * @param int    $index  index of token
      */
     private function isCommentLastLineToken(Tokens $tokens, int $index): bool

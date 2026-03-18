@@ -274,7 +274,7 @@ final class TypeExpression
     {
         if ($this->isCompositeType) {
             return array_map(
-                static fn (array $type) => $type['expression']->toString(),
+                static fn (array $type): string => $type['expression']->toString(),
                 $this->innerTypeExpressions,
             );
         }
@@ -348,7 +348,7 @@ final class TypeExpression
      */
     public function walkTypes(\Closure $callback): void
     {
-        $this->mapTypes(static function (self $type) use ($callback) {
+        $this->mapTypes(static function (self $type) use ($callback): \PhpCsFixer\DocBlock\TypeExpression {
             $valueOrig = $type->value;
             $callback($type);
             \assert($type->value === $valueOrig);

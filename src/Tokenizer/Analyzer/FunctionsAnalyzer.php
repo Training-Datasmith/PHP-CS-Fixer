@@ -39,6 +39,7 @@ final class FunctionsAnalyzer
 
     /**
      * @return array<string, ArgumentAnalysis>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function getFunctionArguments(Tokens $tokens, int $functionIndex): array
     {
@@ -55,6 +56,9 @@ final class FunctionsAnalyzer
         return $arguments;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function getFunctionReturnType(Tokens $tokens, int $methodIndex): ?TypeAnalysis
     {
         $argumentsStart = $tokens->getNextTokenOfKind($methodIndex, ['(']);
@@ -71,10 +75,12 @@ final class FunctionsAnalyzer
         $functionBodyStart = $tokens->getNextTokenOfKind($typeColonIndex, ['{', ';', [\T_DOUBLE_ARROW]]);
 
         for ($i = $typeStartIndex; $i < $functionBodyStart; ++$i) {
-            if ($tokens[$i]->isWhitespace() || $tokens[$i]->isComment()) {
+            if ($tokens[$i]->isWhitespace()) {
                 continue;
             }
-
+            if ($tokens[$i]->isComment()) {
+                continue;
+            }
             $type .= $tokens[$i]->getContent();
             $typeEndIndex = $i;
         }
@@ -82,6 +88,9 @@ final class FunctionsAnalyzer
         return new TypeAnalysis($type, $typeStartIndex, $typeEndIndex);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isTheSameClassCall(Tokens $tokens, int $index): bool
     {
         if (!$tokens->offsetExists($index)) {
@@ -113,6 +122,7 @@ final class FunctionsAnalyzer
 
     /**
      * Important: risky because of the limited (file) scope of the tool.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function isGlobalFunctionCall(Tokens $tokens, int $index): bool
     {
@@ -185,10 +195,12 @@ final class FunctionsAnalyzer
 
         if (!$inGlobalNamespace) {
             foreach ($this->functionsAnalysis['declarations'] as $functionNameIndex) {
-                if ($functionNameIndex < $scopeStartIndex || $functionNameIndex > $scopeEndIndex) {
+                if ($functionNameIndex < $scopeStartIndex) {
                     continue;
                 }
-
+                if ($functionNameIndex > $scopeEndIndex) {
+                    continue;
+                }
                 if (strtolower($tokens[$functionNameIndex]->getContent()) === $functionName) {
                     return false;
                 }
@@ -196,10 +208,12 @@ final class FunctionsAnalyzer
         }
 
         foreach ($this->functionsAnalysis['imports'] as $functionUse) {
-            if ($functionUse->getStartIndex() < $scopeStartIndex || $functionUse->getEndIndex() > $scopeEndIndex) {
+            if ($functionUse->getStartIndex() < $scopeStartIndex) {
                 continue;
             }
-
+            if ($functionUse->getEndIndex() > $scopeEndIndex) {
+                continue;
+            }
             if ($functionName !== strtolower($functionUse->getShortName())) {
                 continue;
             }
@@ -215,6 +229,9 @@ final class FunctionsAnalyzer
         return true;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function buildFunctionsAnalysis(Tokens $tokens): void
     {
         $this->functionsAnalysis = [

@@ -79,6 +79,9 @@ final class PhpUnitSizeClassFixer extends AbstractPhpUnitFixer implements Whites
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $classIndex = $tokens->getPrevTokenOfKind($startIndex, [[\T_CLASS]]);
@@ -100,6 +103,9 @@ final class PhpUnitSizeClassFixer extends AbstractPhpUnitFixer implements Whites
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function isAbstractClass(Tokens $tokens, int $i): bool
     {
         $typeIndex = $tokens->getPrevMeaningfulToken($i);

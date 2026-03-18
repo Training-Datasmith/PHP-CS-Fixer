@@ -47,6 +47,7 @@ final class AttributeAnalyzer
 
     /**
      * Check if given index is an attribute declaration.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public static function isAttribute(Tokens $tokens, int $index): bool
     {
@@ -79,6 +80,7 @@ final class AttributeAnalyzer
      * Find all consecutive elements that start with #[ and end with ] and the attributes inside.
      *
      * @return non-empty-list<AttributeAnalysis>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public static function collect(Tokens $tokens, int $index): array
     {
@@ -104,6 +106,7 @@ final class AttributeAnalyzer
 
     /**
      * Find one element that starts with #[ and ends with ] and the attributes inside.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public static function collectOne(Tokens $tokens, int $index): AttributeAnalysis
     {
@@ -131,6 +134,9 @@ final class AttributeAnalyzer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public static function determineAttributeFullyQualifiedName(Tokens $tokens, string $name, int $index): string
     {
         if ('\\' === $name[0]) {
@@ -161,6 +167,7 @@ final class AttributeAnalyzer
 
     /**
      * @return _AttributeItems
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function collectAttributes(Tokens $tokens, int $index, int $closingIndex): array
     {

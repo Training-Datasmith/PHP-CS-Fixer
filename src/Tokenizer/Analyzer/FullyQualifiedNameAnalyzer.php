@@ -37,6 +37,9 @@ final class FullyQualifiedNameAnalyzer
      */
     private array $namespaceUseAnalyses = [];
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function __construct(Tokens $tokens)
     {
         $this->tokens = $tokens;

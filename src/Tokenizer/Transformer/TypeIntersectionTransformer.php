@@ -40,6 +40,9 @@ final class TypeIntersectionTransformer extends AbstractTypeTransformer
         return 8_01_00;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function process(Tokens $tokens, Token $token, int $index): void
     {
         $this->doProcess($tokens, $index, [\T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG, '&']);
@@ -50,6 +53,9 @@ final class TypeIntersectionTransformer extends AbstractTypeTransformer
         return [CT::T_TYPE_INTERSECTION];
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function replaceToken(Tokens $tokens, int $index): void
     {
         $tokens[$index] = new Token([CT::T_TYPE_INTERSECTION, '&']);

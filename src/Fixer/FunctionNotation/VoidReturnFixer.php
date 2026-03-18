@@ -105,6 +105,9 @@ final class VoidReturnFixer extends AbstractFixer implements ConfigurableFixerIn
         return 5;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_FUNCTION);
@@ -125,6 +128,9 @@ final class VoidReturnFixer extends AbstractFixer implements ConfigurableFixerIn
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -188,6 +194,7 @@ final class VoidReturnFixer extends AbstractFixer implements ConfigurableFixerIn
      * Determine whether there is a non-void return annotation in the function's PHPDoc comment.
      *
      * @param int $index The index of the function token
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function hasReturnAnnotation(Tokens $tokens, int $index): bool
     {
@@ -204,6 +211,7 @@ final class VoidReturnFixer extends AbstractFixer implements ConfigurableFixerIn
      * Determine whether there is a void return annotation in the function's PHPDoc comment.
      *
      * @param int $index The index of the function token
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function hasVoidReturnAnnotation(Tokens $tokens, int $index): bool
     {
@@ -220,6 +228,7 @@ final class VoidReturnFixer extends AbstractFixer implements ConfigurableFixerIn
      * Determine whether the function already has a return type hint.
      *
      * @param int $index The index of the end of the function definition line, EG at { or ;
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function hasReturnTypeHint(Tokens $tokens, int $index): bool
     {
@@ -234,6 +243,7 @@ final class VoidReturnFixer extends AbstractFixer implements ConfigurableFixerIn
      *
      * @param int $startIndex Start of function body
      * @param int $endIndex   End of function body
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function hasVoidReturn(Tokens $tokens, int $startIndex, int $endIndex): bool
     {
@@ -269,6 +279,7 @@ final class VoidReturnFixer extends AbstractFixer implements ConfigurableFixerIn
 
     /**
      * @param int $index The index of the end of the function definition line, EG at { or ;
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixFunctionDefinition(Tokens $tokens, int $index): void
     {
@@ -286,6 +297,7 @@ final class VoidReturnFixer extends AbstractFixer implements ConfigurableFixerIn
      * @param int $index The index of the function token
      *
      * @return list<Annotation>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findReturnAnnotations(Tokens $tokens, int $index): array
     {

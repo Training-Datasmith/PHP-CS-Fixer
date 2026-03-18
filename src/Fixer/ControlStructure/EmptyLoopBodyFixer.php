@@ -77,11 +77,17 @@ final class EmptyLoopBodyFixer extends AbstractFixer implements ConfigurableFixe
         return 39;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(self::TOKEN_LOOP_KINDS);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         if (self::STYLE_BRACES === $this->configuration['style']) {

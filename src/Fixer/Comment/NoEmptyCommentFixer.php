@@ -51,11 +51,17 @@ final class NoEmptyCommentFixer extends AbstractFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_COMMENT);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = 1, $count = \count($tokens); $index < $count; ++$index) {
@@ -84,6 +90,7 @@ final class NoEmptyCommentFixer extends AbstractFixer
      * @param int $index T_COMMENT index
      *
      * @return array{blockStart: int, blockEnd: int, isEmpty: bool}
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getCommentBlock(Tokens $tokens, int $index): array
     {
@@ -140,6 +147,9 @@ final class NoEmptyCommentFixer extends AbstractFixer
         return self::TYPE_DOUBLE_SLASH;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function getLineBreakCount(Tokens $tokens, int $whiteStart, int $whiteEnd): int
     {
         $lineCount = 0;

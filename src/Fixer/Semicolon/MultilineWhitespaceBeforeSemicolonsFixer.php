@@ -98,6 +98,9 @@ final class MultilineWhitespaceBeforeSemicolonsFixer extends AbstractFixer imple
         return 0;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(';');
@@ -116,6 +119,9 @@ final class MultilineWhitespaceBeforeSemicolonsFixer extends AbstractFixer imple
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $lineEnding = $this->whitespacesConfig->getLineEnding();
@@ -155,10 +161,12 @@ final class MultilineWhitespaceBeforeSemicolonsFixer extends AbstractFixer imple
                 // insert the new line with indented semicolon
                 $tokens->insertAt($index++, [$newline, new Token(';')]);
             } else {
-                if (!$previous->isWhitespace() || !str_contains($previous->getContent(), "\n")) {
+                if (!$previous->isWhitespace()) {
                     continue;
                 }
-
+                if (!str_contains($previous->getContent(), "\n")) {
+                    continue;
+                }
                 $content = $previous->getContent();
                 if (str_starts_with($content, $lineEnding) && $tokens[$index - 2]->isComment()) {
                     // if there is comment between closing parenthesis and semicolon
@@ -182,6 +190,7 @@ final class MultilineWhitespaceBeforeSemicolonsFixer extends AbstractFixer imple
 
     /**
      * Find the index for the next new line. Return the given index when there's no new line.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getNewLineIndex(int $index, Tokens $tokens): int
     {
@@ -191,7 +200,7 @@ final class MultilineWhitespaceBeforeSemicolonsFixer extends AbstractFixer imple
             if (!$tokens[$index]->isWhitespace() && !$tokens[$index]->isComment()) {
                 break;
             }
-            if (false !== strstr($tokens[$index]->getContent(), $lineEnding)) {
+            if (str_contains($tokens[$index]->getContent(), $lineEnding)) {
                 return $index;
             }
         }
@@ -201,6 +210,7 @@ final class MultilineWhitespaceBeforeSemicolonsFixer extends AbstractFixer imple
 
     /**
      * Find the index for the previous significant token. Return the given index when there's no significant token.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getPreviousSignificantTokenIndex(int $index, Tokens $tokens): int
     {
@@ -228,6 +238,7 @@ final class MultilineWhitespaceBeforeSemicolonsFixer extends AbstractFixer imple
      * ____$this->methodCall()
      *          ->anotherCall();
      * ..
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findWhitespaceBeforeFirstCall(int $index, Tokens $tokens): ?string
     {

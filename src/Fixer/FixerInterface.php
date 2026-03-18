@@ -33,6 +33,7 @@ interface FixerInterface
      * When this method returns true then to the Tokens collection may or may not
      * need a fixing, but when this method returns false then the Tokens collection
      * need no fixing for sure.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function isCandidate(Tokens $tokens): bool;
 
@@ -47,7 +48,7 @@ interface FixerInterface
      * Fixes a file.
      *
      * @param \SplFileInfo $file   A \SplFileInfo instance
-     * @param Tokens       $tokens Tokens collection
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens Tokens collection
      */
     public function fix(\SplFileInfo $file, Tokens $tokens): void;
 

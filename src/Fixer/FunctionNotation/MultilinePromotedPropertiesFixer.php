@@ -103,6 +103,9 @@ final class MultilinePromotedPropertiesFixer extends AbstractFixer implements Co
         return 1;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([
@@ -126,6 +129,9 @@ final class MultilinePromotedPropertiesFixer extends AbstractFixer implements Co
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -146,6 +152,9 @@ final class MultilinePromotedPropertiesFixer extends AbstractFixer implements Co
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function shouldBeFixed(Tokens $tokens, int $openParenthesisIndex, int $closeParenthesisIndex): bool
     {
         $promotedParameterFound = false;
@@ -168,6 +177,9 @@ final class MultilinePromotedPropertiesFixer extends AbstractFixer implements Co
         return $promotedParameterFound && $minimumNumberOfParameters >= $this->configuration['minimum_number_of_parameters'];
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixParameters(Tokens $tokens, int $openParenthesis, int $closeParenthesis): void
     {
         $indent = WhitespacesAnalyzer::detectIndent($tokens, $openParenthesis);
@@ -200,6 +212,9 @@ final class MultilinePromotedPropertiesFixer extends AbstractFixer implements Co
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixParameter(Tokens $tokens, int $index, string $indent): void
     {
         if ($this->configuration['keep_blank_lines'] && $tokens[$index]->isWhitespace() && str_contains($tokens[$index]->getContent(), "\n")) {

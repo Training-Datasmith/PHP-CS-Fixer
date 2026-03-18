@@ -138,33 +138,33 @@ final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements C
             'PHPUnit assertions like `assertInternalType`, `assertFileExists`, should be used over `assertTrue`.',
             [
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        public function testSomeTest()
                         {
-                            public function testSomeTest()
-                            {
-                                $this->assertTrue(is_float( $a), "my message");
-                                $this->assertTrue(is_nan($a));
-                            }
+                            $this->assertTrue(is_float( $a), "my message");
+                            $this->assertTrue(is_nan($a));
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                 ),
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        public function testSomeTest()
                         {
-                            public function testSomeTest()
-                            {
-                                $this->assertTrue(is_dir($a));
-                                $this->assertTrue(is_writable($a));
-                                $this->assertTrue(is_readable($a));
-                            }
+                            $this->assertTrue(is_dir($a));
+                            $this->assertTrue(is_writable($a));
+                            $this->assertTrue(is_readable($a));
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                     ['target' => PhpUnitTargetVersion::VERSION_5_6],
                 ),
             ],
@@ -240,6 +240,9 @@ final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements C
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();
@@ -286,6 +289,7 @@ final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements C
      *     openBraceIndex: int,
      *     closeBraceIndex: int,
      * } $assertCall
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixAssertTrueFalse(Tokens $tokens, ArgumentsAnalyzer $argumentsAnalyzer, array $assertCall): void
     {
@@ -389,6 +393,7 @@ final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements C
      *     openBraceIndex: int,
      *     closeBraceIndex: int,
      * } $assertCall
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixAssertTrueFalseInstanceof(Tokens $tokens, array $assertCall, int $testIndex): bool
     {
@@ -462,6 +467,7 @@ final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements C
      *     openBraceIndex: int,
      *     closeBraceIndex: int,
      * } $assertCall
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixAssertSameEquals(Tokens $tokens, array $assertCall): void
     {
@@ -531,10 +537,13 @@ final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements C
 
         $tokens[$assertCall['index']] = new Token([
             \T_STRING,
-            false === strpos($assertCall['loweredName'], 'not', 6) ? 'assertCount' : 'assertNotCount',
+            !str_contains(substr($assertCall['loweredName'], 6), 'not') ? 'assertCount' : 'assertNotCount',
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function removeFunctionCall(Tokens $tokens, ?int $callNSIndex, int $callIndex, int $openIndex, int $closeIndex): void
     {
         $tokens->clearTokenAndMergeSurroundingWhitespace($callIndex);
@@ -556,6 +565,7 @@ final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements C
 
     /**
      * @param array<int, int> $argumentsIndices
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function swapArguments(Tokens $tokens, array $argumentsIndices): void
     {
@@ -582,6 +592,7 @@ final class PhpUnitDedicateAssertFixer extends AbstractPhpUnitFixer implements C
 
     /**
      * @return list<Token>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function cloneAndClearTokens(Tokens $tokens, int $start, int $end): array
     {

@@ -30,6 +30,9 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class PhpdocNoEmptyReturnFixer extends AbstractFixer
 {
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
@@ -75,6 +78,9 @@ final class PhpdocNoEmptyReturnFixer extends AbstractFixer
         return 4;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {

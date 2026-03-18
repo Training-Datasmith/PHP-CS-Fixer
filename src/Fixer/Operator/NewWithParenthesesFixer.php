@@ -124,6 +124,9 @@ final class NewWithParenthesesFixer extends AbstractFixer implements Configurabl
         return 38;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_NEW);
@@ -148,6 +151,9 @@ final class NewWithParenthesesFixer extends AbstractFixer implements Configurabl
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 3; $index > 0; --$index) {
@@ -185,6 +191,9 @@ final class NewWithParenthesesFixer extends AbstractFixer implements Configurabl
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function ensureParenthesesAt(Tokens $tokens, int $index): void
     {
         $token = $tokens[$index];
@@ -197,6 +206,9 @@ final class NewWithParenthesesFixer extends AbstractFixer implements Configurabl
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function ensureNoParenthesesAt(Tokens $tokens, int $index): void
     {
         if (!$tokens[$index]->equals('(')) {

@@ -56,6 +56,9 @@ final class NoTrailingCommaInSinglelineFixer extends AbstractFixer implements Co
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return
@@ -76,6 +79,9 @@ final class NoTrailingCommaInSinglelineFixer extends AbstractFixer implements Co
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; $index >= 0; --$index) {
@@ -109,6 +115,9 @@ final class NoTrailingCommaInSinglelineFixer extends AbstractFixer implements Co
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function shouldBeCleared(Tokens $tokens, int $openIndex): bool
     {
         $elements = $this->configuration['elements'];

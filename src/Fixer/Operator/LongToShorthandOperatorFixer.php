@@ -79,11 +79,17 @@ final class LongToShorthandOperatorFixer extends AbstractShortOperatorFixer
         return true;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([...array_keys(self::OPERATORS), FCT::T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG, FCT::T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->operatorTypes = array_keys(self::OPERATORS);
@@ -92,6 +98,9 @@ final class LongToShorthandOperatorFixer extends AbstractShortOperatorFixer
         parent::applyFix($file, $tokens);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function isOperatorTokenCandidate(Tokens $tokens, int $index): bool
     {
         if (!$tokens[$index]->equalsAny($this->operatorTypes)) {

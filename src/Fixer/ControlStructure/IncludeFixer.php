@@ -50,11 +50,17 @@ final class IncludeFixer extends AbstractFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_REQUIRE, \T_REQUIRE_ONCE, \T_INCLUDE, \T_INCLUDE_ONCE]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->clearIncludies($tokens, $this->findIncludies($tokens));
@@ -62,6 +68,7 @@ final class IncludeFixer extends AbstractFixer
 
     /**
      * @param array<int, array{begin: int, braces: ?array{open: int, close: int}, end: int}> $includies
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clearIncludies(Tokens $tokens, array $includies): void
     {
@@ -105,6 +112,7 @@ final class IncludeFixer extends AbstractFixer
 
     /**
      * @return array<int, array{begin: int, braces: ?array{open: int, close: int}, end: int}>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findIncludies(Tokens $tokens): array
     {
@@ -138,6 +146,9 @@ final class IncludeFixer extends AbstractFixer
         return $includies;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function removeWhitespaceAroundIfPossible(Tokens $tokens, int $index): void
     {
         $nextIndex = $tokens->getNextNonWhitespace($index);

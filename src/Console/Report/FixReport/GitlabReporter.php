@@ -120,7 +120,7 @@ final class GitlabReporter implements ReporterInterface
         if (isset($diffs[0])) {
             $firstDiff = $diffs[0];
 
-            $firstChunk = \Closure::bind(static fn (Diff $diff) => array_shift($diff->chunks), null, $firstDiff)($firstDiff);
+            $firstChunk = \Closure::bind(static fn (Diff $diff): ?\SebastianBergmann\Diff\Chunk => array_shift($diff->chunks), null, $firstDiff)($firstDiff);
 
             if ($firstChunk instanceof Chunk) {
                 return self::getBeginEndForDiffChunk($firstChunk);

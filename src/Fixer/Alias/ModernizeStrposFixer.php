@@ -122,6 +122,9 @@ final class ModernizeStrposFixer extends AbstractFixer implements ConfigurableFi
         return 37;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING) && $tokens->isAnyTokenKindsFound([\T_IS_IDENTICAL, \T_IS_NOT_IDENTICAL]);
@@ -142,6 +145,9 @@ final class ModernizeStrposFixer extends AbstractFixer implements ConfigurableFi
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -154,10 +160,12 @@ final class ModernizeStrposFixer extends AbstractFixer implements ConfigurableFi
 
         for ($index = \count($tokens) - 1; $index > 0; --$index) {
             // find candidate function call
-            if (!$tokens[$index]->equalsAny($modernizeCandidates, false) || !$functionsAnalyzer->isGlobalFunctionCall($tokens, $index)) {
+            if (!$tokens[$index]->equalsAny($modernizeCandidates, false)) {
                 continue;
             }
-
+            if (!$functionsAnalyzer->isGlobalFunctionCall($tokens, $index)) {
+                continue;
+            }
             // assert called with 2 arguments
             $openIndex = $tokens->getNextMeaningfulToken($index);
             $closeIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $openIndex);
@@ -183,6 +191,7 @@ final class ModernizeStrposFixer extends AbstractFixer implements ConfigurableFi
 
     /**
      * @param array{operator_index: int, operand_index: int} $operatorIndices
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixCall(Tokens $tokens, int $functionIndex, array $operatorIndices, bool $isCaseInsensitive): void
     {
@@ -221,6 +230,9 @@ final class ModernizeStrposFixer extends AbstractFixer implements ConfigurableFi
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function wrapArgumentsWithStrToLower(Tokens $tokens, int $functionIndex): void
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();
@@ -271,6 +283,7 @@ final class ModernizeStrposFixer extends AbstractFixer implements ConfigurableFi
      * @param -1|1 $direction
      *
      * @return null|array{operator_index: int, operand_index: int}
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getCompareTokens(Tokens $tokens, int $offsetIndex, int $direction): ?array
     {
@@ -307,28 +320,29 @@ final class ModernizeStrposFixer extends AbstractFixer implements ConfigurableFi
 
     private function isOfHigherPrecedence(Token $token): bool
     {
-        return
-            $token->isGivenKind([
-                \T_DEC,                 // --
-                \T_INC,                 // ++
-                \T_INSTANCEOF,          // instanceof
-                \T_IS_GREATER_OR_EQUAL, // >=
-                \T_IS_SMALLER_OR_EQUAL, // <=
-                \T_POW,                 // **
-                \T_SL,                  // <<
-                \T_SR,                  // >>
-            ])
-            || $token->equalsAny([
-                '!',
-                '%',
-                '*',
-                '+',
-                '-',
-                '.',
-                '/',
-                '<',
-                '>',
-                '~',
-            ]);
+        if ($token->isGivenKind([
+            \T_DEC,                 // --
+            \T_INC,                 // ++
+            \T_INSTANCEOF,          // instanceof
+            \T_IS_GREATER_OR_EQUAL, // >=
+            \T_IS_SMALLER_OR_EQUAL, // <=
+            \T_POW,                 // **
+            \T_SL,                  // <<
+            \T_SR,                  // >>
+        ])) {
+            return true;
+        }
+        return $token->equalsAny([
+            '!',
+            '%',
+            '*',
+            '+',
+            '-',
+            '.',
+            '/',
+            '<',
+            '>',
+            '~',
+        ]);
     }
 }

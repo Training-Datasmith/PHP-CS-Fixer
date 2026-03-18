@@ -74,32 +74,32 @@ final class PhpUnitDedicateAssertInternalTypeFixer extends AbstractPhpUnitFixer 
             'PHPUnit assertions like `assertIsArray` should be used over `assertInternalType`.',
             [
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit\Framework\TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit\Framework\TestCase
+                    {
+                        public function testMe()
                         {
-                            public function testMe()
-                            {
-                                $this->assertInternalType("array", $var);
-                                $this->assertInternalType("boolean", $var);
-                            }
+                            $this->assertInternalType("array", $var);
+                            $this->assertInternalType("boolean", $var);
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                 ),
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit\Framework\TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit\Framework\TestCase
+                    {
+                        public function testMe()
                         {
-                            public function testMe()
-                            {
-                                $this->assertInternalType("array", $var);
-                                $this->assertInternalType("boolean", $var);
-                            }
+                            $this->assertInternalType("array", $var);
+                            $this->assertInternalType("boolean", $var);
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                     ['target' => PhpUnitTargetVersion::VERSION_7_5],
                 ),
             ],
@@ -134,16 +134,21 @@ final class PhpUnitDedicateAssertInternalTypeFixer extends AbstractPhpUnitFixer 
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $anonymousClassIndices = [];
         $tokenAnalyzer = new TokensAnalyzer($tokens);
 
         for ($index = $startIndex; $index < $endIndex; ++$index) {
-            if (!$tokens[$index]->isGivenKind(\T_CLASS) || !$tokenAnalyzer->isAnonymousClass($index)) {
+            if (!$tokens[$index]->isGivenKind(\T_CLASS)) {
                 continue;
             }
-
+            if (!$tokenAnalyzer->isAnonymousClass($index)) {
+                continue;
+            }
             $openingBraceIndex = $tokens->getNextTokenOfKind($index, ['{']);
             $closingBraceIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $openingBraceIndex);
 

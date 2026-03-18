@@ -92,6 +92,9 @@ final class NoBreakCommentFixer extends AbstractFixer implements ConfigurableFix
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_SWITCH);
@@ -127,6 +130,9 @@ final class NoBreakCommentFixer extends AbstractFixer implements ConfigurableFix
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = \count($tokens) - 1; $index >= 0; --$index) {
@@ -142,6 +148,9 @@ final class NoBreakCommentFixer extends AbstractFixer implements ConfigurableFix
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixCase(Tokens $tokens, int $casePosition): void
     {
         $empty = true;
@@ -228,6 +237,9 @@ final class NoBreakCommentFixer extends AbstractFixer implements ConfigurableFix
         return Preg::match("~^((//|#)\\s*{$text}\\s*)|(/\\*\\*?\\s*{$text}(\\s+.*)*\\*/)$~i", $token->getContent());
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function insertCommentAt(Tokens $tokens, int $casePosition): void
     {
         $lineEnding = $this->whitespacesConfig->getLineEnding();
@@ -259,6 +271,7 @@ final class NoBreakCommentFixer extends AbstractFixer implements ConfigurableFix
 
     /**
      * @return int The newline token position
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function ensureNewLineAt(Tokens $tokens, int $position): int
     {
@@ -295,6 +308,9 @@ final class NoBreakCommentFixer extends AbstractFixer implements ConfigurableFix
         return $position - 1;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function removeComment(Tokens $tokens, int $commentPosition): void
     {
         if ($tokens[$tokens->getPrevNonWhitespace($commentPosition)]->isGivenKind(\T_OPEN_TAG)) {
@@ -316,6 +332,9 @@ final class NoBreakCommentFixer extends AbstractFixer implements ConfigurableFix
         $tokens->clearTokenAndMergeSurroundingWhitespace($commentPosition);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function getStructureEnd(Tokens $tokens, int $position): int
     {
         $initialToken = $tokens[$position];

@@ -34,6 +34,9 @@ use PhpCsFixer\Utils;
  */
 final class SingleLineAfterImportsFixer extends AbstractFixer implements WhitespacesAwareFixerInterface
 {
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_USE);
@@ -86,6 +89,9 @@ final class SingleLineAfterImportsFixer extends AbstractFixer implements Whitesp
         return -11;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $ending = $this->whitespacesConfig->getLineEnding();

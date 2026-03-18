@@ -44,11 +44,17 @@ final class NoShortBoolCastFixer extends AbstractFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound('!');
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = \count($tokens) - 1; $index > 1; --$index) {
@@ -58,6 +64,9 @@ final class NoShortBoolCastFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixShortCast(Tokens $tokens, int $index): int
     {
         for ($i = $index - 1; $i > 1; --$i) {
@@ -75,6 +84,9 @@ final class NoShortBoolCastFixer extends AbstractFixer
         return $i;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixShortCastToBoolCast(Tokens $tokens, int $start, int $end): void
     {
         for (; $start <= $end; ++$start) {

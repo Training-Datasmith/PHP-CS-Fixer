@@ -89,6 +89,9 @@ final class TernaryToElvisOperatorFixer extends AbstractFixer
         return 2;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound('?');
@@ -99,6 +102,9 @@ final class TernaryToElvisOperatorFixer extends AbstractFixer
         return true;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = \count($tokens) - 5; $index > 1; --$index) {
@@ -134,6 +140,7 @@ final class TernaryToElvisOperatorFixer extends AbstractFixer
 
     /**
      * @return ?array{start: int, end: int} null if contains ++/-- operator
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getBeforeOperator(Tokens $tokens, int $index): ?array
     {
@@ -190,6 +197,7 @@ final class TernaryToElvisOperatorFixer extends AbstractFixer
 
     /**
      * @return array{start: int, end: int}
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getAfterOperator(Tokens $tokens, int $index): array
     {
@@ -212,6 +220,7 @@ final class TernaryToElvisOperatorFixer extends AbstractFixer
 
     /**
      * @param array{start: int, end: int} $range
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clearMeaningfulFromRange(Tokens $tokens, array $range): void
     {

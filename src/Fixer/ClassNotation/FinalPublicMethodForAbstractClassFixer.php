@@ -73,6 +73,9 @@ final class FinalPublicMethodForAbstractClassFixer extends AbstractFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_ABSTRACT, \T_PUBLIC, \T_FUNCTION]);
@@ -83,6 +86,9 @@ final class FinalPublicMethodForAbstractClassFixer extends AbstractFixer
         return true;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $abstracts = array_keys($tokens->findGivenKind(\T_ABSTRACT));
@@ -100,6 +106,9 @@ final class FinalPublicMethodForAbstractClassFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixClass(Tokens $tokens, int $classOpenIndex, int $classCloseIndex): void
     {
         for ($index = $classCloseIndex - 1; $index > $classOpenIndex; --$index) {

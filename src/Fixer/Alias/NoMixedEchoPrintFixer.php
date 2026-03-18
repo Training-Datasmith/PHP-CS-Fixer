@@ -72,6 +72,9 @@ final class NoMixedEchoPrintFixer extends AbstractFixer implements ConfigurableF
         return -10;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound($this->candidateTokenType);
@@ -82,6 +85,9 @@ final class NoMixedEchoPrintFixer extends AbstractFixer implements ConfigurableF
         $this->candidateTokenType = 'echo' === $this->configuration['use'] ? \T_PRINT : \T_ECHO;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -105,6 +111,9 @@ final class NoMixedEchoPrintFixer extends AbstractFixer implements ConfigurableF
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixEchoToPrint(Tokens $tokens, int $index): void
     {
         $nextTokenIndex = $tokens->getNextMeaningfulToken($index);
@@ -131,6 +140,9 @@ final class NoMixedEchoPrintFixer extends AbstractFixer implements ConfigurableF
         $tokens[$index] = new Token([\T_PRINT, 'print']);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixPrintToEcho(Tokens $tokens, int $index): void
     {
         $prevToken = $tokens[$tokens->getPrevMeaningfulToken($index)];

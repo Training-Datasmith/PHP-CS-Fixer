@@ -115,6 +115,9 @@ final class PhpdocReturnSelfReferenceFixer extends AbstractFixer implements Conf
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return \count($tokens) > 10 && $tokens->isAllTokenKindsFound([\T_DOC_COMMENT, \T_FUNCTION]) && $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
@@ -131,6 +134,9 @@ final class PhpdocReturnSelfReferenceFixer extends AbstractFixer implements Conf
         return 10;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -190,6 +196,9 @@ final class PhpdocReturnSelfReferenceFixer extends AbstractFixer implements Conf
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixMethod(Tokens $tokens, int $index): void
     {
         // find PHPDoc of method (if any)

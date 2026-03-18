@@ -71,6 +71,9 @@ final class DoctrineAnnotationIndentationFixer extends AbstractDoctrineAnnotatio
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $doctrineAnnotationTokens
+     */
     protected function fixAnnotations(Tokens $doctrineAnnotationTokens): void
     {
         $annotationPositions = [];
@@ -90,10 +93,12 @@ final class DoctrineAnnotationIndentationFixer extends AbstractDoctrineAnnotatio
 
         $indentLevel = 0;
         foreach ($doctrineAnnotationTokens as $index => $token) {
-            if (!$token->isType(DocLexer::T_NONE) || !str_contains($token->getContent(), "\n")) {
+            if (!$token->isType(DocLexer::T_NONE)) {
                 continue;
             }
-
+            if (!str_contains($token->getContent(), "\n")) {
+                continue;
+            }
             if (!$this->indentationCanBeFixed($doctrineAnnotationTokens, $index, $annotationPositions)) {
                 continue;
             }
@@ -125,6 +130,7 @@ final class DoctrineAnnotationIndentationFixer extends AbstractDoctrineAnnotatio
 
     /**
      * @return array{int, int}
+     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
      */
     private function getLineBracesCount(Tokens $tokens, int $index): array
     {
@@ -157,6 +163,9 @@ final class DoctrineAnnotationIndentationFixer extends AbstractDoctrineAnnotatio
         return [$opening, $closing];
     }
 
+    /**
+     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
+     */
     private function isClosingLineWithMeaningfulContent(Tokens $tokens, int $index): bool
     {
         while (isset($tokens[++$index])) {
@@ -177,6 +186,7 @@ final class DoctrineAnnotationIndentationFixer extends AbstractDoctrineAnnotatio
 
     /**
      * @param list<array{int, int}> $annotationPositions Pairs of begin and end indices of main annotations
+     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
      */
     private function indentationCanBeFixed(Tokens $tokens, int $newLineTokenIndex, array $annotationPositions): bool
     {

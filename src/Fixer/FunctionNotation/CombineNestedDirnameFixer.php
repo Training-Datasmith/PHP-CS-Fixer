@@ -43,6 +43,9 @@ final class CombineNestedDirnameFixer extends AbstractFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -64,6 +67,9 @@ final class CombineNestedDirnameFixer extends AbstractFixer
         return 35;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; 0 <= $index; --$index) {
@@ -108,6 +114,7 @@ final class CombineNestedDirnameFixer extends AbstractFixer
      * @param null|int $firstArgumentEndIndex Index of last token of first argument of `dirname` call
      *
      * @return array{indices: non-empty-list<int>, secondArgument?: int, levels: int, end: int}|false `false` when it is not a (supported) `dirname` call, an array with info about the dirname call otherwise
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getDirnameInfo(Tokens $tokens, int $index, ?int $firstArgumentEndIndex = null)
     {
@@ -192,6 +199,7 @@ final class CombineNestedDirnameFixer extends AbstractFixer
 
     /**
      * @param non-empty-list<array{indices: non-empty-list<int>, secondArgument?: int, levels: int, end: int}> $dirnameInfoArray
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function combineDirnames(Tokens $tokens, array $dirnameInfoArray): void
     {

@@ -105,6 +105,9 @@ final class OperatorLinebreakFixer extends AbstractFixer implements Configurable
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return true;
@@ -134,6 +137,9 @@ final class OperatorLinebreakFixer extends AbstractFixer implements Configurable
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $referenceAnalyzer = new ReferenceAnalyzer();
@@ -180,6 +186,7 @@ final class OperatorLinebreakFixer extends AbstractFixer implements Configurable
 
     /**
      * @param non-empty-list<int> $operatorIndices
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixOperatorLinebreak(Tokens $tokens, array $operatorIndices): void
     {
@@ -212,6 +219,7 @@ final class OperatorLinebreakFixer extends AbstractFixer implements Configurable
 
     /**
      * @param non-empty-list<int> $operatorIndices
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixMoveToTheBeginning(Tokens $tokens, array $operatorIndices): void
     {
@@ -237,6 +245,7 @@ final class OperatorLinebreakFixer extends AbstractFixer implements Configurable
 
     /**
      * @param non-empty-list<int> $operatorIndices
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixMoveToTheEnd(Tokens $tokens, array $operatorIndices): void
     {
@@ -264,6 +273,7 @@ final class OperatorLinebreakFixer extends AbstractFixer implements Configurable
      * @param list<int> $indices
      *
      * @return list<Token>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getReplacementsAndClear(Tokens $tokens, array $indices, int $direction): array
     {
@@ -283,6 +293,9 @@ final class OperatorLinebreakFixer extends AbstractFixer implements Configurable
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function isMultiline(Tokens $tokens, int $indexStart, int $indexEnd): bool
     {
         for ($index = $indexStart; $index <= $indexEnd; ++$index) {

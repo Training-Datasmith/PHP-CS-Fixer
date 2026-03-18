@@ -45,11 +45,17 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
         return 24;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_UNSET);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; $index >= 0; --$index) {
@@ -103,6 +109,7 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
 
     /**
      * @param list<int> $indices
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clearOffsetTokens(Tokens $tokens, int $offset, array $indices): void
     {
@@ -123,6 +130,7 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
      * Or the index to where the method looked for a call.
      *
      * @return array{int, int, int, int}|int
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getPreviousUnsetCall(Tokens $tokens, int $index)
     {
@@ -168,6 +176,7 @@ final class CombineConsecutiveUnsetsFixer extends AbstractFixer
      * @param int $to    Upper boundary index
      *
      * @return int Number of tokens inserted
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function moveTokens(Tokens $tokens, int $start, int $end, int $to): int
     {

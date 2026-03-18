@@ -55,6 +55,9 @@ abstract class AbstractFixer implements FixerInterface
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     final public function fix(\SplFileInfo $file, Tokens $tokens): void
     {
         if ($this instanceof ConfigurableFixerInterface && property_exists($this, 'configuration') && null === $this->configuration) {
@@ -95,16 +98,8 @@ abstract class AbstractFixer implements FixerInterface
         $this->whitespacesConfig = $config;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     abstract protected function applyFix(\SplFileInfo $file, Tokens $tokens): void;
-
-    private function getDefaultWhitespacesFixerConfig(): WhitespacesFixerConfig
-    {
-        static $defaultWhitespacesFixerConfig = null;
-
-        if (null === $defaultWhitespacesFixerConfig) {
-            $defaultWhitespacesFixerConfig = new WhitespacesFixerConfig('    ', "\n");
-        }
-
-        return $defaultWhitespacesFixerConfig;
-    }
 }

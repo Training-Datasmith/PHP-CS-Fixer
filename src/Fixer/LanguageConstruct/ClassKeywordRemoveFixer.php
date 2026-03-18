@@ -72,11 +72,17 @@ final class ClassKeywordRemoveFixer extends AbstractFixer implements DeprecatedF
         return 0;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(CT::T_CLASS_CONSTANT);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $previousNamespaceScopeEndIndex = 0;
@@ -89,16 +95,21 @@ final class ClassKeywordRemoveFixer extends AbstractFixer implements DeprecatedF
         $this->replaceClassKeywordsSection($tokens, '', $previousNamespaceScopeEndIndex, $tokens->count() - 1);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function storeImports(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
         $this->imports = [];
 
         foreach ($tokensAnalyzer->getImportUseIndexes() as $index) {
-            if ($index < $startIndex || $index > $endIndex) {
+            if ($index < $startIndex) {
                 continue;
             }
-
+            if ($index > $endIndex) {
+                continue;
+            }
             $import = '';
             while (($index = $tokens->getNextMeaningfulToken($index)) !== null) {
                 if ($tokens[$index]->equalsAny([';', [CT::T_GROUP_IMPORT_BRACE_OPEN]]) || $tokens[$index]->isGivenKind(\T_AS)) {
@@ -133,6 +144,9 @@ final class ClassKeywordRemoveFixer extends AbstractFixer implements DeprecatedF
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function replaceClassKeywordsSection(Tokens $tokens, string $namespace, int $startIndex, int $endIndex): void
     {
         if ($endIndex - $startIndex < 3) {
@@ -147,6 +161,9 @@ final class ClassKeywordRemoveFixer extends AbstractFixer implements DeprecatedF
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function replaceClassKeyword(Tokens $tokens, string $namespacePrefix, int $classIndex): void
     {
         $classEndIndex = $tokens->getPrevMeaningfulToken($classIndex);

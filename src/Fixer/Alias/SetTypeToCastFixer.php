@@ -57,11 +57,17 @@ final class SetTypeToCastFixer extends AbstractFunctionReferenceFixer
         return 0;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_CONSTANT_ENCAPSED_STRING, \T_STRING, \T_VARIABLE]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $map = [
@@ -161,6 +167,7 @@ final class SetTypeToCastFixer extends AbstractFunctionReferenceFixer
 
     /**
      * @return list<array{int, int, int}>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findSettypeCalls(Tokens $tokens): array
     {
@@ -180,6 +187,9 @@ final class SetTypeToCastFixer extends AbstractFunctionReferenceFixer
         return $candidates;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function removeSettypeCall(
         Tokens $tokens,
         int $functionNameIndex,
@@ -202,6 +212,9 @@ final class SetTypeToCastFixer extends AbstractFunctionReferenceFixer
         $tokens->clearEmptyTokens();
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixSettypeCall(
         Tokens $tokens,
         int $functionNameIndex,
@@ -224,6 +237,9 @@ final class SetTypeToCastFixer extends AbstractFunctionReferenceFixer
         $tokens->removeTrailingWhitespace($functionNameIndex + 6); // 6 = number of inserted tokens -1 for offset correction
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixSettypeNullCall(
         Tokens $tokens,
         int $functionNameIndex,

@@ -25,6 +25,9 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class NoUselessReturnFixer extends AbstractFixer
 {
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_FUNCTION, \T_RETURN]);
@@ -62,6 +65,9 @@ final class NoUselessReturnFixer extends AbstractFixer
         return -18;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -79,6 +85,7 @@ final class NoUselessReturnFixer extends AbstractFixer
     /**
      * @param int $start Token index of the opening brace token of the function
      * @param int $end   Token index of the closing brace token of the function
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixFunction(Tokens $tokens, int $start, int $end): void
     {

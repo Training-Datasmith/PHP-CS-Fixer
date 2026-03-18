@@ -37,6 +37,9 @@ final class FopenFlagOrderFixer extends AbstractFopenFlagFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function fixFopenFlagToken(Tokens $tokens, int $argumentStartIndex, int $argumentEndIndex): void
     {
         $argumentFlagIndex = null;

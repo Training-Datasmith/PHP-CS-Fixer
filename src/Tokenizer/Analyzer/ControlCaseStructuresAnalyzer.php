@@ -40,6 +40,7 @@ final class ControlCaseStructuresAnalyzer
      * @param list<int> $types Token types of interest of which analyses must be returned
      *
      * @return iterable<int, AbstractControlCaseStructuresAnalysis>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public static function findControlStructures(Tokens $tokens, array $types): iterable
     {
@@ -248,6 +249,9 @@ final class ControlCaseStructuresAnalyzer
         throw new \InvalidArgumentException(\sprintf('Unexpected type "%d".', $analysis['kind']));
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private static function findCaseOpen(Tokens $tokens, int $kind, int $index): int
     {
         if (\T_SWITCH === $kind) {
@@ -289,6 +293,9 @@ final class ControlCaseStructuresAnalyzer
         throw new \InvalidArgumentException(\sprintf('Unexpected case for type "%d".', $kind));
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private static function findDefaultOpen(Tokens $tokens, int $kind, int $index): int
     {
         if (\T_SWITCH === $kind) {

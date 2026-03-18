@@ -93,6 +93,9 @@ final class HeredocIndentationFixer extends AbstractFixer implements Configurabl
         return -26;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_START_HEREDOC);
@@ -108,6 +111,9 @@ final class HeredocIndentationFixer extends AbstractFixer implements Configurabl
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = \count($tokens) - 1; 0 <= $index; --$index) {
@@ -122,6 +128,9 @@ final class HeredocIndentationFixer extends AbstractFixer implements Configurabl
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixIndentation(Tokens $tokens, int $start, int $end): void
     {
         $indent = WhitespacesAnalyzer::detectIndent($tokens, $start);

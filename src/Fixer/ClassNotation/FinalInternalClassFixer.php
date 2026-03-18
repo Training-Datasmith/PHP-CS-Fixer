@@ -121,6 +121,9 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
         return 67;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_CLASS);
@@ -136,15 +139,20 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
         $this->assertConfigHasNoConflicts();
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
 
         for ($index = $tokens->count() - 1; 0 <= $index; --$index) {
-            if (!$tokens[$index]->isGivenKind(\T_CLASS) || !$this->isClassCandidate($tokensAnalyzer, $tokens, $index)) {
+            if (!$tokens[$index]->isGivenKind(\T_CLASS)) {
                 continue;
             }
-
+            if (!$this->isClassCandidate($tokensAnalyzer, $tokens, $index)) {
+                continue;
+            }
             // make class 'final'
             $tokens->insertSlices([
                 $index => [
@@ -186,7 +194,7 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
                 ->setAllowedValues($annotationsAsserts)
                 ->setDefault(
                     array_map(
-                        static fn (string $string) => '@'.$string,
+                        static fn (string $string): string => '@'.$string,
                         self::DEFAULTS['include'],
                     ),
                 )
@@ -198,7 +206,7 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
                 ->setAllowedValues($annotationsAsserts)
                 ->setDefault(
                     array_map(
-                        static fn (string $string) => '@'.$string,
+                        static fn (string $string): string => '@'.$string,
                         self::DEFAULTS['exclude'],
                     ),
                 )
@@ -226,6 +234,7 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
 
     /**
      * @param int $index T_CLASS index
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isClassCandidate(TokensAnalyzer $tokensAnalyzer, Tokens $tokens, int $index): bool
     {
@@ -269,6 +278,9 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
             || ([] === $decisions && true === $this->configuration['consider_absent_docblock_as_internal_class']);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function isClassCandidateBasedOnPhpDoc(Tokens $tokens, int $index): ?bool
     {
         $doc = new DocBlock($tokens[$index]->getContent());
@@ -294,6 +306,9 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
         return null;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function isClassCandidateBasedOnAttribute(Tokens $tokens, int $startIndex, int $endIndex): ?bool
     {
         $attributeCandidates = [];
@@ -348,13 +363,8 @@ final class FinalInternalClassFixer extends AbstractFixer implements Configurabl
             $newConfigIsSet = $this->configuration[$newConfigKey] !== $defaults;
             $oldConfigIsSet = $this->configuration[$oldConfigKey] !== $defaults;
 
-            if ($newConfigIsSet && $oldConfigIsSet) {
-                throw new InvalidFixerConfigurationException($this->getName(), \sprintf('Configuration cannot contain deprecated option "%s" and new option "%s".', $oldConfigKey, $newConfigKey));
-            }
-
             if ($oldConfigIsSet) {
-                $this->configuration[$newConfigKey] = $this->configuration[$oldConfigKey]; // @phpstan-ignore-line crazy mapping, to be removed while cleaning up deprecated options
-                $this->checkAttributes = false; // run in old mode
+                throw new InvalidFixerConfigurationException($this->getName(), \sprintf('Configuration cannot contain deprecated option "%s" and new option "%s".', $oldConfigKey, $newConfigKey));
             }
 
             // if ($newConfigIsSet) - only new config is set, all good

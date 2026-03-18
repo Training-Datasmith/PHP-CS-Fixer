@@ -36,6 +36,9 @@ final class NoBlankLinesBeforeNamespaceFixer extends AbstractProxyFixer implemen
         return array_keys($this->proxyFixers);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_NAMESPACE);

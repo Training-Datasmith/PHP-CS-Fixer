@@ -28,6 +28,9 @@ abstract class AbstractFunctionReferenceFixer extends AbstractFixer
 {
     private ?FunctionsAnalyzer $functionsAnalyzer = null;
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -43,6 +46,7 @@ abstract class AbstractFunctionReferenceFixer extends AbstractFixer
      * which can be supplied by other methods in this abstract class.
      *
      * @return ?array{int, int, int} returns $functionName, $openParenthesis, $closeParenthesis packed into array
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     protected function find(string $functionNameToSearch, Tokens $tokens, int $start = 0, ?int $end = null): ?array
     {

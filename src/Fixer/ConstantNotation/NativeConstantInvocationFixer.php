@@ -73,16 +73,16 @@ final class NativeConstantInvocationFixer extends AbstractFixer implements Confi
             [
                 new CodeSample("<?php var_dump(PHP_VERSION, M_PI, MY_CUSTOM_PI);\n"),
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        namespace space1 {
-                            echo PHP_VERSION;
-                        }
-                        namespace {
-                            echo M_PI;
-                        }
-
-                        PHP,
+                    <<<'PHP_WRAP'
+                    <?php
+                    namespace space1 {
+                        echo PHP_VERSION;
+                    }
+                    namespace {
+                        echo M_PI;
+                    }
+                    
+                    PHP_WRAP,
                     ['scope' => 'namespaced'],
                 ),
                 new CodeSample(
@@ -127,6 +127,9 @@ final class NativeConstantInvocationFixer extends AbstractFixer implements Confi
         return 1;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -184,6 +187,9 @@ final class NativeConstantInvocationFixer extends AbstractFixer implements Confi
         ksort($this->caseInsensitiveConstantsToEscape);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         if ('all' === $this->configuration['scope']) {
@@ -245,6 +251,9 @@ final class NativeConstantInvocationFixer extends AbstractFixer implements Confi
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixConstantInvocations(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $useDeclarations = (new NamespaceUsesAnalyzer())->getDeclarationsFromTokens($tokens);

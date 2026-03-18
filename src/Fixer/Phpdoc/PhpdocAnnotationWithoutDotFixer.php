@@ -65,11 +65,17 @@ final class PhpdocAnnotationWithoutDotFixer extends AbstractFixer
         return 17;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -85,27 +91,30 @@ final class PhpdocAnnotationWithoutDotFixer extends AbstractFixer
             }
 
             foreach ($annotations as $annotation) {
-                if (
-                    !$annotation->getTag()->valid() || !\in_array($annotation->getTag()->getName(), $this->tags, true)
-                ) {
+                if (!$annotation->getTag()->valid()) {
                     continue;
                 }
-
+                if (!\in_array($annotation->getTag()->getName(), $this->tags, true)) {
+                    continue;
+                }
                 $lineAfterAnnotation = $doc->getLine($annotation->getEnd() + 1);
                 if (null !== $lineAfterAnnotation) {
                     $lineAfterAnnotationTrimmed = ltrim($lineAfterAnnotation->getContent());
-                    if ('' === $lineAfterAnnotationTrimmed || !str_starts_with($lineAfterAnnotationTrimmed, '*')) {
+                    if ('' === $lineAfterAnnotationTrimmed) {
+                        // malformed PHPDoc, missing asterisk !
+                        continue;
+                    }
+                    if (!str_starts_with($lineAfterAnnotationTrimmed, '*')) {
                         // malformed PHPDoc, missing asterisk !
                         continue;
                     }
                 }
 
                 $content = $annotation->getContent();
-
-                if (
-                    !Preg::match('/[.。]\h*$/u', $content)
-                    || Preg::match('/[.。](?!\h*$)/u', $content, $matches)
-                ) {
+                if (!Preg::match('/[.。]\h*$/u', $content)) {
+                    continue;
+                }
+                if (Preg::match('/[.。](?!\h*$)/u', $content, $matches)) {
                     continue;
                 }
 

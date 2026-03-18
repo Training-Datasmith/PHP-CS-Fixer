@@ -173,6 +173,9 @@ final class PhpdocAlignFixer extends AbstractFixer implements ConfigurableFixerI
         return -42;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
@@ -212,6 +215,9 @@ final class PhpdocAlignFixer extends AbstractFixer implements ConfigurableFixerI
         $this->spacing = $this->configuration['spacing'];
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -231,7 +237,7 @@ final class PhpdocAlignFixer extends AbstractFixer implements ConfigurableFixerI
 
     protected function createConfigurationDefinition(): FixerConfigurationResolverInterface
     {
-        $allowPositiveIntegers = static function ($value) {
+        $allowPositiveIntegers = static function ($value): bool {
             $spacings = \is_array($value) ? $value : [$value];
             foreach ($spacings as $val) {
                 if (\is_int($val) && $val <= 0) {

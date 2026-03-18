@@ -135,6 +135,9 @@ final class OrderedTypesFixer extends AbstractFixer implements ConfigurableFixer
         return 0;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([CT::T_TYPE_ALTERNATION, CT::T_TYPE_INTERSECTION]);
@@ -163,6 +166,9 @@ final class OrderedTypesFixer extends AbstractFixer implements ConfigurableFixer
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -189,6 +195,7 @@ final class OrderedTypesFixer extends AbstractFixer implements ConfigurableFixer
      * @return array<int, string>
      *
      * @phpstan-return array<int, 'catch'|'method'|'property'>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getElements(Tokens $tokens): array
     {
@@ -220,6 +227,9 @@ final class OrderedTypesFixer extends AbstractFixer implements ConfigurableFixer
         return $elements;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function collectTypeAnalysis(Tokens $tokens, int $startIndex, int $endIndex): ?TypeAnalysis
     {
         $type = '';
@@ -227,10 +237,12 @@ final class OrderedTypesFixer extends AbstractFixer implements ConfigurableFixer
         $typeEndIndex = $typeStartIndex;
 
         for ($i = $typeStartIndex; $i < $endIndex; ++$i) {
-            if ($tokens[$i]->isWhitespace() || $tokens[$i]->isComment()) {
+            if ($tokens[$i]->isWhitespace()) {
                 continue;
             }
-
+            if ($tokens[$i]->isComment()) {
+                continue;
+            }
             $type .= $tokens[$i]->getContent();
             $typeEndIndex = $i;
         }
@@ -238,6 +250,9 @@ final class OrderedTypesFixer extends AbstractFixer implements ConfigurableFixer
         return '' !== $type ? new TypeAnalysis($type, $typeStartIndex, $typeEndIndex) : null;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixCatchArgumentType(Tokens $tokens, int $index): void
     {
         $catchStart = $tokens->getNextTokenOfKind($index, ['(']);
@@ -252,6 +267,9 @@ final class OrderedTypesFixer extends AbstractFixer implements ConfigurableFixer
         $this->sortTypes($catchArgumentType, $tokens);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixPropertyType(Tokens $tokens, int $index): void
     {
         $propertyIndex = $index;
@@ -269,6 +287,9 @@ final class OrderedTypesFixer extends AbstractFixer implements ConfigurableFixer
         $this->sortTypes($propertyType, $tokens);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixMethodArgumentType(FunctionsAnalyzer $functionsAnalyzer, Tokens $tokens, int $index): void
     {
         foreach ($functionsAnalyzer->getFunctionArguments($tokens, $index) as $argumentInfo) {
@@ -282,6 +303,9 @@ final class OrderedTypesFixer extends AbstractFixer implements ConfigurableFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixMethodReturnType(FunctionsAnalyzer $functionsAnalyzer, Tokens $tokens, int $index): void
     {
         $returnType = $functionsAnalyzer->getFunctionReturnType($tokens, $index);
@@ -293,6 +317,9 @@ final class OrderedTypesFixer extends AbstractFixer implements ConfigurableFixer
         $this->sortTypes($returnType, $tokens);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function sortTypes(TypeAnalysis $typeAnalysis, Tokens $tokens): void
     {
         $type = $typeAnalysis->getName();

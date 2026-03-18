@@ -59,86 +59,86 @@ final class PhpUnitExpectationFixer extends AbstractPhpUnitFixer implements Conf
             'Usages of `->setExpectedException*` methods MUST be replaced by `->expectException*` methods.',
             [
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        public function testFoo()
                         {
-                            public function testFoo()
-                            {
-                                $this->setExpectedException("RuntimeException", "Msg", 123);
-                                foo();
-                            }
-
-                            public function testBar()
-                            {
-                                $this->setExpectedExceptionRegExp("RuntimeException", "/Msg.*/", 123);
-                                bar();
-                            }
+                            $this->setExpectedException("RuntimeException", "Msg", 123);
+                            foo();
                         }
-
-                        PHP,
+                    
+                        public function testBar()
+                        {
+                            $this->setExpectedExceptionRegExp("RuntimeException", "/Msg.*/", 123);
+                            bar();
+                        }
+                    }
+                    
+                    PHP_WRAP,
                 ),
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        public function testFoo()
                         {
-                            public function testFoo()
-                            {
-                                $this->setExpectedException("RuntimeException", null, 123);
-                                foo();
-                            }
-
-                            public function testBar()
-                            {
-                                $this->setExpectedExceptionRegExp("RuntimeException", "/Msg.*/", 123);
-                                bar();
-                            }
+                            $this->setExpectedException("RuntimeException", null, 123);
+                            foo();
                         }
-
-                        PHP,
+                    
+                        public function testBar()
+                        {
+                            $this->setExpectedExceptionRegExp("RuntimeException", "/Msg.*/", 123);
+                            bar();
+                        }
+                    }
+                    
+                    PHP_WRAP,
                     ['target' => PhpUnitTargetVersion::VERSION_8_4],
                 ),
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        public function testFoo()
                         {
-                            public function testFoo()
-                            {
-                                $this->setExpectedException("RuntimeException", null, 123);
-                                foo();
-                            }
-
-                            public function testBar()
-                            {
-                                $this->setExpectedExceptionRegExp("RuntimeException", "/Msg.*/", 123);
-                                bar();
-                            }
+                            $this->setExpectedException("RuntimeException", null, 123);
+                            foo();
                         }
-
-                        PHP,
+                    
+                        public function testBar()
+                        {
+                            $this->setExpectedExceptionRegExp("RuntimeException", "/Msg.*/", 123);
+                            bar();
+                        }
+                    }
+                    
+                    PHP_WRAP,
                     ['target' => PhpUnitTargetVersion::VERSION_5_6],
                 ),
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        public function testFoo()
                         {
-                            public function testFoo()
-                            {
-                                $this->setExpectedException("RuntimeException", "Msg", 123);
-                                foo();
-                            }
-
-                            public function testBar()
-                            {
-                                $this->setExpectedExceptionRegExp("RuntimeException", "/Msg.*/", 123);
-                                bar();
-                            }
+                            $this->setExpectedException("RuntimeException", "Msg", 123);
+                            foo();
                         }
-
-                        PHP,
+                    
+                        public function testBar()
+                        {
+                            $this->setExpectedExceptionRegExp("RuntimeException", "/Msg.*/", 123);
+                            bar();
+                        }
+                    }
+                    
+                    PHP_WRAP,
                     ['target' => PhpUnitTargetVersion::VERSION_5_2],
                 ),
             ],
@@ -189,6 +189,9 @@ final class PhpUnitExpectationFixer extends AbstractPhpUnitFixer implements Conf
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         foreach (Token::getObjectOperatorKinds() as $objectOperator) {
@@ -196,6 +199,9 @@ final class PhpUnitExpectationFixer extends AbstractPhpUnitFixer implements Conf
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function applyPhpUnitClassFixWithObjectOperator(Tokens $tokens, int $startIndex, int $endIndex, int $objectOperator): void
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();

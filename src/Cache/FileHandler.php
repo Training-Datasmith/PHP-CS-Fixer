@@ -107,7 +107,7 @@ final class FileHandler implements FileHandlerInterface
 
         if (false === $mtime) {
             // cannot check mtime? OK - let's pretend file is old.
-            $mtime = 0;
+            return 0;
         }
 
         return $mtime;

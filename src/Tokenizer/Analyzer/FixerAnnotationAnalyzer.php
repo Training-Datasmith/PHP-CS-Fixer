@@ -34,6 +34,7 @@ final class FixerAnnotationAnalyzer
 {
     /**
      * @return array<string, list<string>>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function find(Tokens $tokens): array
     {
@@ -45,12 +46,14 @@ final class FixerAnnotationAnalyzer
 
         for (0; $index < $count; ++$index) {
             $token = $tokens[$index];
-
             if ($token->isGivenKind([
                 \T_OPEN_TAG,
                 \T_OPEN_TAG_WITH_ECHO,
                 \T_WHITESPACE,
-            ]) || $token->equals(';')) {
+            ])) {
+                continue;
+            }
+            if ($token->equals(';')) {
                 continue;
             }
 
@@ -72,11 +75,13 @@ final class FixerAnnotationAnalyzer
 
         for ($indexBackwards = $count - 1; $indexBackwards > $index; --$indexBackwards) {
             $token = $tokens[$indexBackwards];
-
             if ($token->isGivenKind([
                 \T_CLOSE_TAG,
                 \T_WHITESPACE,
-            ]) || $token->equals(';')) {
+            ])) {
+                continue;
+            }
+            if ($token->equals(';')) {
                 continue;
             }
 

@@ -182,6 +182,9 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
         return 55;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
@@ -196,6 +199,9 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($this->getElementsByClass($tokens) as $class) {
@@ -270,6 +276,7 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
      * element within the class, interface or trait.
      *
      * @param _Class $class
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixSpaceAboveClassElement(Tokens $tokens, array $class, int $elementIndex): void
     {
@@ -349,6 +356,7 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Class $class
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function determineRequiredLineCount(Tokens $tokens, array $class, int $elementIndex): int
     {
@@ -387,6 +395,7 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Class $class
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixSpaceBelowClassElement(Tokens $tokens, array $class): void
     {
@@ -398,6 +407,9 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function correctLineBreaks(Tokens $tokens, int $startIndex, int $endIndex, int $reqLineCount): void
     {
         $lineEnding = $this->whitespacesConfig->getLineEnding();
@@ -452,6 +464,9 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function getLineBreakCount(Tokens $tokens, int $startIndex, int $endIndex): int
     {
         $lineCount = 0;
@@ -463,6 +478,9 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
         return $lineCount;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function findCommentBlockStart(Tokens $tokens, int $start, int $elementAboveEnd): int
     {
         for ($i = $start; $i > $elementAboveEnd; --$i) {
@@ -488,6 +506,7 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
 
     /**
      * @return iterable<_Class>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getElementsByClass(Tokens $tokens): iterable
     {
@@ -527,6 +546,7 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
 
     /**
      * including trailing single line comments if belonging to the class element.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getFirstTokenIndexOfClassElement(Tokens $tokens, int $classOpen, int $elementIndex): int
     {
@@ -547,6 +567,7 @@ final class ClassAttributesSeparationFixer extends AbstractFixer implements Conf
 
     /**
      * including trailing single line comments if belonging to the class element.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getLastTokenIndexOfClassElement(Tokens $tokens, int $classIndex, int $elementIndex, string $elementType, TokensAnalyzer $tokensAnalyzer): int
     {

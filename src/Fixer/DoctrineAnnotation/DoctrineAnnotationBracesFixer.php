@@ -75,6 +75,9 @@ final class DoctrineAnnotationBracesFixer extends AbstractDoctrineAnnotationFixe
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $doctrineAnnotationTokens
+     */
     protected function fixAnnotations(Tokens $doctrineAnnotationTokens): void
     {
         if ('without_braces' === $this->configuration['syntax']) {
@@ -84,6 +87,9 @@ final class DoctrineAnnotationBracesFixer extends AbstractDoctrineAnnotationFixe
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
+     */
     private function addBracesToAnnotations(Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -101,6 +107,9 @@ final class DoctrineAnnotationBracesFixer extends AbstractDoctrineAnnotationFixe
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
+     */
     private function removesBracesFromAnnotations(Tokens $tokens): void
     {
         for ($index = 0, $max = \count($tokens); $index < $max; ++$index) {

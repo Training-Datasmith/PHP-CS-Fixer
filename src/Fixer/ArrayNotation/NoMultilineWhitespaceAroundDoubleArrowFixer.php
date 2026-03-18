@@ -48,11 +48,17 @@ final class NoMultilineWhitespaceAroundDoubleArrowFixer extends AbstractFixer
         return 31;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOUBLE_ARROW);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -71,6 +77,9 @@ final class NoMultilineWhitespaceAroundDoubleArrowFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixWhitespace(Tokens $tokens, int $index): void
     {
         $token = $tokens[$index];

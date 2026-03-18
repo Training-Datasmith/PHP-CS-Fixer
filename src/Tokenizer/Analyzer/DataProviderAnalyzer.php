@@ -37,6 +37,7 @@ final class DataProviderAnalyzer
 
     /**
      * @return list<DataProviderAnalysis>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function getDataProviders(Tokens $tokens, int $startIndex, int $endIndex): array
     {
@@ -96,6 +97,7 @@ final class DataProviderAnalyzer
 
     /**
      * @return array<string, int>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getMethods(Tokens $tokens, int $startIndex, int $endIndex): array
     {
@@ -119,6 +121,7 @@ final class DataProviderAnalyzer
 
     /**
      * @return array{null|int, null|int}
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getAttributeIndexAndDocCommentIndices(Tokens $tokens, int $index): array
     {
@@ -139,6 +142,7 @@ final class DataProviderAnalyzer
 
     /**
      * @param _AttributeItem $attribute
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getDataProviderNameIndex(Tokens $tokens, FullyQualifiedNameAnalyzer $fullyQualifiedNameAnalyzer, array $attribute): ?int
     {

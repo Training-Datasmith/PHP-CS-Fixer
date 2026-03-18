@@ -69,6 +69,9 @@ final class EregToPregFixer extends AbstractFixer
         return 0;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -79,6 +82,9 @@ final class EregToPregFixer extends AbstractFixer
         return true;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $end = $tokens->count() - 1;
@@ -112,8 +118,10 @@ final class EregToPregFixer extends AbstractFixer
 
                 // ensure the first parameter is just a string (e.g. has nothing appended)
                 $next = $tokens->getNextMeaningfulToken($match[2]);
-
-                if (null === $next || !$tokens[$next]->equalsAny([',', ')'])) {
+                if (null === $next) {
+                    continue;
+                }
+                if (!$tokens[$next]->equalsAny([',', ')'])) {
                     continue;
                 }
 

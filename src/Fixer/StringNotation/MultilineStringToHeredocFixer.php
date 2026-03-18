@@ -52,6 +52,9 @@ final class MultilineStringToHeredocFixer extends AbstractFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_CONSTANT_ENCAPSED_STRING, \T_ENCAPSED_AND_WHITESPACE]);
@@ -67,6 +70,9 @@ final class MultilineStringToHeredocFixer extends AbstractFixer
         return 16;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $complexStringStartIndex = null;
@@ -85,6 +91,9 @@ final class MultilineStringToHeredocFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function convertStringToHeredoc(Tokens $tokens, int $stringStartIndex, int $stringEndIndex): void
     {
         $closingMarker = 'EOD';

@@ -32,11 +32,17 @@ abstract class AbstractPhpUnitFixer extends AbstractFixer
 {
     use DocBlockAnnotationTrait;
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_CLASS, \T_STRING]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     final protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ((new PhpUnitTestCaseAnalyzer())->findPhpUnitClasses($tokens) as $indices) {
@@ -44,6 +50,9 @@ abstract class AbstractPhpUnitFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     abstract protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void;
 
     /**
@@ -53,6 +62,7 @@ abstract class AbstractPhpUnitFixer extends AbstractFixer
      *     openBraceIndex: int,
      *     closeBraceIndex: int,
      * }>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     protected function getPreviousAssertCall(Tokens $tokens, int $startIndex, int $endIndex): iterable
     {
@@ -92,6 +102,9 @@ abstract class AbstractPhpUnitFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     final protected function isTestAttributePresent(Tokens $tokens, int $index): bool
     {
         $attributeIndex = $tokens->getPrevTokenOfKind($index, ['{', [FCT::T_ATTRIBUTE]]);

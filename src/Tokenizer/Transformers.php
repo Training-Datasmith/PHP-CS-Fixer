@@ -58,7 +58,7 @@ final class Transformers
     /**
      * Transform given Tokens collection through all Transformer classes.
      *
-     * @param Tokens $tokens Tokens collection
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens Tokens collection
      */
     public function transform(Tokens $tokens): void
     {

@@ -31,6 +31,9 @@ final class FirstClassCallableTransformer extends AbstractTransformer
         return 8_01_00;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function process(Tokens $tokens, Token $token, int $index): void
     {
         if (

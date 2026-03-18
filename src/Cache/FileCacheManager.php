@@ -79,7 +79,7 @@ final class FileCacheManager implements CacheManagerInterface
      */
     public function __serialize(): array
     {
-        throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot serialize '.self::class);
     }
 
     /**
@@ -92,14 +92,16 @@ final class FileCacheManager implements CacheManagerInterface
      */
     public function __unserialize(array $data): void
     {
-        throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
+        throw new \BadMethodCallException('Cannot unserialize '.self::class);
     }
 
     public function needFixing(string $file, string $fileContent): bool
     {
         $file = $this->cacheDirectory->getRelativePathTo($file);
-
-        return !$this->cache->has($file) || $this->cache->get($file) !== $this->calcHash($fileContent);
+        if (!$this->cache->has($file)) {
+            return true;
+        }
+        return $this->cache->get($file) !== $this->calcHash($fileContent);
     }
 
     public function setFile(string $file, string $fileContent): void

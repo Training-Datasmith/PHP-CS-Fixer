@@ -109,11 +109,17 @@ final class SpacesInsideParenthesesFixer extends AbstractFixer implements Config
         return 3;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(['(', CT::T_BRACE_CLASS_INSTANTIATION_OPEN]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         if ('none' === $this->configuration['space']) {
@@ -196,6 +202,7 @@ final class SpacesInsideParenthesesFixer extends AbstractFixer implements Config
 
     /**
      * Remove spaces from token at a given index.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function removeSpaceAroundToken(Tokens $tokens, int $index): void
     {
@@ -206,6 +213,9 @@ final class SpacesInsideParenthesesFixer extends AbstractFixer implements Config
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixParenthesisInnerEdge(Tokens $tokens, int $start, int $end): void
     {
         // fix white space before ')'
@@ -231,6 +241,7 @@ final class SpacesInsideParenthesesFixer extends AbstractFixer implements Config
 
     /**
      * @return list<string>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getBlockContent(int $startIndex, int $endIndex, Tokens $tokens): array
     {

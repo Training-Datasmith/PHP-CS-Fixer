@@ -75,11 +75,17 @@ final class NoUselessConcatOperatorFixer extends AbstractFixer implements Config
         return 5;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound('.') && $tokens->isAnyTokenKindsFound([\T_CONSTANT_ENCAPSED_STRING, '"']);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; $index > 0; --$index) {
@@ -128,6 +134,7 @@ final class NoUselessConcatOperatorFixer extends AbstractFixer implements Config
     /**
      * @param _ConcatOperandType $firstOperand
      * @param _ConcatOperandType $secondOperand
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixConcatOperation(Tokens $tokens, array $firstOperand, int $concatIndex, array $secondOperand): void
     {
@@ -206,6 +213,7 @@ final class NoUselessConcatOperatorFixer extends AbstractFixer implements Config
      * @param -1|1 $direction
      *
      * @return null|_ConcatOperandType
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getConcatOperandType(Tokens $tokens, int $index, int $direction): ?array
     {
@@ -239,6 +247,7 @@ final class NoUselessConcatOperatorFixer extends AbstractFixer implements Config
     /**
      * @param _ConcatOperandType $firstOperand
      * @param _ConcatOperandType $secondOperand
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function mergeConstantEscapedStringOperands(
         Tokens $tokens,
@@ -264,6 +273,7 @@ final class NoUselessConcatOperatorFixer extends AbstractFixer implements Config
     /**
      * @param _ConcatOperandType $firstOperand
      * @param _ConcatOperandType $secondOperand
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function mergeConstantEscapedStringVarOperands(
         Tokens $tokens,
@@ -313,6 +323,9 @@ final class NoUselessConcatOperatorFixer extends AbstractFixer implements Config
         $tokens->overrideRange($firstOperand['start'], $firstOperand['start'], $insertTokens);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function clearConcatAndAround(Tokens $tokens, int $concatOperatorIndex): void
     {
         if ($tokens[$concatOperatorIndex + 1]->isWhitespace()) {
@@ -331,6 +344,9 @@ final class NoUselessConcatOperatorFixer extends AbstractFixer implements Config
         return !Preg::match('#[\$"\'\\\]#', substr($candidate, 1, -1));
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function containsLinebreak(Tokens $tokens, int $startIndex, int $endIndex): bool
     {
         for ($i = $endIndex; $i > $startIndex; --$i) {
@@ -345,6 +361,7 @@ final class NoUselessConcatOperatorFixer extends AbstractFixer implements Config
     /**
      * @param _ConcatOperandType $firstOperand
      * @param _ConcatOperandType $secondOperand
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function operandsCanNotBeMerged(Tokens $tokens, array $firstOperand, array $secondOperand): bool
     {

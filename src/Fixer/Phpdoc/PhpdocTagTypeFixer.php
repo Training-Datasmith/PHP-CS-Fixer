@@ -56,6 +56,9 @@ final class PhpdocTagTypeFixer extends AbstractFixer implements ConfigurableFixe
         )}
     )$/x';
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
@@ -88,6 +91,9 @@ final class PhpdocTagTypeFixer extends AbstractFixer implements ConfigurableFixe
         return 0;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         if (0 === \count($this->configuration['tags'])) {
@@ -202,9 +208,10 @@ final class PhpdocTagTypeFixer extends AbstractFixer implements ConfigurableFixe
      */
     private function tagIsSurroundedByText(array $parts, int $index): bool
     {
-        return
-            Preg::match('/(^|\R)\h*[^@\s]\N*/', $this->cleanComment($parts[$index - 1]))
-            || Preg::match('/^.*?\R\s*[^@\s]/', $this->cleanComment($parts[$index + 1]));
+        if (Preg::match('/(^|\R)\h*[^@\s]\N*/', $this->cleanComment($parts[$index - 1]))) {
+            return true;
+        }
+        return Preg::match('/^.*?\R\s*[^@\s]/', $this->cleanComment($parts[$index + 1]));
     }
 
     private function cleanComment(string $comment): string
