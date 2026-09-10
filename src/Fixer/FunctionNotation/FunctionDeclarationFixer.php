@@ -67,6 +67,9 @@ final class FunctionDeclarationFixer extends AbstractFixer implements Configurab
 
     private string $singleLineWhitespaceOptions = " \t";
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_FUNCTION, \T_FN]);
@@ -127,6 +130,9 @@ final class FunctionDeclarationFixer extends AbstractFixer implements Configurab
         return 31;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -258,6 +264,9 @@ final class FunctionDeclarationFixer extends AbstractFixer implements Configurab
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixParenthesisInnerEdge(Tokens $tokens, int $start, int $end): void
     {
         do {

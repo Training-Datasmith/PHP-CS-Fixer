@@ -95,6 +95,9 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_VARIABLE) && $tokens->isAnyTokenKindsFound([\T_FUNCTION, \T_FN]);
@@ -121,6 +124,9 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -140,22 +146,23 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
 
     /**
      * @param array<string, ArgumentAnalysis> $arguments
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixFunctionParameters(Tokens $tokens, array $arguments): void
     {
         foreach (array_reverse($arguments) as $argumentInfo) {
-            if (
-                // Skip, if the parameter
-                // - doesn't have a type declaration
-                !$argumentInfo->hasTypeAnalysis()
-                // - has a mixed or standalone null type
-                || \in_array(strtolower($argumentInfo->getTypeAnalysis()->getName()), ['mixed', 'null'], true)
-                // - a default value is not null we can continue
-                || !$argumentInfo->hasDefault() || 'null' !== strtolower($argumentInfo->getDefault())
-            ) {
+            if (!$argumentInfo->hasTypeAnalysis()) {
                 continue;
             }
-
+            if (\in_array(strtolower($argumentInfo->getTypeAnalysis()->getName()), ['mixed', 'null'], true)) {
+                continue;
+            }
+            if (!$argumentInfo->hasDefault()) {
+                continue;
+            }
+            if ('null' !== strtolower($argumentInfo->getDefault())) {
+                continue;
+            }
             $argumentTypeInfo = $argumentInfo->getTypeAnalysis();
 
             if (\PHP_VERSION_ID >= 8_00_00 && false === $this->configuration['use_nullable_type_declaration']) {
@@ -175,6 +182,9 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixSingleTypeParameter(Tokens $tokens, TypeAnalysis $argumentTypeInfo): void
     {
         if (true === $this->configuration['use_nullable_type_declaration']) {
@@ -187,6 +197,9 @@ final class NullableTypeDeclarationForDefaultNullValueFixer extends AbstractFixe
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixUnionTypeParameter(Tokens $tokens, TypeAnalysis $argumentTypeInfo): void
     {
         if (true === $this->configuration['use_nullable_type_declaration']) {

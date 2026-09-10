@@ -53,11 +53,17 @@ final class LambdaNotUsedImportFixer extends AbstractFixer
         return 31;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_FUNCTION, CT::T_USE_LAMBDA]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->argumentsAnalyzer = new ArgumentsAnalyzer();
@@ -73,6 +79,9 @@ final class LambdaNotUsedImportFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixLambda(Tokens $tokens, int $lambdaUseIndex): void
     {
         $lambdaUseOpenBraceIndex = $tokens->getNextTokenOfKind($lambdaUseIndex, ['(']);
@@ -105,6 +114,7 @@ final class LambdaNotUsedImportFixer extends AbstractFixer
      * @param array<string, int> $imports
      *
      * @return array<string, int>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findNotUsedLambdaImports(Tokens $tokens, array $imports, int $lambdaUseCloseBraceIndex): array
     {
@@ -233,6 +243,7 @@ final class LambdaNotUsedImportFixer extends AbstractFixer
      * @param array<int, int>    $arguments
      *
      * @return array<string, int>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function countImportsUsedAsArgument(Tokens $tokens, array $imports, array $arguments): array
     {
@@ -254,6 +265,7 @@ final class LambdaNotUsedImportFixer extends AbstractFixer
 
     /**
      * @return false|int
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getLambdaUseIndex(Tokens $tokens, int $index)
     {
@@ -281,6 +293,7 @@ final class LambdaNotUsedImportFixer extends AbstractFixer
      * @param array<int, int> $arguments
      *
      * @return array<string, int>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function filterArguments(Tokens $tokens, array $arguments): array
     {
@@ -312,6 +325,7 @@ final class LambdaNotUsedImportFixer extends AbstractFixer
 
     /**
      * @param array<string, int> $imports
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clearImports(Tokens $tokens, array $imports): void
     {
@@ -329,6 +343,7 @@ final class LambdaNotUsedImportFixer extends AbstractFixer
 
     /**
      * Remove `use` and all imported variables.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clearImportsAndUse(Tokens $tokens, int $lambdaUseIndex, int $lambdaUseCloseBraceIndex): void
     {
