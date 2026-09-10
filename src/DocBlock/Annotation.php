@@ -97,10 +97,9 @@ final class Annotation implements \Stringable
      * Create a new line instance.
      *
      * @param non-empty-array<int, Line> $lines
-     * @param null|NamespaceAnalysis     $namespace
      * @param list<NamespaceUseAnalysis> $namespaceUses
      */
-    public function __construct(array $lines, $namespace = null, array $namespaceUses = [])
+    public function __construct(array $lines, ?\PhpCsFixer\Tokenizer\Analyzer\Analysis\NamespaceAnalysis $namespace = null, array $namespaceUses = [])
     {
         $this->lines = array_values($lines);
         $this->namespace = $namespace;
@@ -259,8 +258,8 @@ final class Annotation implements \Stringable
         }
 
         $normalizedTypeExpression = $typeExpression
-            ->mapTypes(static fn (TypeExpression $v) => new TypeExpression(strtolower($v->toString()), null, []))
-            ->sortTypes(static fn (TypeExpression $a, TypeExpression $b) => $a->toString() <=> $b->toString())
+            ->mapTypes(static fn (TypeExpression $v): \PhpCsFixer\DocBlock\TypeExpression => new TypeExpression(strtolower($v->toString()), null, []))
+            ->sortTypes(static fn (TypeExpression $a, TypeExpression $b): int => $a->toString() <=> $b->toString())
         ;
 
         return $normalizedTypeExpression->getTypes();

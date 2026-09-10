@@ -100,19 +100,19 @@ final class ComposerJsonReader
         /** @var non-empty-list<string> $arr */
         $arr = Preg::split('/\s*\|\|?\s*/', trim($version));
 
-        $arr = array_map(static function ($v) {
+        $arr = array_map(static function ($v): string {
             $v = ltrim($v, 'v^~>= ');
 
             $v = substr($v, 0, strcspn($v, ' ,-'));
 
             if (str_ends_with($v, '.*')) {
-                $v = substr($v, 0, -\strlen('.*'));
+                return substr($v, 0, -\strlen('.*'));
             }
 
             return $v;
         }, $arr);
 
-        $textVersion = array_find($arr, static fn ($v) => true === Preg::match('/^\D/', $v));
+        $textVersion = array_find($arr, static fn (string $v): bool => true === Preg::match('/^\D/', $v));
 
         if (null !== $textVersion) {
             return null;

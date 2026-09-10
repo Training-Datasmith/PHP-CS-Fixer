@@ -31,11 +31,17 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 abstract class AbstractPhpdocTypesFixer extends AbstractFixer
 {
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -78,7 +84,7 @@ abstract class AbstractPhpdocTypesFixer extends AbstractFixer
             return;
         }
 
-        $newTypeExpression = $typeExpression->mapTypes(function (TypeExpression $type) {
+        $newTypeExpression = $typeExpression->mapTypes(function (TypeExpression $type): \PhpCsFixer\DocBlock\TypeExpression {
             if (!$type->isCompositeType()) {
                 $value = $this->normalize($type->toString());
 

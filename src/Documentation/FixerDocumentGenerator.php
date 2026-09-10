@@ -377,7 +377,7 @@ final class FixerDocumentGenerator
     private static function createFixerInFutureMode(FixerInterface $fixer): FixerInterface
     {
         $object = Future::runWithEnforcedFutureMode(
-            static fn () => (new \ReflectionObject($fixer))->newInstance(),
+            static fn (): object => (new \ReflectionObject($fixer))->newInstance(),
         );
 
         \assert($object instanceof $fixer);

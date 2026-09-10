@@ -27,6 +27,9 @@ abstract class AbstractNoUselessElseFixer extends AbstractFixer
         return 39;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function isSuperfluousElse(Tokens $tokens, int $index): bool
     {
         $previousBlockStart = $index;
@@ -97,6 +100,7 @@ abstract class AbstractNoUselessElseFixer extends AbstractFixer
      * @param int $index T_IF, T_ELSE, T_ELSEIF
      *
      * @return array{int, int}
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getPreviousBlock(Tokens $tokens, int $index): array
     {
@@ -120,6 +124,7 @@ abstract class AbstractNoUselessElseFixer extends AbstractFixer
     /**
      * @param int $index           Index of the token to check
      * @param int $lowerLimitIndex Lower limit index. Since the token to check will always be in a conditional we must stop checking at this index
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isInConditional(Tokens $tokens, int $index, int $lowerLimitIndex): bool
     {
@@ -148,6 +153,7 @@ abstract class AbstractNoUselessElseFixer extends AbstractFixer
      * out of range index, etc.
      *
      * @param int $index Index of the token to check
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isInConditionWithoutBraces(Tokens $tokens, int $index, int $lowerLimitIndex): bool
     {

@@ -100,7 +100,7 @@ final class DescribeCommand extends Command
     {
         $this->setDefinition(
             [
-                new InputArgument('name', InputArgument::OPTIONAL, 'Name of rule / set.', null, fn () => array_merge($this->getSetNames(), array_keys($this->getFixers()))),
+                new InputArgument('name', InputArgument::OPTIONAL, 'Name of rule / set.', null, fn (): array => array_merge($this->getSetNames(), array_keys($this->getFixers()))),
                 new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The path to a .php-cs-fixer.php file.'),
                 new InputOption('expand', '', InputOption::VALUE_NONE, 'Shall nested sets be expanded into nested rules.'),
                 new InputOption('format', '', InputOption::VALUE_REQUIRED, 'To output results in other formats (txt, tree).', 'txt', ['txt', 'tree']),
@@ -679,7 +679,7 @@ final class DescribeCommand extends Command
     {
         return Preg::replaceCallback(
             '/(`[^<]+<[^>]+>`_)/',
-            static fn (array $matches) => Preg::replaceCallback(
+            static fn (array $matches): string => Preg::replaceCallback(
                 '/`(.*)<(.*)>`_/',
                 static fn (array $matches): string => $matches[1].'('.$matches[2].')',
                 $matches[1],
@@ -745,7 +745,7 @@ final class DescribeCommand extends Command
                 }
 
                 if (\in_array('expand', $this->adjustments, true)) {
-                    $value = (new RuleSet($value))->getRules();
+                    return (new RuleSet($value))->getRules();
                 }
 
                 return $value;
