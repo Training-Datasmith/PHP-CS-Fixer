@@ -58,11 +58,17 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
         return 16;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_RETURN);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -78,6 +84,7 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
 
     /**
      * Clear the return statement located at a given index.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clear(Tokens $tokens, int $index): void
     {
@@ -90,6 +97,7 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
 
     /**
      * Does the return statement located at a given index need fixing?
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function needFixing(Tokens $tokens, int $index): bool
     {
@@ -116,6 +124,7 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
      * Is the return within a function with a non-void or nullable return type?
      *
      * @param int $returnIndex Current return token index
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isStrictOrNullableReturnTypeFunction(Tokens $tokens, int $returnIndex): bool
     {
@@ -147,6 +156,7 @@ final class SimplifiedNullReturnFixer extends AbstractFixer
      * - token is whitespace that is immediately before a comment
      * - token is whitespace that is immediately before the PHP close tag
      * - token is whitespace that is immediately after a comment and before a semicolon
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function shouldClearToken(Tokens $tokens, int $index): bool
     {

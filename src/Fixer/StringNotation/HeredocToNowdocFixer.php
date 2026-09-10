@@ -56,28 +56,35 @@ final class HeredocToNowdocFixer extends AbstractFixer
         return 0;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_START_HEREDOC);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
-            if (!$token->isGivenKind(\T_START_HEREDOC) || str_contains($token->getContent(), "'")) {
+            if (!$token->isGivenKind(\T_START_HEREDOC)) {
                 continue;
             }
-
+            if (str_contains($token->getContent(), "'")) {
+                continue;
+            }
             if ($tokens[$index + 1]->isGivenKind(\T_END_HEREDOC)) {
                 $tokens[$index] = $this->convertToNowdoc($token);
 
                 continue;
             }
-
-            if (
-                !$tokens[$index + 1]->isGivenKind(\T_ENCAPSED_AND_WHITESPACE)
-                || !$tokens[$index + 2]->isGivenKind(\T_END_HEREDOC)
-            ) {
+            if (!$tokens[$index + 1]->isGivenKind(\T_ENCAPSED_AND_WHITESPACE)) {
+                continue;
+            }
+            if (!$tokens[$index + 2]->isGivenKind(\T_END_HEREDOC)) {
                 continue;
             }
 
