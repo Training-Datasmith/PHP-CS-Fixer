@@ -57,11 +57,17 @@ final class NoUnusedImportsFixer extends AbstractFixer
         return -10;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_USE);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $useDeclarations = (new NamespaceUsesAnalyzer())->getDeclarationsFromTokens($tokens, true);
@@ -93,6 +99,7 @@ final class NoUnusedImportsFixer extends AbstractFixer
 
     /**
      * @param array<int, int> $ignoredIndices indices of the use statements themselves that should not be checked as being "used"
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isImportUsed(Tokens $tokens, NamespaceAnalysis $namespace, NamespaceUseAnalysis $import, array $ignoredIndices): bool
     {
@@ -135,11 +142,10 @@ final class NoUnusedImportsFixer extends AbstractFixer
 
                     continue;
                 }
-
-                if (
-                    $prevMeaningfulToken->isGivenKind([\T_NS_SEPARATOR, \T_FUNCTION, \T_DOUBLE_COLON])
-                    || $prevMeaningfulToken->isObjectOperator()
-                ) {
+                if ($prevMeaningfulToken->isGivenKind([\T_NS_SEPARATOR, \T_FUNCTION, \T_DOUBLE_COLON])) {
+                    continue;
+                }
+                if ($prevMeaningfulToken->isObjectOperator()) {
                     continue;
                 }
 
@@ -187,6 +193,9 @@ final class NoUnusedImportsFixer extends AbstractFixer
         return false;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function removeUseDeclaration(
         Tokens $tokens,
         NamespaceUseAnalysis $useDeclaration,
@@ -236,6 +245,7 @@ final class NoUnusedImportsFixer extends AbstractFixer
 
     /**
      * @param list<NamespaceUseAnalysis> $useDeclarations
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function removeUsesInSameNamespace(Tokens $tokens, array $useDeclarations, NamespaceAnalysis $namespaceDeclaration): void
     {
@@ -261,6 +271,9 @@ final class NoUnusedImportsFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function cleanUpAfterImportChunkRemoval(Tokens $tokens, NamespaceUseAnalysis $useDeclaration): void
     {
         $beforeChunkIndex = $tokens->getPrevMeaningfulToken($useDeclaration->getChunkStartIndex());
@@ -295,10 +308,12 @@ final class NoUnusedImportsFixer extends AbstractFixer
 
         // Ensure there's a single space where applicable, otherwise no space (before comma, before closing brace)
         for ($index = $beforeChunkIndex; $index <= $afterChunkIndex; ++$index) {
-            if (null === $tokens[$index]->getId() || !$tokens[$index]->isWhitespace(' ')) {
+            if (null === $tokens[$index]->getId()) {
                 continue;
             }
-
+            if (!$tokens[$index]->isWhitespace(' ')) {
+                continue;
+            }
             $nextTokenIndex = $tokens->getNextMeaningfulToken($index);
             if (
                 $tokens[$nextTokenIndex]->equals(',')
@@ -320,6 +335,9 @@ final class NoUnusedImportsFixer extends AbstractFixer
         $this->removeImportStatementIfEmpty($tokens, $useDeclaration);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function cleanUpSurroundingNewLines(Tokens $tokens, NamespaceUseAnalysis $useDeclaration): void
     {
         $prevIndex = $useDeclaration->getStartIndex() - 1;
@@ -367,6 +385,9 @@ final class NoUnusedImportsFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function removeImportStatementIfEmpty(Tokens $tokens, NamespaceUseAnalysis $useDeclaration): void
     {
         // First we look for empty groups where all chunks were removed (`use Foo\{};`).
@@ -394,6 +415,9 @@ final class NoUnusedImportsFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function removeLineIfEmpty(Tokens $tokens, NamespaceUseAnalysis $useAnalysis): void
     {
         if (!$useAnalysis->isInMulti()) {
@@ -428,6 +452,7 @@ final class NoUnusedImportsFixer extends AbstractFixer
      * @param -1|1 $direction
      *
      * @return array{0: null|int, 1: bool}
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function scanForNonEmptyTokensUntilNewLineFound(Tokens $tokens, int $index, int $direction): array
     {
@@ -437,8 +462,10 @@ final class NoUnusedImportsFixer extends AbstractFixer
         // Iterate until we find new line OR we get out of $tokens bounds (next sibling index is `null`).
         while (\is_int($index)) {
             $index = $tokens->getNonEmptySibling($index, $direction);
-
-            if (null === $index || null === $tokens[$index]->getId()) {
+            if (null === $index) {
+                continue;
+            }
+            if (null === $tokens[$index]->getId()) {
                 continue;
             }
 

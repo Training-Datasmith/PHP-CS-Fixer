@@ -89,6 +89,9 @@ final class ErrorSuppressionFixer extends AbstractFixer implements ConfigurableF
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -117,6 +120,9 @@ final class ErrorSuppressionFixer extends AbstractFixer implements ConfigurableF
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -170,6 +176,9 @@ final class ErrorSuppressionFixer extends AbstractFixer implements ConfigurableF
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function isDeprecationErrorCall(Tokens $tokens, int $index): bool
     {
         if ('trigger_error' !== strtolower($tokens[$index]->getContent())) {

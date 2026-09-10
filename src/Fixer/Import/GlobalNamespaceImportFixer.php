@@ -133,6 +133,9 @@ final class GlobalNamespaceImportFixer extends AbstractFixer implements Configur
         return 0;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_DOC_COMMENT, \T_NS_SEPARATOR, \T_USE])
@@ -141,6 +144,9 @@ final class GlobalNamespaceImportFixer extends AbstractFixer implements Configur
             && $tokens->isMonolithicPhp();
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $namespaceAnalyses = $tokens->getNamespaceDeclarations();
@@ -206,6 +212,7 @@ final class GlobalNamespaceImportFixer extends AbstractFixer implements Configur
      * @param list<NamespaceUseAnalysis> $useDeclarations
      *
      * @return array<non-empty-string, non-empty-string>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function importConstants(Tokens $tokens, array $useDeclarations): array
     {
@@ -277,6 +284,7 @@ final class GlobalNamespaceImportFixer extends AbstractFixer implements Configur
      * @param list<NamespaceUseAnalysis> $useDeclarations
      *
      * @return array<non-empty-string, non-empty-string>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function importFunctions(Tokens $tokens, array $useDeclarations): array
     {
@@ -327,6 +335,7 @@ final class GlobalNamespaceImportFixer extends AbstractFixer implements Configur
      * @param list<NamespaceUseAnalysis> $useDeclarations
      *
      * @return array<non-empty-string, non-empty-string>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function importClasses(Tokens $tokens, array $useDeclarations): array
     {
@@ -445,6 +454,7 @@ final class GlobalNamespaceImportFixer extends AbstractFixer implements Configur
      * @param array<string, true>        $other
      *
      * @return array<non-empty-string, non-empty-string> array keys contain the names that must be imported
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function prepareImports(Tokens $tokens, array $indices, array $global, array $other, bool $caseSensitive): array
     {
@@ -473,6 +483,7 @@ final class GlobalNamespaceImportFixer extends AbstractFixer implements Configur
 
     /**
      * @param list<NamespaceUseAnalysis> $useDeclarations
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fullyQualifyConstants(Tokens $tokens, array $useDeclarations): void
     {
@@ -513,6 +524,7 @@ final class GlobalNamespaceImportFixer extends AbstractFixer implements Configur
 
     /**
      * @param list<NamespaceUseAnalysis> $useDeclarations
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fullyQualifyFunctions(Tokens $tokens, array $useDeclarations): void
     {
@@ -553,6 +565,7 @@ final class GlobalNamespaceImportFixer extends AbstractFixer implements Configur
 
     /**
      * @param list<NamespaceUseAnalysis> $useDeclarations
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fullyQualifyClasses(Tokens $tokens, array $useDeclarations): void
     {
@@ -643,6 +656,7 @@ final class GlobalNamespaceImportFixer extends AbstractFixer implements Configur
 
     /**
      * @return iterable<string>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findFunctionDeclarations(Tokens $tokens, int $start, int $end): iterable
     {

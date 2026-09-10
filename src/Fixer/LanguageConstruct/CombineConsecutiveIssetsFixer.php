@@ -44,21 +44,28 @@ final class CombineConsecutiveIssetsFixer extends AbstractFixer
         return 4;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_ISSET, \T_BOOLEAN_AND]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokenCount = $tokens->count();
 
         for ($index = 1; $index < $tokenCount; ++$index) {
-            if (!$tokens[$index]->isGivenKind(\T_ISSET)
-                || !$tokens[$tokens->getPrevMeaningfulToken($index)]->equalsAny(['(', '{', ';', '=', [\T_OPEN_TAG], [\T_BOOLEAN_AND], [\T_BOOLEAN_OR]])) {
+            if (!$tokens[$index]->isGivenKind(\T_ISSET)) {
                 continue;
             }
-
+            if (!$tokens[$tokens->getPrevMeaningfulToken($index)]->equalsAny(['(', '{', ';', '=', [\T_OPEN_TAG], [\T_BOOLEAN_AND], [\T_BOOLEAN_OR]])) {
+                continue;
+            }
             $issetInfo = $this->getIssetInfo($tokens, $index);
             $issetCloseBraceIndex = end($issetInfo); // ')' token
             $insertLocation = (int) prev($issetInfo) + 1; // one index after the previous meaningful of ')'
@@ -108,6 +115,7 @@ final class CombineConsecutiveIssetsFixer extends AbstractFixer
 
     /**
      * @param list<int> $indices
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clearTokens(Tokens $tokens, array $indices): void
     {
@@ -120,6 +128,7 @@ final class CombineConsecutiveIssetsFixer extends AbstractFixer
      * @param int $index of T_ISSET
      *
      * @return non-empty-list<int> indices of meaningful tokens belonging to the isset statement
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getIssetInfo(Tokens $tokens, int $index): array
     {
@@ -129,10 +138,12 @@ final class CombineConsecutiveIssetsFixer extends AbstractFixer
         $meaningfulTokenIndices = [$openIndex];
 
         for ($i = $openIndex + 1;; ++$i) {
-            if ($tokens[$i]->isWhitespace() || $tokens[$i]->isComment()) {
+            if ($tokens[$i]->isWhitespace()) {
                 continue;
             }
-
+            if ($tokens[$i]->isComment()) {
+                continue;
+            }
             $meaningfulTokenIndices[] = $i;
 
             if ($tokens[$i]->equals(')')) {
@@ -152,6 +163,7 @@ final class CombineConsecutiveIssetsFixer extends AbstractFixer
      * @param list<int> $indices
      *
      * @return list<Token>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getTokenClones(Tokens $tokens, array $indices): array
     {

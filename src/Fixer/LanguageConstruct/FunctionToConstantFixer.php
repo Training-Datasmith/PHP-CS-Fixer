@@ -113,6 +113,9 @@ final class FunctionToConstantFixer extends AbstractFixer implements Configurabl
         return 2;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -132,6 +135,9 @@ final class FunctionToConstantFixer extends AbstractFixer implements Configurabl
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionAnalyzer = new FunctionsAnalyzer();
@@ -174,6 +180,7 @@ final class FunctionToConstantFixer extends AbstractFixer implements Configurabl
 
     /**
      * @param non-empty-list<Token> $replacements
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixFunctionCallToConstant(Tokens $tokens, int $index, int $braceOpenIndex, int $braceCloseIndex, array $replacements): void
     {
@@ -202,6 +209,7 @@ final class FunctionToConstantFixer extends AbstractFixer implements Configurabl
 
     /**
      * @return ?array{int, int, non-empty-list<Token>}
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getReplaceCandidate(
         Tokens $tokens,
@@ -242,6 +250,7 @@ final class FunctionToConstantFixer extends AbstractFixer implements Configurabl
 
     /**
      * @return ?array{int, int, non-empty-list<Token>}
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixGetClassCall(
         Tokens $tokens,
