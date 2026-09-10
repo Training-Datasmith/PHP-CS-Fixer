@@ -117,6 +117,9 @@ final class SelfStaticAccessorFixer extends AbstractFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STATIC)
@@ -134,6 +137,9 @@ final class SelfStaticAccessorFixer extends AbstractFixer
         return -10;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -157,6 +163,9 @@ final class SelfStaticAccessorFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixClassy(Tokens $tokens, int $index): int
     {
         $index = $tokens->getNextTokenOfKind($index, ['{']);
