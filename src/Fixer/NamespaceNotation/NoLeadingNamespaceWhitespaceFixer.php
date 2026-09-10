@@ -30,9 +30,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class NoLeadingNamespaceWhitespaceFixer extends AbstractFixer implements WhitespacesAwareFixerInterface
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_NAMESPACE);
@@ -55,9 +52,6 @@ final class NoLeadingNamespaceWhitespaceFixer extends AbstractFixer implements W
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = \count($tokens) - 1; 0 <= $index; --$index) {

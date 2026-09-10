@@ -105,9 +105,6 @@ final class NativeTypeDeclarationCasingFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         $classyFound = $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
@@ -122,9 +119,6 @@ final class NativeTypeDeclarationCasingFixer extends AbstractFixer
             );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -138,18 +132,12 @@ final class NativeTypeDeclarationCasingFixer extends AbstractFixer
             }
 
             $prevIndex = $tokens->getPrevMeaningfulToken($index);
-            if ($tokens[$prevIndex]->equals('=')) {
-                continue;
-            }
-            if ($tokens[$prevIndex]->isGivenKind([\T_CASE, \T_OBJECT_OPERATOR, \T_DOUBLE_COLON, \T_NS_SEPARATOR])) {
+            if ($tokens[$prevIndex]->equals('=') || $tokens[$prevIndex]->isGivenKind([\T_CASE, \T_OBJECT_OPERATOR, \T_DOUBLE_COLON, \T_NS_SEPARATOR])) {
                 continue;
             }
 
             $nextIndex = $tokens->getNextMeaningfulToken($index);
-            if ($tokens[$nextIndex]->equals('=')) {
-                continue;
-            }
-            if ($tokens[$nextIndex]->isGivenKind(\T_NS_SEPARATOR)) {
+            if ($tokens[$nextIndex]->equals('=') || $tokens[$nextIndex]->isGivenKind(\T_NS_SEPARATOR)) {
                 continue;
             }
 

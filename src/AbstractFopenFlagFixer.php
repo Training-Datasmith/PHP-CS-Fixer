@@ -24,17 +24,11 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 abstract class AbstractFopenFlagFixer extends AbstractFunctionReferenceFixer
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_STRING, \T_CONSTANT_ENCAPSED_STRING]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();
@@ -57,12 +51,9 @@ abstract class AbstractFopenFlagFixer extends AbstractFunctionReferenceFixer
                 $candidate[2],
             );
 
-            $argumentsCount = \count($arguments);
-            // argument count sanity check
-            if ($argumentsCount < 2) {
-                continue;
-            }
-            if ($argumentsCount > 4) {
+            $argumentsCount = \count($arguments); // argument count sanity check
+
+            if ($argumentsCount < 2 || $argumentsCount > 4) {
                 continue;
             }
 
@@ -76,9 +67,6 @@ abstract class AbstractFopenFlagFixer extends AbstractFunctionReferenceFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     abstract protected function fixFopenFlagToken(Tokens $tokens, int $argumentStartIndex, int $argumentEndIndex): void;
 
     protected function isValidModeString(string $mode): bool

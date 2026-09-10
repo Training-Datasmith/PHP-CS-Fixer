@@ -135,9 +135,6 @@ final class PhpdocSeparationFixer extends AbstractFixer implements ConfigurableF
         return -3;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
@@ -148,9 +145,6 @@ final class PhpdocSeparationFixer extends AbstractFixer implements ConfigurableF
         $this->groups = $this->configuration['groups'];
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {

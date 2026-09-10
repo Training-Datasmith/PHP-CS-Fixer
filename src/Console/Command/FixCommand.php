@@ -211,10 +211,10 @@ use Symfony\Component\Stopwatch\Stopwatch;
                 new InputOption('allow-risky', '', InputOption::VALUE_REQUIRED, HelpCommand::getDescriptionWithAllowedValues('Are risky fixers allowed (%s).', ConfigurationResolver::BOOL_VALUES), null, ConfigurationResolver::BOOL_VALUES),
                 new InputOption('config', '', InputOption::VALUE_REQUIRED, 'The path to a config file.'),
                 new InputOption('dry-run', '', InputOption::VALUE_NONE, 'Only shows which files would have been modified.'),
-                new InputOption('rules', '', InputOption::VALUE_REQUIRED, 'List of rules that should be run against configured paths.', null, static function (): array {
+                new InputOption('rules', '', InputOption::VALUE_REQUIRED, 'List of rules that should be run against configured paths.', null, static function () {
                     $fixerFactory = new FixerFactory();
                     $fixerFactory->registerBuiltInFixers();
-                    $fixers = array_map(static fn (FixerInterface $fixer): string => $fixer->getName(), $fixerFactory->getFixers());
+                    $fixers = array_map(static fn (FixerInterface $fixer) => $fixer->getName(), $fixerFactory->getFixers());
 
                     return array_merge(RuleSets::getSetDefinitionNames(), $fixers);
                 }),
@@ -273,6 +273,29 @@ use Symfony\Component\Stopwatch\Stopwatch;
         if (null !== $stdErr) {
             $stdErr->writeln(Application::getAboutWithRuntime(true));
 
+            if (version_compare(\PHP_VERSION, ConfigInterface::PHP_VERSION_SYNTAX_SUPPORTED.'.99', '>')) {
+                $message = \sprintf(
+                    'PHP CS Fixer currently supports PHP syntax only up to PHP %s, current PHP version: %s.',
+                    ConfigInterface::PHP_VERSION_SYNTAX_SUPPORTED,
+                    \PHP_VERSION,
+                );
+
+                if (!$resolver->getUnsupportedPhpVersionAllowed()) {
+                    $message .= ' Add `Config::setUnsupportedPhpVersionAllowed(true)` to allow executions on unsupported PHP versions. Such execution may be unstable and you may experience code modified in a wrong way.';
+                    $stdErr->writeln(\sprintf(
+                        $stdErr->isDecorated() ? '<bg=red;fg=white;>%s</>' : '%s',
+                        $message,
+                    ));
+
+                    return 1;
+                }
+                $message .= ' Execution may be unstable. You may experience code modified in a wrong way. Please report such cases at https://github.com/PHP-CS-Fixer/PHP-CS-Fixer. Remove Config::setUnsupportedPhpVersionAllowed(true) to allow executions only on supported PHP versions.';
+                $stdErr->writeln(\sprintf(
+                    $stdErr->isDecorated() ? '<bg=yellow;fg=black;>%s</>' : '%s',
+                    $message,
+                ));
+            }
+
             $configFile = $resolver->getConfigFile();
             $stdErr->writeln(\sprintf('Loaded config <comment>%s</comment>%s.', $resolver->getConfig()->getName(), null === $configFile ? '' : ' from "'.$configFile.'"'));
 
@@ -328,7 +351,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 
         $finder = new \ArrayIterator(array_filter(
             iterator_to_array($resolver->getFinder()),
-            static fn (\SplFileInfo $fileInfo): bool => false !== $fileInfo->getRealPath(),
+            static fn (\SplFileInfo $fileInfo) => false !== $fileInfo->getRealPath(),
         ));
 
         if (null !== $stdErr) {

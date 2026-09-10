@@ -61,9 +61,6 @@ final class GetClassToClassKeywordFixer extends AbstractFixer
         return 1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return \PHP_VERSION_ID >= 8_00_00 && $tokens->isAllTokenKindsFound([\T_STRING, \T_VARIABLE]);
@@ -74,9 +71,6 @@ final class GetClassToClassKeywordFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -135,7 +129,6 @@ final class GetClassToClassKeywordFixer extends AbstractFixer
 
     /**
      * @return non-empty-list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getReplacementTokenSlices(Tokens $tokens, int $variableIndex): array
     {
@@ -146,9 +139,6 @@ final class GetClassToClassKeywordFixer extends AbstractFixer
         ];
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function clearGetClassCall(Tokens $tokens, int $index, int $braceOpenIndex, int $braceCloseIndex): void
     {
         for ($i = $braceOpenIndex; $i <= $braceCloseIndex; ++$i) {

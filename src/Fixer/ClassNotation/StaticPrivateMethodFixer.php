@@ -82,9 +82,6 @@ final class StaticPrivateMethodFixer extends AbstractFixer
         return 1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_CLASS, \T_PRIVATE, \T_FUNCTION]);
@@ -95,9 +92,6 @@ final class StaticPrivateMethodFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -119,9 +113,6 @@ final class StaticPrivateMethodFixer extends AbstractFixer
         } while ($anythingChanged);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixClass(Tokens $tokens, TokensAnalyzer $tokensAnalyzer, int $classOpen, int $classClose): bool
     {
         $fixedMethods = [];
@@ -153,9 +144,6 @@ final class StaticPrivateMethodFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function skipMethod(Tokens $tokens, TokensAnalyzer $tokensAnalyzer, int $functionKeywordIndex, int $methodOpen, int $methodClose): bool
     {
         $methodNameIndex = $tokens->getNextMeaningfulToken($functionKeywordIndex);
@@ -213,7 +201,6 @@ final class StaticPrivateMethodFixer extends AbstractFixer
 
     /**
      * @param array<string, bool> $fixedMethods
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixReferencesInFunction(Tokens $tokens, TokensAnalyzer $tokensAnalyzer, int $methodOpen, int $methodClose, array $fixedMethods): void
     {
@@ -265,7 +252,6 @@ final class StaticPrivateMethodFixer extends AbstractFixer
 
     /**
      * @return list<array{int, int, int}>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getClassMethods(Tokens $tokens, int $classOpen, int $classClose): array
     {
@@ -284,10 +270,7 @@ final class StaticPrivateMethodFixer extends AbstractFixer
             $functionKeywordIndex = $index;
             $prevTokenIndex = $tokens->getPrevMeaningfulToken($functionKeywordIndex);
             $prevPrevTokenIndex = $tokens->getPrevMeaningfulToken($prevTokenIndex);
-            if ($tokens[$prevTokenIndex]->isGivenKind(\T_ABSTRACT)) {
-                continue;
-            }
-            if ($tokens[$prevPrevTokenIndex]->isGivenKind(\T_ABSTRACT)) {
+            if ($tokens[$prevTokenIndex]->isGivenKind(\T_ABSTRACT) || $tokens[$prevPrevTokenIndex]->isGivenKind(\T_ABSTRACT)) {
                 continue;
             }
 

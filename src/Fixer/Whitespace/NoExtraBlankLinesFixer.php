@@ -258,9 +258,6 @@ final class NoExtraBlankLinesFixer extends AbstractFixer implements Configurable
         return -20;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return true;
@@ -319,9 +316,6 @@ final class NoExtraBlankLinesFixer extends AbstractFixer implements Configurable
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->tokens = $tokens;

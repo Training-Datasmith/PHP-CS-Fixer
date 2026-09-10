@@ -138,9 +138,6 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound($this->candidateTypes);
@@ -151,9 +148,6 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
         $this->resolveConfiguration();
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->fixTokens($tokens);
@@ -189,7 +183,7 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
      * encountered or when the block level for `()`, `{}` or `[]` goes below
      * zero.
      *
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens The token list
+     * @param Tokens $tokens The token list
      * @param int    $index  The index of the comparison
      *
      * @return int The last index of the right-hand side of the comparison
@@ -240,7 +234,7 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
      * encountered or when the block level for `()`, `{}` or `[]` goes below
      * zero.
      *
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens The token list
+     * @param Tokens $tokens The token list
      * @param int    $index  The index of the comparison
      *
      * @return int The first index of the left-hand side of the comparison
@@ -289,9 +283,6 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
         return $tokens->getNextMeaningfulToken($index);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixTokens(Tokens $tokens): Tokens
     {
         for ($i = \count($tokens) - 1; $i > 1; --$i) {
@@ -337,7 +328,6 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
      * swapped, this function runs recursively on the previous left-hand-side.
      *
      * @return int an upper bound for all non-fixed comparisons
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixTokensCompare(
         Tokens $tokens,
@@ -373,9 +363,6 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
         return $startLeft;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixTokensComparePart(Tokens $tokens, int $start, int $end): Tokens
     {
         $newTokens = $tokens->generatePartialCode($start, $end);
@@ -389,7 +376,6 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
 
     /**
      * @return null|array{left: array{start: int, end: int}, right: array{start: int, end: int}}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getCompareFixableInfo(Tokens $tokens, int $index, bool $yoda): ?array
     {
@@ -426,7 +412,6 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
 
     /**
      * @return array{start: int, end: int}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getLeftSideCompareFixableInfo(Tokens $tokens, int $index): array
     {
@@ -438,7 +423,6 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
 
     /**
      * @return array{start: int, end: int}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getRightSideCompareFixableInfo(Tokens $tokens, int $index): array
     {
@@ -448,9 +432,6 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
         ];
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isListStatement(Tokens $tokens, int $index, int $end): bool
     {
         for ($i = $index; $i <= $end; ++$i) {
@@ -472,42 +453,38 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
      */
     private function isOfLowerPrecedence(Token $token): bool
     {
-        if ($this->isOfLowerPrecedenceAssignment($token)) {
-            return true;
-        }
-        if ($token->isGivenKind([
-            \T_BOOLEAN_AND,  // &&
-            \T_BOOLEAN_OR,   // ||
-            \T_CASE,         // case
-            \T_DOUBLE_ARROW, // =>
-            \T_ECHO,         // echo
-            \T_GOTO,         // goto
-            \T_LOGICAL_AND,  // and
-            \T_LOGICAL_OR,   // or
-            \T_LOGICAL_XOR,  // xor
-            \T_OPEN_TAG,     // <?php
-            \T_OPEN_TAG_WITH_ECHO,
-            \T_PRINT,        // print
-            \T_RETURN,       // return
-            \T_THROW,        // throw
-            \T_COALESCE,
-            \T_YIELD,        // yield
-            \T_YIELD_FROM,
-            \T_REQUIRE,
-            \T_REQUIRE_ONCE,
-            \T_INCLUDE,
-            \T_INCLUDE_ONCE,
-        ])) {
-            return true;
-        }
-        return $token->equalsAny([
-            // bitwise and, or, xor
-            '&', '|', '^',
-            // ternary operators
-            '?', ':',
-            // end of PHP statement
-            ',', ';',
-        ]);
+        return $this->isOfLowerPrecedenceAssignment($token)
+            || $token->isGivenKind([
+                \T_BOOLEAN_AND,  // &&
+                \T_BOOLEAN_OR,   // ||
+                \T_CASE,         // case
+                \T_DOUBLE_ARROW, // =>
+                \T_ECHO,         // echo
+                \T_GOTO,         // goto
+                \T_LOGICAL_AND,  // and
+                \T_LOGICAL_OR,   // or
+                \T_LOGICAL_XOR,  // xor
+                \T_OPEN_TAG,     // <?php
+                \T_OPEN_TAG_WITH_ECHO,
+                \T_PRINT,        // print
+                \T_RETURN,       // return
+                \T_THROW,        // throw
+                \T_COALESCE,
+                \T_YIELD,        // yield
+                \T_YIELD_FROM,
+                \T_REQUIRE,
+                \T_REQUIRE_ONCE,
+                \T_INCLUDE,
+                \T_INCLUDE_ONCE,
+            ])
+            || $token->equalsAny([
+                // bitwise and, or, xor
+                '&', '|', '^',
+                // ternary operators
+                '?', ':',
+                // end of PHP statement
+                ',', ';',
+            ]);
     }
 
     /**
@@ -516,10 +493,7 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
      */
     private function isOfLowerPrecedenceAssignment(Token $token): bool
     {
-        if ($token->equals('=')) {
-            return true;
-        }
-        return $token->isGivenKind([
+        return $token->equals('=') || $token->isGivenKind([
             \T_AND_EQUAL,      // &=
             \T_CONCAT_EQUAL,   // .=
             \T_DIV_EQUAL,      // /=
@@ -540,7 +514,7 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
      * Checks whether the tokens between the given start and end describe a
      * variable.
      *
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens The token list
+     * @param Tokens $tokens The token list
      * @param int    $start  The first index of the possible variable
      * @param int    $end    The last index of the possible variable
      * @param bool   $strict Enable strict variable detection
@@ -690,9 +664,6 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
         return !$this->isConstant($tokens, $start, $end);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isConstant(Tokens $tokens, int $index, int $end): bool
     {
         $expectArrayOnly = false;
@@ -701,10 +672,8 @@ final class YodaStyleFixer extends AbstractFixer implements ConfigurableFixerInt
 
         for (; $index <= $end; ++$index) {
             $token = $tokens[$index];
-            if ($token->isComment()) {
-                continue;
-            }
-            if ($token->isWhitespace()) {
+
+            if ($token->isComment() || $token->isWhitespace()) {
                 continue;
             }
 

@@ -48,9 +48,6 @@ final class StringLengthToEmptyFixer extends AbstractFunctionReferenceFixer
         return 1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();
@@ -254,21 +251,14 @@ final class StringLengthToEmptyFixer extends AbstractFunctionReferenceFixer
 
     private function isOperatorOfInterest(Token $token): bool
     {
-        if ($token->isGivenKind([\T_IS_IDENTICAL, \T_IS_NOT_IDENTICAL, \T_IS_SMALLER_OR_EQUAL, \T_IS_GREATER_OR_EQUAL])) {
-            return true;
-        }
-        if ($token->equals('<')) {
-            return true;
-        }
-        return $token->equals('>');
+        return
+            $token->isGivenKind([\T_IS_IDENTICAL, \T_IS_NOT_IDENTICAL, \T_IS_SMALLER_OR_EQUAL, \T_IS_GREATER_OR_EQUAL])
+            || $token->equals('<') || $token->equals('>');
     }
 
     private function isOfHigherPrecedence(Token $token): bool
     {
-        if ($token->isGivenKind([\T_INSTANCEOF, \T_POW, \T_SL, \T_SR])) {
-            return true;
-        }
-        return $token->equalsAny([
+        return $token->isGivenKind([\T_INSTANCEOF, \T_POW, \T_SL, \T_SR]) || $token->equalsAny([
             '!',
             '%',
             '*',
@@ -281,9 +271,6 @@ final class StringLengthToEmptyFixer extends AbstractFunctionReferenceFixer
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function keepParentheses(Tokens $tokens, int $openParenthesisIndex, int $closeParenthesisIndex): bool
     {
         $i = $tokens->getNextMeaningfulToken($openParenthesisIndex);
@@ -294,16 +281,8 @@ final class StringLengthToEmptyFixer extends AbstractFunctionReferenceFixer
 
         for (; $i < $closeParenthesisIndex; ++$i) {
             $token = $tokens[$i];
-            if ($token->isGivenKind([\T_VARIABLE, \T_STRING])) {
-                continue;
-            }
-            if ($token->isObjectOperator()) {
-                continue;
-            }
-            if ($token->isWhitespace()) {
-                continue;
-            }
-            if ($token->isComment()) {
+
+            if ($token->isGivenKind([\T_VARIABLE, \T_STRING]) || $token->isObjectOperator() || $token->isWhitespace() || $token->isComment()) {
                 continue;
             }
 
@@ -323,7 +302,6 @@ final class StringLengthToEmptyFixer extends AbstractFunctionReferenceFixer
 
     /**
      * @return iterable<array{int, int, int}>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findStrLengthCalls(Tokens $tokens): iterable
     {

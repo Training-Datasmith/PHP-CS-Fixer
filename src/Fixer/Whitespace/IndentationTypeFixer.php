@@ -55,17 +55,11 @@ final class IndentationTypeFixer extends AbstractFixer implements WhitespacesAwa
         return 50;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_COMMENT, \T_DOC_COMMENT, \T_WHITESPACE]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->indent = $this->whitespacesConfig->getIndent();
@@ -85,9 +79,6 @@ final class IndentationTypeFixer extends AbstractFixer implements WhitespacesAwa
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixIndentInComment(Tokens $tokens, int $index): Token
     {
         $content = Preg::replace('/^(?:(?<! ) {1,3})?\t/m', '\1    ', $tokens[$index]->getContent(), -1, $count);
@@ -105,9 +96,6 @@ final class IndentationTypeFixer extends AbstractFixer implements WhitespacesAwa
         return new Token([$tokens[$index]->getId(), $content]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixIndentToken(Tokens $tokens, int $index): Token
     {
         $content = $tokens[$index]->getContent();
@@ -145,7 +133,7 @@ final class IndentationTypeFixer extends AbstractFixer implements WhitespacesAwa
     private function getExpectedIndent(string $content, string $indent): string
     {
         if ("\t" === $indent) {
-            return str_replace('    ', $indent, $content);
+            $content = str_replace('    ', $indent, $content);
         }
 
         return $content;

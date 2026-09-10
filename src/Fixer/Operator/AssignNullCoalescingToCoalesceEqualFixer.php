@@ -49,17 +49,11 @@ final class AssignNullCoalescingToCoalesceEqualFixer extends AbstractShortOperat
         return -1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_COALESCE);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function isOperatorTokenCandidate(Tokens $tokens, int $index): bool
     {
         if (!$tokens[$index]->isGivenKind(\T_COALESCE)) {

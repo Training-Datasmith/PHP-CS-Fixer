@@ -62,9 +62,6 @@ final class NoAlternativeSyntaxFixer extends AbstractFixer implements Configurab
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->hasAlternativeSyntax() && (true === $this->configuration['fix_non_monolithic_code'] || $tokens->isMonolithicPhp());
@@ -90,9 +87,6 @@ final class NoAlternativeSyntaxFixer extends AbstractFixer implements Configurab
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = \count($tokens) - 1; 0 <= $index; --$index) {
@@ -103,9 +97,6 @@ final class NoAlternativeSyntaxFixer extends AbstractFixer implements Configurab
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function findParenthesisEnd(Tokens $tokens, int $structureTokenIndex): int
     {
         $nextIndex = $tokens->getNextMeaningfulToken($structureTokenIndex);
@@ -122,7 +113,7 @@ final class NoAlternativeSyntaxFixer extends AbstractFixer implements Configurab
      *
      * @param int    $index  the index of the token being processed
      * @param Token  $token  the token being processed
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens the collection of tokens
+     * @param Tokens $tokens the collection of tokens
      */
     private function fixOpenCloseControls(int $index, Token $token, Tokens $tokens): void
     {
@@ -170,7 +161,7 @@ final class NoAlternativeSyntaxFixer extends AbstractFixer implements Configurab
      *
      * @param int    $index  the index of the token being processed
      * @param Token  $token  the token being processed
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens the collection of tokens
+     * @param Tokens $tokens the collection of tokens
      */
     private function fixElse(int $index, Token $token, Tokens $tokens): void
     {
@@ -193,7 +184,7 @@ final class NoAlternativeSyntaxFixer extends AbstractFixer implements Configurab
      *
      * @param int    $index  the index of the token being processed
      * @param Token  $token  the token being processed
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens the collection of tokens
+     * @param Tokens $tokens the collection of tokens
      */
     private function fixElseif(int $index, Token $token, Tokens $tokens): void
     {
@@ -215,7 +206,7 @@ final class NoAlternativeSyntaxFixer extends AbstractFixer implements Configurab
     /**
      * Add opening and closing braces to the else: and elseif: cases.
      *
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens the tokens collection
+     * @param Tokens $tokens     the tokens collection
      * @param Token  $token      the current token
      * @param int    $index      the current token index
      * @param int    $colonIndex the index of the colon

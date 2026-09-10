@@ -163,9 +163,6 @@ final class HeaderCommentFixer extends AbstractFixer implements ConfigurableFixe
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isMonolithicPhp() && !$tokens->isTokenKindFound(\T_OPEN_TAG_WITH_ECHO);
@@ -185,9 +182,6 @@ final class HeaderCommentFixer extends AbstractFixer implements ConfigurableFixe
         return -30;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $headerAsComment = $this->getHeaderAsComment();
@@ -230,12 +224,10 @@ final class HeaderCommentFixer extends AbstractFixer implements ConfigurableFixe
             $headerCurrentIndex = $this->findHeaderCommentCurrentIndex($tokens, $headerAsComment, $headerNewIndex - 1);
 
             if (null === $headerCurrentIndex) {
-                if ('' === $this->configuration['header']) {
+                if ('' === $this->configuration['header'] || $possibleLocation !== $location) {
                     continue;
                 }
-                if ($possibleLocation !== $location) {
-                    continue;
-                }
+
                 $this->insertHeader($tokens, $headerAsComment, $headerNewIndex);
 
                 continue;
@@ -345,9 +337,6 @@ final class HeaderCommentFixer extends AbstractFixer implements ConfigurableFixe
         return $comment.' */';
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function findHeaderCommentCurrentIndex(Tokens $tokens, string $headerAsComment, int $headerNewIndex): ?int
     {
         $index = $tokens->getNextNonWhitespace($headerNewIndex);
@@ -386,7 +375,6 @@ final class HeaderCommentFixer extends AbstractFixer implements ConfigurableFixe
 
     /**
      * Find the index where the header comment must be inserted.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findHeaderCommentInsertionIndex(Tokens $tokens, string $location): int
     {
@@ -445,9 +433,6 @@ final class HeaderCommentFixer extends AbstractFixer implements ConfigurableFixe
         return $next + 1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixWhiteSpaceAroundHeader(Tokens $tokens, int $headerIndex): void
     {
         $lineEnding = $this->whitespacesConfig->getLineEnding();
@@ -502,9 +487,6 @@ final class HeaderCommentFixer extends AbstractFixer implements ConfigurableFixe
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getLineBreakCount(Tokens $tokens, int $index, int $direction): int
     {
         $whitespace = '';
@@ -530,9 +512,6 @@ final class HeaderCommentFixer extends AbstractFixer implements ConfigurableFixe
         return substr_count($whitespace, "\n");
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function removeHeader(Tokens $tokens, int $index): void
     {
         $prevIndex = $index - 1;
@@ -563,9 +542,6 @@ final class HeaderCommentFixer extends AbstractFixer implements ConfigurableFixe
         $tokens->clearTokenAndMergeSurroundingWhitespace($index);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function insertHeader(Tokens $tokens, string $headerAsComment, int $index): void
     {
         $tokens->insertAt($index, new Token([self::HEADER_COMMENT === $this->configuration['comment_type'] ? \T_COMMENT : \T_DOC_COMMENT, $headerAsComment]));

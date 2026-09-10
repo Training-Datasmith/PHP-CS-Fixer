@@ -49,17 +49,11 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
      */
     private array $classyElements;
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         // fetch indices one time, this is safe as we never add or remove a token during fixing
@@ -83,7 +77,6 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
 
     /**
      * Fixes Doctrine annotations from the given PHPDoc style comment.
-     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $doctrineAnnotationTokens
      */
     abstract protected function fixAnnotations(DoctrineAnnotationTokens $doctrineAnnotationTokens): void;
 
@@ -208,9 +201,6 @@ abstract class AbstractDoctrineAnnotationFixer extends AbstractFixer implements 
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function nextElementAcceptsDoctrineAnnotations(Tokens $tokens, int $index): bool
     {
         do {

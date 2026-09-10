@@ -48,17 +48,11 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(Token::getObjectOperatorKinds());
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $lineEnding = $this->whitespacesConfig->getLineEnding();
@@ -70,10 +64,11 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
 
             $endParenthesisIndex = $tokens->getNextTokenOfKind($index, ['(', ';', ',', [\T_CLOSE_TAG]]);
             $previousEndParenthesisIndex = $tokens->getPrevTokenOfKind($index, [')']);
-            if (null === $endParenthesisIndex) {
-                continue;
-            }
-            if (!$tokens[$endParenthesisIndex]->equals('(') && null === $previousEndParenthesisIndex) {
+
+            if (
+                null === $endParenthesisIndex
+                || !$tokens[$endParenthesisIndex]->equals('(') && null === $previousEndParenthesisIndex
+            ) {
                 continue;
             }
 
@@ -133,7 +128,6 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
 
     /**
      * @param int $index index of the first token on the line to indent
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getExpectedIndentAt(Tokens $tokens, int $index): string
     {
@@ -162,7 +156,6 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
 
     /**
      * @param int $index position of the object operator token ("->" or "?->")
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function canBeMovedToNextLine(int $index, Tokens $tokens): bool
     {
@@ -186,7 +179,6 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
 
     /**
      * @param int $index index of the indentation token
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getIndentAt(Tokens $tokens, int $index): ?string
     {
@@ -197,9 +189,6 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
         return null;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getIndentContentAt(Tokens $tokens, int $index): string
     {
         if (!$tokens[$index]->isGivenKind([\T_WHITESPACE, \T_INLINE_HTML])) {
@@ -222,7 +211,6 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
     /**
      * @param int $start index of first meaningful token on previous line
      * @param int $end   index of last token on previous line
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function currentLineRequiresExtraIndentLevel(Tokens $tokens, int $start, int $end): bool
     {
@@ -235,9 +223,9 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
                 $tokens[$thirdMeaningful]->equals('(')
                 && $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $thirdMeaningful) > $end;
         }
-        if (!$tokens[$end]->equals(')')) {
-            return true;
-        }
-        return $tokens->findBlockStart(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $end) >= $start;
+
+        return
+            !$tokens[$end]->equals(')')
+            || $tokens->findBlockStart(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $end) >= $start;
     }
 }

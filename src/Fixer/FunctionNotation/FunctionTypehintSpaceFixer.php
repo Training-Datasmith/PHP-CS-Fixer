@@ -42,9 +42,6 @@ final class FunctionTypehintSpaceFixer extends AbstractProxyFixer implements Dep
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_FUNCTION, \T_FN]);

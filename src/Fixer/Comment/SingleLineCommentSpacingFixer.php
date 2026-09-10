@@ -55,17 +55,11 @@ final class SingleLineCommentSpacingFixer extends AbstractFixer
         return 1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_COMMENT);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = \count($tokens) - 1; 0 <= $index; --$index) {
@@ -94,14 +88,10 @@ final class SingleLineCommentSpacingFixer extends AbstractFixer
                     $newContent = $this->fixCommentLeadingSpace($content, '//');
                 }
             } else { // hash comment
-                if ($contentLength < 2) {
-                    // cheap check for "#" or annotation (like) comment
+                if ($contentLength < 2 || '[' === $content[1]) { // cheap check for "#" or annotation (like) comment
                     continue;
                 }
-                if ('[' === $content[1]) {
-                    // cheap check for "#" or annotation (like) comment
-                    continue;
-                }
+
                 $newContent = $this->fixCommentLeadingSpace($content, '#');
             }
 

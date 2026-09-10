@@ -39,18 +39,18 @@ final class PhpUnitAssertNewNamesFixer extends AbstractPhpUnitFixer
             'Rename deprecated PHPUnit assertions like `assertFileNotExists` to new methods like `assertFileDoesNotExist`.',
             [
                 new CodeSample(
-                    <<<'PHP_WRAP'
-                    <?php
-                    final class MyTest extends \PHPUnit_Framework_TestCase
-                    {
-                        public function testSomeTest()
+                    <<<'PHP'
+                        <?php
+                        final class MyTest extends \PHPUnit_Framework_TestCase
                         {
-                            $this->assertFileNotExists("test.php");
-                            $this->assertNotIsWritable("path.php");
+                            public function testSomeTest()
+                            {
+                                $this->assertFileNotExists("test.php");
+                                $this->assertNotIsWritable("path.php");
+                            }
                         }
-                    }
-                    
-                    PHP_WRAP,
+
+                        PHP,
                 ),
             ],
             null,
@@ -68,9 +68,6 @@ final class PhpUnitAssertNewNamesFixer extends AbstractPhpUnitFixer
         return -10;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         foreach ($this->getPreviousAssertCall($tokens, $startIndex, $endIndex) as $assertCall) {
@@ -85,7 +82,6 @@ final class PhpUnitAssertNewNamesFixer extends AbstractPhpUnitFixer
      *     openBraceIndex: int,
      *     closeBraceIndex: int,
      * } $assertCall
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixAssertNewNames(Tokens $tokens, array $assertCall): void
     {

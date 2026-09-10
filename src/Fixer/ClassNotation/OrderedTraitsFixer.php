@@ -61,9 +61,6 @@ final class OrderedTraitsFixer extends AbstractFixer implements ConfigurableFixe
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(CT::T_USE_TRAIT);
@@ -84,9 +81,6 @@ final class OrderedTraitsFixer extends AbstractFixer implements ConfigurableFixe
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($this->findUseStatementsGroups($tokens) as $uses) {
@@ -96,7 +90,6 @@ final class OrderedTraitsFixer extends AbstractFixer implements ConfigurableFixe
 
     /**
      * @return iterable<array<int, Tokens>>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findUseStatementsGroups(Tokens $tokens): iterable
     {
@@ -104,10 +97,8 @@ final class OrderedTraitsFixer extends AbstractFixer implements ConfigurableFixe
 
         for ($index = 1, $max = \count($tokens); $index < $max; ++$index) {
             $token = $tokens[$index];
-            if ($token->isWhitespace()) {
-                continue;
-            }
-            if ($token->isComment()) {
+
+            if ($token->isWhitespace() || $token->isComment()) {
                 continue;
             }
 
@@ -144,7 +135,6 @@ final class OrderedTraitsFixer extends AbstractFixer implements ConfigurableFixe
 
     /**
      * @param array<int, Tokens> $uses
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function sortUseStatements(Tokens $tokens, array $uses): void
     {
@@ -155,9 +145,6 @@ final class OrderedTraitsFixer extends AbstractFixer implements ConfigurableFixe
         $this->sort($tokens, $uses);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $use
-     */
     private function sortMultipleTraitsInStatement(Tokens $use): void
     {
         $traits = [];
@@ -195,7 +182,6 @@ final class OrderedTraitsFixer extends AbstractFixer implements ConfigurableFixe
 
     /**
      * @param array<int, Tokens> $elements
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function sort(Tokens $tokens, array $elements): void
     {

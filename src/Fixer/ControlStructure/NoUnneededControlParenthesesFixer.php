@@ -236,17 +236,11 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         return 30;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(['(', CT::T_BRACE_CLASS_INSTANTIATION_OPEN]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -340,29 +334,16 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isUselessWrapped(Tokens $tokens, int $beforeOpenIndex, int $afterCloseIndex): bool
     {
-        if ($this->isSingleStatement($tokens, $beforeOpenIndex, $afterCloseIndex)) {
-            return true;
-        }
-        if ($this->isWrappedFnBody($tokens, $beforeOpenIndex, $afterCloseIndex)) {
-            return true;
-        }
-        if ($this->isWrappedForElement($tokens, $beforeOpenIndex, $afterCloseIndex)) {
-            return true;
-        }
-        if ($this->isWrappedLanguageConstructArgument($tokens, $beforeOpenIndex, $afterCloseIndex)) {
-            return true;
-        }
-        return $this->isWrappedSequenceElement($tokens, $beforeOpenIndex, $afterCloseIndex);
+        return
+            $this->isSingleStatement($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isWrappedFnBody($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isWrappedForElement($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isWrappedLanguageConstructArgument($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isWrappedSequenceElement($tokens, $beforeOpenIndex, $afterCloseIndex);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isWrappedCloneArgument(Tokens $tokens, int $beforeOpenIndex, int $openIndex, int $closeIndex, int $afterCloseIndex): bool
     {
         $beforeOpenIndex = $tokens->getPrevMeaningfulToken($beforeOpenIndex);
@@ -389,9 +370,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         return !$this->containsOperation($tokens, $openIndex, $closeIndex);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getIndexOfInstanceOfStatement(Tokens $tokens, int $openIndex, int $closeIndex): ?int
     {
         $instanceOfIndex = $tokens->findGivenKind(\T_INSTANCEOF, $openIndex, $closeIndex);
@@ -399,9 +377,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         return 1 === \count($instanceOfIndex) ? array_key_first($instanceOfIndex) : null;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isWrappedInstanceOf(Tokens $tokens, int $instanceOfIndex, int $beforeOpenIndex, int $openIndex, int $closeIndex, int $afterCloseIndex): bool
     {
         if (
@@ -414,24 +389,15 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         if ($tokens[$beforeOpenIndex]->equals('!')) {
             $beforeOpenIndex = $tokens->getPrevMeaningfulToken($beforeOpenIndex);
         }
-        if ($this->isSimpleAssignment($tokens, $beforeOpenIndex, $afterCloseIndex)) {
-            return true;
-        }
-        if ($this->isSingleStatement($tokens, $beforeOpenIndex, $afterCloseIndex)) {
-            return true;
-        }
-        if ($this->isWrappedFnBody($tokens, $beforeOpenIndex, $afterCloseIndex)) {
-            return true;
-        }
-        if ($this->isWrappedForElement($tokens, $beforeOpenIndex, $afterCloseIndex)) {
-            return true;
-        }
-        return $this->isWrappedSequenceElement($tokens, $beforeOpenIndex, $afterCloseIndex);
+
+        return
+            $this->isSimpleAssignment($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isSingleStatement($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isWrappedFnBody($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isWrappedForElement($tokens, $beforeOpenIndex, $afterCloseIndex)
+            || $this->isWrappedSequenceElement($tokens, $beforeOpenIndex, $afterCloseIndex);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isWrappedPartOfOperation(Tokens $tokens, int $beforeOpenIndex, int $openIndex, int $closeIndex, int $afterCloseIndex): bool
     {
         if ($this->containsOperation($tokens, $openIndex, $closeIndex)) {
@@ -500,9 +466,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
     }
 
     // bounded `print|yield|yield from|require|require_once|include|include_once (X)`
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isWrappedLanguageConstructArgument(Tokens $tokens, int $beforeOpenIndex, int $afterCloseIndex): bool
     {
         if (!$tokens[$beforeOpenIndex]->isGivenKind([\T_PRINT, \T_YIELD, \T_YIELD_FROM, \T_REQUIRE, \T_REQUIRE_ONCE, \T_INCLUDE, \T_INCLUDE_ONCE])) {
@@ -515,9 +478,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
     }
 
     // any of `<?php|<?|<?=|;|throw|return|... (X) ;|T_CLOSE`
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isSingleStatement(Tokens $tokens, int $beforeOpenIndex, int $afterCloseIndex): bool
     {
         if ($tokens[$beforeOpenIndex]->isGivenKind(\T_CASE)) {
@@ -535,17 +495,11 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         return $tokens[$beforeOpenIndex]->equalsAny(self::BEFORE_TYPES);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isSimpleAssignment(Tokens $tokens, int $beforeOpenIndex, int $afterCloseIndex): bool
     {
         return $tokens[$beforeOpenIndex]->equals('=') && $tokens[$afterCloseIndex]->equalsAny([';', [\T_CLOSE_TAG]]); // `= (X) ;`
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isWrappedSequenceElement(Tokens $tokens, int $startIndex, int $endIndex): bool
     {
         $startIsComma = $tokens[$startIndex]->equals(',');
@@ -565,9 +519,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
     }
 
     // any of `for( (X); ;(X)) ;` note that the middle element is covered as 'single statement' as it is `; (X) ;`
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isWrappedForElement(Tokens $tokens, int $beforeOpenIndex, int $afterCloseIndex): bool
     {
         $forCandidateIndex = null;
@@ -583,9 +534,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
     }
 
     // `fn() => (X);`
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isWrappedFnBody(Tokens $tokens, int $beforeOpenIndex, int $afterCloseIndex): bool
     {
         if (!$tokens[$beforeOpenIndex]->isGivenKind(\T_DOUBLE_ARROW)) {
@@ -628,20 +576,11 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         return $tokens[$afterCloseIndex]->equalsAny([';', ',', [\T_CLOSE_TAG]]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isPreUnaryOperation(Tokens $tokens, int $index): bool
     {
-        if ($this->tokensAnalyzer->isUnaryPredecessorOperator($index)) {
-            return true;
-        }
-        return $tokens[$index]->isCast();
+        return $this->tokensAnalyzer->isUnaryPredecessorOperator($index) || $tokens[$index]->isCast();
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getBeforePreUnaryOperation(Tokens $tokens, int $index): int
     {
         do {
@@ -652,24 +591,13 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
     }
 
     // array access `(X)[` or `(X){` or object access `(X)->` or `(X)?->`
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isAccess(Tokens $tokens, int $index): bool
     {
         $token = $tokens[$index];
-        if ($token->isObjectOperator()) {
-            return true;
-        }
-        if ($token->equals('[')) {
-            return true;
-        }
-        return $token->isGivenKind(CT::T_ARRAY_INDEX_CURLY_BRACE_OPEN);
+
+        return $token->isObjectOperator() || $token->equals('[') || $token->isGivenKind(CT::T_ARRAY_INDEX_CURLY_BRACE_OPEN);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getAfterAccess(Tokens $tokens, int $index): int
     {
         while (true) {
@@ -699,7 +627,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
 
     /**
      * @return null|array{type: Tokens::BLOCK_TYPE_*, isStart: bool}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getBlock(Tokens $tokens, int $index, bool $isStart): ?array
     {
@@ -708,9 +635,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         return null !== $block && $isStart === $block['isStart'] && \in_array($block['type'], self::BLOCK_TYPES, true) ? $block : null;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function containsOperation(Tokens $tokens, int $startIndex, int $endIndex): bool
     {
         while (true) {
@@ -736,9 +660,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         return false;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getConfigType(Tokens $tokens, int $beforeOpenIndex): ?string
     {
         if ($tokens[$beforeOpenIndex]->isGivenKind(self::TOKEN_TYPE_NO_CONFIG)) {
@@ -754,9 +675,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         return 'others';
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function removeUselessParenthesisPair(
         Tokens $tokens,
         int $beforeOpenIndex,
@@ -784,9 +702,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         $this->removeBrace($tokens, $openIndex, $needsSpaceBefore);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function removeBrace(Tokens $tokens, int $index, bool $needsSpace): void
     {
         if ($needsSpace) {
@@ -808,9 +723,6 @@ final class NoUnneededControlParenthesesFixer extends AbstractFixer implements C
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function closeCurlyBelongsToDynamicElement(Tokens $tokens, int $beforeOpenIndex): bool
     {
         $index = $tokens->findBlockStart(Tokens::BLOCK_TYPE_CURLY_BRACE, $beforeOpenIndex);

@@ -68,9 +68,6 @@ final class ProtectedToPrivateFixer extends AbstractFixer
         return 66;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_PROTECTED, CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PROTECTED, FCT::T_PROTECTED_SET])
@@ -80,9 +77,6 @@ final class ProtectedToPrivateFixer extends AbstractFixer
             );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -147,7 +141,6 @@ final class ProtectedToPrivateFixer extends AbstractFixer
      *     - is final
      *     - does not use traits
      *     - does not extend other class.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isClassCandidate(Tokens $tokens, int $classIndex): bool
     {

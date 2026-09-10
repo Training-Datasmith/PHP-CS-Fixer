@@ -29,9 +29,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class BacktickToShellExecFixer extends AbstractFixer
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound('`');
@@ -65,9 +62,6 @@ final class BacktickToShellExecFixer extends AbstractFixer
         return 17;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $backtickStarted = false;
@@ -98,7 +92,6 @@ final class BacktickToShellExecFixer extends AbstractFixer
      * Override backtick code with corresponding double-quoted string.
      *
      * @param array<int, Token> $backtickTokens
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixBackticks(Tokens $tokens, array $backtickTokens): void
     {

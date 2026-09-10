@@ -45,9 +45,6 @@ final class ImportTransformer extends AbstractTransformer
         return 5_06_00;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function process(Tokens $tokens, Token $token, int $index): void
     {
         if (!$token->isGivenKind([\T_CONST, \T_FUNCTION])) {

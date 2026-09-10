@@ -50,9 +50,6 @@ final class ModernSerializationMethodsFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_CLASS, \T_FUNCTION]);
@@ -63,9 +60,6 @@ final class ModernSerializationMethodsFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $methodsByClass = [];

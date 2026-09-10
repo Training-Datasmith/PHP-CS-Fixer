@@ -79,9 +79,6 @@ final class TypesSpacesFixer extends AbstractFixer implements ConfigurableFixerI
         return -1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([CT::T_TYPE_ALTERNATION, CT::T_TYPE_INTERSECTION]);
@@ -111,9 +108,6 @@ final class TypesSpacesFixer extends AbstractFixer implements ConfigurableFixerI
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokenCount = $tokens->count() - 1;
@@ -141,9 +135,6 @@ final class TypesSpacesFixer extends AbstractFixer implements ConfigurableFixerI
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixSpacing(Tokens $tokens, int $index, bool $singleSpace): int
     {
         if (!$singleSpace) {
@@ -155,13 +146,11 @@ final class TypesSpacesFixer extends AbstractFixer implements ConfigurableFixerI
 
         $addedTokenCount = 0;
         $addedTokenCount += $this->ensureSingleSpace($tokens, $index + 1, 0);
+        $addedTokenCount += $this->ensureSingleSpace($tokens, $index - 1, 1);
 
-        return $addedTokenCount + $this->ensureSingleSpace($tokens, $index - 1, 1);
+        return $addedTokenCount;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function ensureSingleSpace(Tokens $tokens, int $index, int $offset): int
     {
         if (!$tokens[$index]->isWhitespace()) {
@@ -177,9 +166,6 @@ final class TypesSpacesFixer extends AbstractFixer implements ConfigurableFixerI
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function ensureNoSpace(Tokens $tokens, int $index): void
     {
         if ($tokens[$index]->isWhitespace() && !Preg::match('/\R/', $tokens[$index]->getContent())) {

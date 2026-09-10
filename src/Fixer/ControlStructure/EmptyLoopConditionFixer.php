@@ -70,17 +70,11 @@ final class EmptyLoopConditionFixer extends AbstractFixer implements Configurabl
         return 1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(self::TOKEN_LOOP_KINDS);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         if (self::STYLE_WHILE === $this->configuration['style']) {
@@ -143,9 +137,6 @@ final class EmptyLoopConditionFixer extends AbstractFixer implements Configurabl
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private static function clearNotCommentsInRange(Tokens $tokens, int $indexStart, int $indexEnd): void
     {
         for ($i = $indexStart; $i <= $indexEnd; ++$i) {
@@ -157,7 +148,6 @@ final class EmptyLoopConditionFixer extends AbstractFixer implements Configurabl
 
     /**
      * @param list<Token> $replacement
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function cloneAndInsert(Tokens $tokens, int $index, array $replacement): void
     {
@@ -170,9 +160,6 @@ final class EmptyLoopConditionFixer extends AbstractFixer implements Configurabl
         $tokens->insertAt($index, $replacementClones);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private static function getDoIndex(Tokens $tokens, int $index): ?int
     {
         $endIndex = $tokens->getPrevMeaningfulToken($index);
@@ -187,9 +174,6 @@ final class EmptyLoopConditionFixer extends AbstractFixer implements Configurabl
         return null === $index || !$tokens[$index]->isGivenKind(\T_DO) ? null : $index;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private static function isForLoopWithEmptyCondition(Tokens $tokens, int $index, int $openIndex, int $endIndex): bool
     {
         if (!$tokens[$index]->isGivenKind(\T_FOR)) {
@@ -207,9 +191,6 @@ final class EmptyLoopConditionFixer extends AbstractFixer implements Configurabl
         return null !== $index && $tokens[$index]->equals(';') && $endIndex === $tokens->getNextMeaningfulToken($index);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private static function isWhileLoopWithEmptyCondition(Tokens $tokens, int $index, int $openIndex, int $endIndex): bool
     {
         if (!$tokens[$index]->isGivenKind(\T_WHILE)) {

@@ -52,17 +52,11 @@ final class SwitchCaseSpaceFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_SWITCH);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         /** @var SwitchAnalysis $analysis */
@@ -71,10 +65,8 @@ final class SwitchCaseSpaceFixer extends AbstractFixer
 
             if (null !== $default) {
                 $index = $default->getIndex();
-                if (!$tokens[$index + 1]->isWhitespace()) {
-                    continue;
-                }
-                if (!$tokens[$index + 2]->equalsAny([':', ';'])) {
+
+                if (!$tokens[$index + 1]->isWhitespace() || !$tokens[$index + 2]->equalsAny([':', ';'])) {
                     continue;
                 }
 
@@ -84,11 +76,9 @@ final class SwitchCaseSpaceFixer extends AbstractFixer
             foreach ($analysis->getCases() as $caseAnalysis) {
                 $colonIndex = $caseAnalysis->getColonIndex();
                 $valueIndex = $tokens->getPrevNonWhitespace($colonIndex);
+
                 // skip if there is no space between the colon and previous token or is space after comment
-                if ($valueIndex === $colonIndex - 1) {
-                    continue;
-                }
-                if ($tokens[$valueIndex]->isComment()) {
+                if ($valueIndex === $colonIndex - 1 || $tokens[$valueIndex]->isComment()) {
                     continue;
                 }
 

@@ -94,7 +94,7 @@ final class Utils
             $sortItems[] = [$element, $index, $getComparedValue($element)];
         }
 
-        usort($sortItems, static function (array $a, array $b) use ($compareValues): int {
+        usort($sortItems, static function ($a, $b) use ($compareValues): int {
             $comparison = $compareValues($a[2], $b[2]);
 
             if (0 !== $comparison) {

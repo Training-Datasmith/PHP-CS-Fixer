@@ -96,9 +96,6 @@ final class GeneralPhpdocTagRenameFixer extends AbstractFixer implements Configu
         return 11;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
@@ -174,9 +171,6 @@ final class GeneralPhpdocTagRenameFixer extends AbstractFixer implements Configu
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         if (0 === \count($this->configuration['replacements'])) {

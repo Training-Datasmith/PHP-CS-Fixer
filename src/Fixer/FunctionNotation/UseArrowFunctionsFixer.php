@@ -50,9 +50,6 @@ final class UseArrowFunctionsFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_FUNCTION, \T_RETURN]);
@@ -73,9 +70,6 @@ final class UseArrowFunctionsFixer extends AbstractFixer
         return 32;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $analyzer = new TokensAnalyzer($tokens);
@@ -86,10 +80,8 @@ final class UseArrowFunctionsFixer extends AbstractFixer
 
                 continue;
             }
-            if (!$tokens[$index]->isGivenKind(\T_FUNCTION)) {
-                continue;
-            }
-            if (!$analyzer->isLambda($index)) {
+
+            if (!$tokens[$index]->isGivenKind(\T_FUNCTION) || !$analyzer->isLambda($index)) {
                 continue;
             }
 
@@ -180,9 +172,6 @@ final class UseArrowFunctionsFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function transform(Tokens $tokens, int $index, ?int $useStart, ?int $useEnd, int $braceOpen, int $return, int $semicolon, int $braceClose): void
     {
         $tokensToInsert = [new Token([\T_DOUBLE_ARROW, '=>'])];
@@ -207,7 +196,6 @@ final class UseArrowFunctionsFixer extends AbstractFixer
 
     /**
      * Check if the return statement contains include/include_once/require/require_once.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function containsIncludeOrRequire(Tokens $tokens, int $start, int $end): bool
     {

@@ -62,17 +62,11 @@ final class ExplicitStringVariableFixer extends AbstractFixer
         return 6;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_VARIABLE);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $backtickStarted = false;
@@ -84,10 +78,8 @@ final class ExplicitStringVariableFixer extends AbstractFixer
 
                 continue;
             }
-            if ($backtickStarted) {
-                continue;
-            }
-            if (!$token->isGivenKind(\T_VARIABLE)) {
+
+            if ($backtickStarted || !$token->isGivenKind(\T_VARIABLE)) {
                 continue;
             }
 
@@ -168,15 +160,9 @@ final class ExplicitStringVariableFixer extends AbstractFixer
      */
     private function isStringPartToken(Token $token): bool
     {
-        if ($token->isGivenKind(\T_ENCAPSED_AND_WHITESPACE)) {
-            return true;
-        }
-        if ($token->isGivenKind(\T_START_HEREDOC)) {
-            return true;
-        }
-        if ('"' === $token->getContent()) {
-            return true;
-        }
-        return 'b"' === strtolower($token->getContent());
+        return $token->isGivenKind(\T_ENCAPSED_AND_WHITESPACE)
+            || $token->isGivenKind(\T_START_HEREDOC)
+            || '"' === $token->getContent()
+            || 'b"' === strtolower($token->getContent());
     }
 }

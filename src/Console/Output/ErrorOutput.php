@@ -55,10 +55,7 @@ final class ErrorOutput
         foreach ($errors as $i => $error) {
             $this->output->writeln(\sprintf('%4d) %s', $i + 1, $error->getFilePath()));
             $e = $error->getSource();
-            if (!$showDetails) {
-                continue;
-            }
-            if (null === $e) {
+            if (!$showDetails || null === $e) {
                 continue;
             }
 

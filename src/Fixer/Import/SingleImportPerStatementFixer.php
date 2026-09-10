@@ -89,17 +89,11 @@ final class SingleImportPerStatementFixer extends AbstractFixer implements Confi
         return 1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_USE);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -130,7 +124,6 @@ final class SingleImportPerStatementFixer extends AbstractFixer implements Confi
 
     /**
      * @return array{string, ?int, int, string}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getGroupDeclaration(Tokens $tokens, int $index): array
     {
@@ -173,7 +166,6 @@ final class SingleImportPerStatementFixer extends AbstractFixer implements Confi
 
     /**
      * @return list<string>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getGroupStatements(Tokens $tokens, string $groupPrefix, int $groupOpenIndex, int $groupCloseIndex, string $comment): array
     {
@@ -207,10 +199,8 @@ final class SingleImportPerStatementFixer extends AbstractFixer implements Confi
                     $statement = ' const'.$statement;
                     $i += 2;
                 }
-                if ($token->isWhitespace(" \t")) {
-                    continue;
-                }
-                if (!str_starts_with($tokens[$i - 1]->getContent(), '//')) {
+
+                if ($token->isWhitespace(" \t") || !str_starts_with($tokens[$i - 1]->getContent(), '//')) {
                     continue;
                 }
             }
@@ -225,9 +215,6 @@ final class SingleImportPerStatementFixer extends AbstractFixer implements Confi
         return $statements;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixGroupUse(Tokens $tokens, int $index, int $endIndex): void
     {
         [$groupPrefix, $groupOpenIndex, $groupCloseIndex, $comment] = $this->getGroupDeclaration($tokens, $index);
@@ -246,9 +233,6 @@ final class SingleImportPerStatementFixer extends AbstractFixer implements Confi
         $tokens->insertAt($index, $importTokens);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixMultipleUse(Tokens $tokens, int $index, int $endIndex): void
     {
         $nextTokenIndex = $tokens->getNextMeaningfulToken($index);

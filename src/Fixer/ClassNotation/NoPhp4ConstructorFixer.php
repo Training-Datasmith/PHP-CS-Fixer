@@ -64,9 +64,6 @@ final class NoPhp4ConstructorFixer extends AbstractFixer
         return 75;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_CLASS);
@@ -77,9 +74,6 @@ final class NoPhp4ConstructorFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -140,7 +134,7 @@ final class NoPhp4ConstructorFixer extends AbstractFixer
     /**
      * Fix constructor within a class, if possible.
      *
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens the Tokens instance
+     * @param Tokens $tokens     the Tokens instance
      * @param string $className  the class name
      * @param int    $classStart the class start index
      * @param int    $classEnd   the class end index
@@ -204,7 +198,7 @@ final class NoPhp4ConstructorFixer extends AbstractFixer
     /**
      * Fix calls to the parent constructor within a class.
      *
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens the Tokens instance
+     * @param Tokens $tokens     the Tokens instance
      * @param int    $classStart the class start index
      * @param int    $classEnd   the class end index
      */
@@ -267,7 +261,7 @@ final class NoPhp4ConstructorFixer extends AbstractFixer
      * Fix a particular infinite recursion issue happening when the parent class has __construct and the child has only
      * a PHP4 constructor that calls the parent constructor as $this->__construct().
      *
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens the Tokens instance
+     * @param Tokens $tokens the Tokens instance
      * @param int    $start  the PHP4 constructor body start
      * @param int    $end    the PHP4 constructor body end
      */
@@ -299,7 +293,7 @@ final class NoPhp4ConstructorFixer extends AbstractFixer
      * Generate the sequence of tokens necessary for the body of a wrapper method that simply
      * calls $this->{$method}( [args...] ) with the same arguments as its own signature.
      *
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens the Tokens instance
+     * @param Tokens $tokens     the Tokens instance
      * @param string $method     the wrapped method name
      * @param int    $startIndex function/method start index
      * @param int    $bodyIndex  function/method body index
@@ -362,7 +356,7 @@ final class NoPhp4ConstructorFixer extends AbstractFixer
      * - bodyIndex (int): The index of the function/method body.
      * - modifiers (array): The modifiers as array keys and their index as the values, e.g. array(T_PUBLIC => 10)
      *
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens the Tokens instance
+     * @param Tokens $tokens     the Tokens instance
      * @param string $name       the function/Method name
      * @param int    $startIndex the search start index
      * @param int    $endIndex   the search end index

@@ -34,7 +34,6 @@ final class NamespaceUsesAnalyzer
 {
     /**
      * @return list<NamespaceUseAnalysis>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function getDeclarationsFromTokens(Tokens $tokens, bool $allowMultiUses = false): array
     {
@@ -46,7 +45,6 @@ final class NamespaceUsesAnalyzer
 
     /**
      * @return list<NamespaceUseAnalysis>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function getDeclarationsInNamespace(Tokens $tokens, NamespaceAnalysis $namespace, bool $allowMultiUses = false): array
     {
@@ -65,7 +63,6 @@ final class NamespaceUsesAnalyzer
      * @param list<int> $useIndices
      *
      * @return list<NamespaceUseAnalysis>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getDeclarations(Tokens $tokens, array $useIndices, bool $allowMultiUses = false): array
     {
@@ -76,7 +73,7 @@ final class NamespaceUsesAnalyzer
 
             $declarations = $this->parseDeclarations($index, $endIndex, $tokens);
             if (false === $allowMultiUses) {
-                $declarations = array_filter($declarations, static fn (NamespaceUseAnalysis $declaration): bool => !$declaration->isInMulti());
+                $declarations = array_filter($declarations, static fn (NamespaceUseAnalysis $declaration) => !$declaration->isInMulti());
             }
 
             if ([] !== $declarations) {
@@ -89,7 +86,6 @@ final class NamespaceUsesAnalyzer
 
     /**
      * @return list<NamespaceUseAnalysis>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function parseDeclarations(int $startIndex, int $endIndex, Tokens $tokens): array
     {
@@ -164,7 +160,6 @@ final class NamespaceUsesAnalyzer
 
     /**
      * @return NamespaceUseAnalysis::TYPE_*
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function determineImportType(Tokens $tokens, int $startIndex): int
     {
@@ -183,7 +178,6 @@ final class NamespaceUsesAnalyzer
 
     /**
      * @return array{fullName: string, shortName: string, aliased: bool, afterIndex: int}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getNearestQualifiedName(Tokens $tokens, int $index): array
     {

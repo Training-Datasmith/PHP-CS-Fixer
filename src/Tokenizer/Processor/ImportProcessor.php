@@ -41,7 +41,6 @@ final class ImportProcessor
      *     class?: array<int|string, non-empty-string>,
      *     function?: array<int|string, non-empty-string>
      * } $imports
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function insertImports(Tokens $tokens, array $imports, int $atIndex): void
     {

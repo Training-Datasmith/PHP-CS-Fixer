@@ -63,23 +63,23 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     public function getDefinition(): FixerDefinitionInterface
     {
-        $codeSample = <<<'PHP_WRAP'
-        <?php
-        /**
-         * @covers \VendorName\Foo
-         * @internal
-         */
-        final class FooTest extends TestCase {
+        $codeSample = <<<'PHP'
+            <?php
             /**
-             * @param int $expected
-             * @param int $actual
-             * @dataProvider giveMeSomeData
-             * @requires PHP 8.0
+             * @covers \VendorName\Foo
+             * @internal
              */
-            public function testSomething($expected, $actual) {}
-        }
-        
-        PHP_WRAP;
+            final class FooTest extends TestCase {
+                /**
+                 * @param int $expected
+                 * @param int $actual
+                 * @dataProvider giveMeSomeData
+                 * @requires PHP 8.0
+                 */
+                public function testSomething($expected, $actual) {}
+            }
+
+            PHP;
 
         return new FixerDefinition(
             'PHPUnit attributes must be used over their respective PHPDoc-based annotations.',
@@ -90,9 +90,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return \PHP_VERSION_ID >= 8_00_00 && parent::isCandidate($tokens);
@@ -119,9 +116,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $classIndex = $tokens->getPrevTokenOfKind($startIndex, [[\T_CLASS]]);
@@ -243,7 +237,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @param list<Token> $tokensToInsert
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function isAttributeAlreadyPresent(
         Tokens $tokens,
@@ -282,7 +275,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @return non-empty-list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function fixWithoutParameters(Tokens $tokens, int $index, Annotation $annotation): array
     {
@@ -291,7 +283,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @return list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function fixWithSingleStringValue(Tokens $tokens, int $index, Annotation $annotation): array
     {
@@ -314,7 +305,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @return list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function fixWithEnabledDisabledValue(Tokens $tokens, int $index, Annotation $annotation): array
     {
@@ -333,7 +323,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @return list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function fixCovers(Tokens $tokens, int $index, Annotation $annotation): array
     {
@@ -357,7 +346,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @return list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function fixDataProvider(Tokens $tokens, int $index, Annotation $annotation): array
     {
@@ -396,7 +384,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @return list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function fixDepends(Tokens $tokens, int $index, Annotation $annotation): array
     {
@@ -448,7 +435,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @return list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function fixRequires(Tokens $tokens, int $index, Annotation $annotation): array
     {
@@ -502,7 +488,7 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
     private static function fixVersionConstraint(string $version): string
     {
         if (Preg::match('/^[\d\.-]+(dev|(RC|alpha|beta)[\d\.])?$/', $version)) {
-            return '>= '.$version;
+            $version = '>= '.$version;
         }
 
         return $version;
@@ -510,7 +496,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @return list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function fixTestWith(Tokens $tokens, int $index, Annotation $annotation): array
     {
@@ -535,7 +520,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @return list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function fixUses(Tokens $tokens, int $index, Annotation $annotation): array
     {
@@ -584,7 +568,6 @@ final class PhpUnitAttributesFixer extends AbstractPhpUnitFixer implements Confi
 
     /**
      * @return non-empty-list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function createAttributeTokens(
         Tokens $tokens,

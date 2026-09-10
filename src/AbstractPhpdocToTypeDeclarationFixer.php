@@ -108,7 +108,6 @@ abstract class AbstractPhpdocToTypeDeclarationFixer extends AbstractFixer implem
 
     /**
      * @param int $index The index of the function token
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     protected function findFunctionDocComment(Tokens $tokens, int $index): ?int
     {
@@ -133,7 +132,6 @@ abstract class AbstractPhpdocToTypeDeclarationFixer extends AbstractFixer implem
 
     /**
      * @return list<Annotation>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     protected function getAnnotationsFromDocComment(string $name, Tokens $tokens, int $docCommentIndex): array
     {

@@ -52,17 +52,11 @@ final class NoEmptyStatementFixer extends AbstractFixer
         return 40;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(';');
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = 0, $count = $tokens->count(); $index < $count; ++$index) {
@@ -136,7 +130,6 @@ final class NoEmptyStatementFixer extends AbstractFixer
      * - namespace (with '{' '}')
      *
      * @param int $index Semicolon index
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixSemicolonAfterCurlyBraceClose(Tokens $tokens, int $index, int $curlyCloseIndex): void
     {

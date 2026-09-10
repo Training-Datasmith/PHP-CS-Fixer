@@ -59,7 +59,7 @@ final class ProcessUtils
                     $escapedArgument .= '^%"'.substr($part, 1, -1).'"^%';
                 } else {
                     // escape trailing backslash
-                    if (str_ends_with($part, '\\')) {
+                    if ('\\' === substr($part, -1)) {
                         $part .= '\\';
                     }
                     $quote = true;
@@ -67,7 +67,7 @@ final class ProcessUtils
                 }
             }
             if ($quote) {
-                return '"'.$escapedArgument.'"';
+                $escapedArgument = '"'.$escapedArgument.'"';
             }
 
             return $escapedArgument;

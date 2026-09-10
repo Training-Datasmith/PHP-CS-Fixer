@@ -57,17 +57,11 @@ final class SingleTraitInsertPerStatementFixer extends AbstractFixer
         return 36;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(CT::T_USE_TRAIT);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = \count($tokens) - 1; 1 < $index; --$index) {
@@ -82,7 +76,6 @@ final class SingleTraitInsertPerStatementFixer extends AbstractFixer
 
     /**
      * @param list<int> $candidates ',' indices to fix
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixTraitUse(Tokens $tokens, int $useTraitIndex, array $candidates): void
     {
@@ -108,7 +101,6 @@ final class SingleTraitInsertPerStatementFixer extends AbstractFixer
 
     /**
      * @return list<int>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getCandidates(Tokens $tokens, int $index): array
     {

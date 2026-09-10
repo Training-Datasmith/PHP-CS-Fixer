@@ -64,36 +64,36 @@ final class PhpUnitStrictFixer extends AbstractPhpUnitFixer implements Configura
             'PHPUnit methods like `assertSame` should be used instead of `assertEquals`.',
             [
                 new CodeSample(
-                    <<<'PHP_WRAP'
-                    <?php
-                    final class MyTest extends \PHPUnit_Framework_TestCase
-                    {
-                        public function testSomeTest()
+                    <<<'PHP'
+                        <?php
+                        final class MyTest extends \PHPUnit_Framework_TestCase
                         {
-                            $this->assertAttributeEquals(a(), b());
-                            $this->assertAttributeNotEquals(a(), b());
-                            $this->assertEquals(a(), b());
-                            $this->assertNotEquals(a(), b());
+                            public function testSomeTest()
+                            {
+                                $this->assertAttributeEquals(a(), b());
+                                $this->assertAttributeNotEquals(a(), b());
+                                $this->assertEquals(a(), b());
+                                $this->assertNotEquals(a(), b());
+                            }
                         }
-                    }
-                    
-                    PHP_WRAP,
+
+                        PHP,
                 ),
                 new CodeSample(
-                    <<<'PHP_WRAP'
-                    <?php
-                    final class MyTest extends \PHPUnit_Framework_TestCase
-                    {
-                        public function testSomeTest()
+                    <<<'PHP'
+                        <?php
+                        final class MyTest extends \PHPUnit_Framework_TestCase
                         {
-                            $this->assertAttributeEquals(a(), b());
-                            $this->assertAttributeNotEquals(a(), b());
-                            $this->assertEquals(a(), b());
-                            $this->assertNotEquals(a(), b());
+                            public function testSomeTest()
+                            {
+                                $this->assertAttributeEquals(a(), b());
+                                $this->assertAttributeNotEquals(a(), b());
+                                $this->assertEquals(a(), b());
+                                $this->assertNotEquals(a(), b());
+                            }
                         }
-                    }
-                    
-                    PHP_WRAP,
+
+                        PHP,
                     ['assertions' => ['assertEquals']],
                 ),
             ],
@@ -107,9 +107,6 @@ final class PhpUnitStrictFixer extends AbstractPhpUnitFixer implements Configura
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();

@@ -38,9 +38,6 @@ final class StaticLambdaFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_FUNCTION, \T_FN]);
@@ -61,21 +58,16 @@ final class StaticLambdaFixer extends AbstractFixer
         return parent::getPriority();
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $analyzer = new TokensAnalyzer($tokens);
         $expectedFunctionKinds = [\T_FUNCTION, \T_FN];
 
         for ($index = $tokens->count() - 4; $index > 0; --$index) {
-            if (!$tokens[$index]->isGivenKind($expectedFunctionKinds)) {
+            if (!$tokens[$index]->isGivenKind($expectedFunctionKinds) || !$analyzer->isLambda($index)) {
                 continue;
             }
-            if (!$analyzer->isLambda($index)) {
-                continue;
-            }
+
             $prev = $tokens->getPrevMeaningfulToken($index);
 
             if ($tokens[$prev]->isGivenKind(\T_STATIC)) {
@@ -114,7 +106,6 @@ final class StaticLambdaFixer extends AbstractFixer
 
     /**
      * Returns 'true' if there is a possible reference to '$this' within the given tokens index range.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function hasPossibleReferenceToThis(Tokens $tokens, int $startIndex, int $endIndex): bool
     {

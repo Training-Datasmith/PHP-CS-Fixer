@@ -93,9 +93,6 @@ final class StringImplicitBackslashesFixer extends AbstractFixer implements Conf
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_ENCAPSED_AND_WHITESPACE, \T_CONSTANT_ENCAPSED_STRING]);
@@ -112,9 +109,6 @@ final class StringImplicitBackslashesFixer extends AbstractFixer implements Conf
         return 15;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $singleQuotedReservedRegex = '[\'\\\]';
@@ -137,7 +131,7 @@ final class StringImplicitBackslashesFixer extends AbstractFixer implements Conf
             }
 
             // nowdoc syntax
-            if ($token->isGivenKind(\T_ENCAPSED_AND_WHITESPACE) && str_ends_with(rtrim($tokens[$index - 1]->getContent()), '\'')) {
+            if ($token->isGivenKind(\T_ENCAPSED_AND_WHITESPACE) && '\'' === substr(rtrim($tokens[$index - 1]->getContent()), -1)) {
                 continue;
             }
 

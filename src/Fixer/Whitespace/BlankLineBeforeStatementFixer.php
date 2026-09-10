@@ -272,9 +272,6 @@ final class BlankLineBeforeStatementFixer extends AbstractFixer implements Confi
         return -21;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound($this->fixTokenMap);
@@ -291,9 +288,6 @@ final class BlankLineBeforeStatementFixer extends AbstractFixer implements Confi
         $this->fixTokenMap = array_values($fixTokenMap);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $analyzer = new TokensAnalyzer($tokens);
@@ -342,9 +336,6 @@ final class BlankLineBeforeStatementFixer extends AbstractFixer implements Confi
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getInsertBlankLineIndex(Tokens $tokens, int $index): int
     {
         while ($index > 0) {
@@ -372,9 +363,6 @@ final class BlankLineBeforeStatementFixer extends AbstractFixer implements Confi
         return $index;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function shouldAddBlankLine(Tokens $tokens, int $prevNonWhitespace): bool
     {
         $prevNonWhitespaceToken = $tokens[$prevNonWhitespace];
@@ -384,10 +372,8 @@ final class BlankLineBeforeStatementFixer extends AbstractFixer implements Confi
                 if (str_contains($tokens[$j]->getContent(), "\n")) {
                     return false;
                 }
-                if ($tokens[$j]->isWhitespace()) {
-                    continue;
-                }
-                if ($tokens[$j]->isComment()) {
+
+                if ($tokens[$j]->isWhitespace() || $tokens[$j]->isComment()) {
                     continue;
                 }
 
@@ -398,9 +384,6 @@ final class BlankLineBeforeStatementFixer extends AbstractFixer implements Confi
         return $prevNonWhitespaceToken->equalsAny([';', '}']);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function insertBlankLine(Tokens $tokens, int $index): void
     {
         $prevIndex = $index - 1;

@@ -48,17 +48,11 @@ final class PhpdocSingleLineVarSpacingFixer extends AbstractFixer
         return -10;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_COMMENT, \T_DOC_COMMENT]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -79,7 +73,7 @@ final class PhpdocSingleLineVarSpacingFixer extends AbstractFixer
     {
         return Preg::replaceCallback(
             '#^/\*\*\h*@var\h+(\S+)\h*(\$\S+)?\h*([^\n]*)\*/$#',
-            static function (array $matches): string {
+            static function (array $matches) {
                 $content = '/** @var';
 
                 for ($i = 1, $m = \count($matches); $i < $m; ++$i) {

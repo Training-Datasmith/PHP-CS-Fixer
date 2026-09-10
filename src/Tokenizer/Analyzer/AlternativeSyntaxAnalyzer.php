@@ -35,9 +35,6 @@ final class AlternativeSyntaxAnalyzer
         \T_SWITCH => [\T_ENDSWITCH],
     ];
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function belongsToAlternativeSyntax(Tokens $tokens, int $index): bool
     {
         if (!$tokens[$index]->equals(':')) {
@@ -68,9 +65,6 @@ final class AlternativeSyntaxAnalyzer
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function findAlternativeSyntaxBlockEnd(Tokens $tokens, int $index): int
     {
         if (!isset($tokens[$index])) {
@@ -107,9 +101,6 @@ final class AlternativeSyntaxAnalyzer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isStartOfAlternativeSyntaxBlock(Tokens $tokens, int $index): bool
     {
         $map = self::ALTERNATIVE_SYNTAX_BLOCK_EDGES;

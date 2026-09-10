@@ -176,9 +176,6 @@ final class BracesPositionFixer extends AbstractFixer implements ConfigurableFix
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound('{');
@@ -230,9 +227,6 @@ final class BracesPositionFixer extends AbstractFixer implements ConfigurableFix
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $classyTokens = Token::getClassyTokenKinds();
@@ -448,10 +442,11 @@ final class BracesPositionFixer extends AbstractFixer implements ConfigurableFix
                     ++$allowSingleLineUntil;
                 }
             }
-            if (!$addNewlinesInsideBraces) {
-                continue;
-            }
-            if ($tokens[$tokens->getPrevMeaningfulToken($closeBraceIndex)]->isGivenKind(\T_OPEN_TAG)) {
+
+            if (
+                !$addNewlinesInsideBraces
+                || $tokens[$tokens->getPrevMeaningfulToken($closeBraceIndex)]->isGivenKind(\T_OPEN_TAG)
+            ) {
                 continue;
             }
 
@@ -471,9 +466,6 @@ final class BracesPositionFixer extends AbstractFixer implements ConfigurableFix
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function findParenthesisEnd(Tokens $tokens, int $structureTokenIndex): int
     {
         $nextIndex = $tokens->getNextMeaningfulToken($structureTokenIndex);
@@ -487,9 +479,6 @@ final class BracesPositionFixer extends AbstractFixer implements ConfigurableFix
         return $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $nextIndex);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isFollowedByNewLine(Tokens $tokens, int $index): bool
     {
         for (++$index, $max = \count($tokens) - 1; $index < $max; ++$index) {
@@ -502,9 +491,6 @@ final class BracesPositionFixer extends AbstractFixer implements ConfigurableFix
         return false;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function hasCommentOnSameLine(Tokens $tokens, int $index): bool
     {
         $token = $tokens[$index + 1];

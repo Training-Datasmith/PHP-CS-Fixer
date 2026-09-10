@@ -32,9 +32,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class StringLineEndingFixer extends AbstractFixer implements WhitespacesAwareFixerInterface
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_CONSTANT_ENCAPSED_STRING, \T_ENCAPSED_AND_WHITESPACE, \T_INLINE_HTML]);
@@ -59,9 +56,6 @@ final class StringLineEndingFixer extends AbstractFixer implements WhitespacesAw
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $ending = $this->whitespacesConfig->getLineEnding();

@@ -57,9 +57,6 @@ final class YieldFromArrayToYieldsFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_YIELD_FROM);
@@ -76,9 +73,6 @@ final class YieldFromArrayToYieldsFixer extends AbstractFixer
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         /**
@@ -131,7 +125,6 @@ final class YieldFromArrayToYieldsFixer extends AbstractFixer
 
     /**
      * @return iterable<int, array{int, int}>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getYieldsFromToUnpack(Tokens $tokens): iterable
     {
@@ -177,7 +170,6 @@ final class YieldFromArrayToYieldsFixer extends AbstractFixer
 
     /**
      * @return iterable<int>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findArrayItemCommaIndex(Tokens $tokens, int $startIndex, int $endIndex): iterable
     {

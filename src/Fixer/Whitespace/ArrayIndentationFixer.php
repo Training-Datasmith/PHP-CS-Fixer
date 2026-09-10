@@ -42,9 +42,6 @@ final class ArrayIndentationFixer extends AbstractFixer implements WhitespacesAw
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_ARRAY, \T_LIST, CT::T_ARRAY_SQUARE_BRACE_OPEN, CT::T_DESTRUCTURING_SQUARE_BRACE_OPEN]);
@@ -61,9 +58,6 @@ final class ArrayIndentationFixer extends AbstractFixer implements WhitespacesAw
         return 29;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $lastIndent = '';
@@ -175,9 +169,6 @@ final class ArrayIndentationFixer extends AbstractFixer implements WhitespacesAw
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function findExpressionEndIndex(Tokens $tokens, int $index, int $parentScopeEndIndex): int
     {
         $endIndex = null;

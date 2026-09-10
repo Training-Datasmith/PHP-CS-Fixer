@@ -105,9 +105,6 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_CLASS);
@@ -118,18 +115,12 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->applyFixForSrc($file, $tokens);
         $this->applyFixForTest($file, $tokens);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function applyFixForTest(\SplFileInfo $file, Tokens $tokens): void
     {
         if (!$this->isTestForFixerFile($file)) {
@@ -153,7 +144,7 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
         }
 
         $covers = array_map(
-            static function (\PhpCsFixer\DocBlock\Annotation $annotation): string {
+            static function ($annotation): string {
                 $parts = explode(' ', $annotation->getContent());
 
                 return trim(array_pop($parts));
@@ -247,9 +238,6 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
         $tokens[$docBlockIndex] = new Token([\T_DOC_COMMENT, $doc->getContent()]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function applyFixForSrc(\SplFileInfo $file, Tokens $tokens): void
     {
         if ($file instanceof StdinFileInfo) {
@@ -279,7 +267,7 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
                         .implode(
                             ', ',
                             array_map(
-                                static fn (string $value): string => \sprintf("'%s'?: '%s'", $value, strtolower($value)),
+                                static fn ($value): string => \sprintf("'%s'?: '%s'", $value, strtolower($value)),
                                 $allowed[0]->getAllowedValues(),
                             ),
                         )
@@ -317,14 +305,14 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
                 // $allowed are allowed values
                 $allowed = array_map(
                     static fn ($value): string => $value instanceof AllowedValueSubset
-                        ? \sprintf('list<%s>', implode('|', array_map(static fn ($val): string => "'".$val."'", $value->getAllowedValues())))
+                        ? \sprintf('list<%s>', implode('|', array_map(static fn ($val) => "'".$val."'", $value->getAllowedValues())))
                         : Utils::toString($value),
                     $allowed,
                 );
             } else {
                 // $allowed will be allowed types
                 $allowed = array_map(
-                    static fn (string $value): string => Utils::convertArrayTypeToList($value),
+                    static fn ($value): string => Utils::convertArrayTypeToList($value),
                     $option->getAllowedTypes(),
                 );
             }
@@ -335,7 +323,7 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
             if ('array' === $allowed) {
                 $default = $option->getDefault();
                 $getTypes = static fn ($values): array => array_unique(array_map(
-                    static fn ($val): string => \gettype($val),
+                    static fn ($val) => \gettype($val),
                     $values,
                 ));
                 $defaultKeyTypes = $getTypes(array_keys($default));
@@ -446,9 +434,6 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
         $tokens[$docBlockIndex] = new Token([\T_DOC_COMMENT, $doc->getContent()]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getDocBlockIndex(Tokens $tokens, int $index): int
     {
         do {
@@ -509,6 +494,7 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
         if (false === $implements || !isset($implements[ConfigurableFixerInterface::class])) {
             return null;
         }
+
         if (AbstractPhpdocToTypeDeclarationFixer::class === $className) {
             return new class extends AbstractPhpdocToTypeDeclarationFixer {
                 protected function isSkippedType(string $type): bool
@@ -526,25 +512,17 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
                     throw new \LogicException('Not implemented.');
                 }
 
-                /**
-                 * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-                 */
                 protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
                 {
                     throw new \LogicException('Not implemented.');
                 }
 
-                /**
-                 * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-                 */
                 public function isCandidate(Tokens $tokens): bool
                 {
                     throw new \LogicException('Not implemented.');
                 }
             };
-        }
-
-        if (AbstractDoctrineAnnotationFixer::class === $className) {
+        } elseif (AbstractDoctrineAnnotationFixer::class === $className) {
             return new class extends AbstractDoctrineAnnotationFixer {
                 protected function isSkippedType(string $type): bool
                 {
@@ -561,17 +539,11 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
                     throw new \LogicException('Not implemented.');
                 }
 
-                /**
-                 * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-                 */
                 protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
                 {
                     throw new \LogicException('Not implemented.');
                 }
 
-                /**
-                 * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-                 */
                 public function isCandidate(Tokens $tokens): bool
                 {
                     throw new \LogicException('Not implemented.');
@@ -582,9 +554,6 @@ final class ConfigurableFixerTemplateFixer extends AbstractFixer implements Inte
                     // void
                 }
 
-                /**
-                 * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $doctrineAnnotationTokens
-                 */
                 protected function fixAnnotations(DoctrineAnnotationTokens $doctrineAnnotationTokens): void
                 {
                     throw new \LogicException('Not implemented.');

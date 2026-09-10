@@ -34,14 +34,10 @@ abstract class AbstractTypeTransformer extends AbstractTransformer
         [\T_WHITESPACE], [\T_COMMENT], [\T_DOC_COMMENT], // technically these can be inside of type tokens array
     ];
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     abstract protected function replaceToken(Tokens $tokens, int $index): void;
 
     /**
      * @param _PhpTokenPrototype $originalToken
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     protected function doProcess(Tokens $tokens, int $index, $originalToken): void
     {
@@ -56,9 +52,6 @@ abstract class AbstractTypeTransformer extends AbstractTransformer
         $this->replaceToken($tokens, $index);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isPartOfType(Tokens $tokens, int $index): bool
     {
         // return types and non-capturing catches

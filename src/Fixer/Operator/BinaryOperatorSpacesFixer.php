@@ -351,9 +351,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
         return -32;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return true;
@@ -364,9 +361,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
         $this->operators = $this->resolveOperatorsFromConfig();
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -424,7 +418,7 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
                                     'Unexpected value for operator "%s", expected any of %s, got "%s".',
                                     $operator,
                                     Utils::naturalLanguageJoin(array_map(
-                                        static fn (?string $value): string => Utils::toString($value),
+                                        static fn ($value): string => Utils::toString($value),
                                         self::ALLOWED_VALUES,
                                     )),
                                     \is_object($value) ? \get_class($value) : (null === $value ? 'null' : \gettype($value).'#'.$value),
@@ -440,9 +434,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixWhiteSpaceAroundOperator(Tokens $tokens, int $index): void
     {
         $tokenContent = strtolower($tokens[$index]->getContent());
@@ -494,9 +485,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
         $tokens->insertAt($index + 1, new Token([\T_WHITESPACE, ' ']));
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixWhiteSpaceAroundOperatorToSingleSpace(Tokens $tokens, int $index): void
     {
         // fix white space after operator
@@ -520,9 +508,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixWhiteSpaceAroundOperatorToAtLeastSingleSpace(Tokens $tokens, int $index): void
     {
         // fix white space after operator
@@ -536,9 +521,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixWhiteSpaceAroundOperatorToNoSpace(Tokens $tokens, int $index): void
     {
         // fix white space after operator
@@ -560,7 +542,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
 
     /**
      * @return false|int index of T_DECLARE where the `=` belongs to or `false`
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isEqualPartOfDeclareStatement(Tokens $tokens, int $index)
     {
@@ -603,9 +584,9 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
     }
 
     // Alignment logic related methods
+
     /**
      * @param array<string, string> $toAlign
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixAlignment(Tokens $tokens, array $toAlign): void
     {
@@ -656,13 +637,10 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
                 }
             }
 
-            $tokens->setCode($this->replacePlaceholders($tokensClone, $alignStrategy));
+            $tokens->setCode($this->replacePlaceholders($tokensClone, $alignStrategy, $tokenContent));
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function injectAlignmentPlaceholdersDefault(Tokens $tokens, int $startAt, int $endAt, string $tokenContent): void
     {
         $newLineFoundSinceLastPlaceholder = true;
@@ -745,9 +723,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function injectAlignmentPlaceholders(Tokens $tokens, int $from, int $until, string $tokenContent): void
     {
         // Only inject placeholders for multi-line code
@@ -760,9 +735,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function injectAlignmentPlaceholdersForArrow(Tokens $tokens, int $startAt, int $endAt): void
     {
         $newLineFoundSinceLastPlaceholder = true;
@@ -888,9 +860,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function injectArrayAlignmentPlaceholders(Tokens $tokens, int $from, int $until): void
     {
         // Only inject placeholders for multi-line arrays
@@ -903,9 +872,6 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixWhiteSpaceBeforeOperator(Tokens $tokens, int $index, string $alignStrategy): void
     {
         // fix white space after operator is not needed as BinaryOperatorSpacesFixer took care of this (if strategy is _not_ ALIGN)
@@ -930,9 +896,8 @@ final class BinaryOperatorSpacesFixer extends AbstractFixer implements Configura
 
     /**
      * Look for group of placeholders and provide vertical alignment.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
-    private function replacePlaceholders(Tokens $tokens, string $alignStrategy): string
+    private function replacePlaceholders(Tokens $tokens, string $alignStrategy, string $tokenContent): string
     {
         $tmpCode = $tokens->generateCode();
 

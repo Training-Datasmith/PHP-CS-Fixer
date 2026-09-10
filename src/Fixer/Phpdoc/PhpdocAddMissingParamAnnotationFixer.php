@@ -110,17 +110,11 @@ final class PhpdocAddMissingParamAnnotationFixer extends AbstractFixer implement
         return 10;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();
@@ -246,7 +240,6 @@ final class PhpdocAddMissingParamAnnotationFixer extends AbstractFixer implement
 
     /**
      * @return array{default: string, name: string, type: string}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function prepareArgumentInformation(Tokens $tokens, int $start, int $end): array
     {
@@ -260,21 +253,20 @@ final class PhpdocAddMissingParamAnnotationFixer extends AbstractFixer implement
 
         for ($index = $start; $index <= $end; ++$index) {
             $token = $tokens[$index];
-            if ($token->isComment()) {
-                continue;
-            }
-            if ($token->isWhitespace()) {
-                continue;
-            }
-            if ($token->isGivenKind([
-                CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PRIVATE,
-                CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PROTECTED,
-                CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PUBLIC,
-                FCT::T_READONLY,
-                FCT::T_PRIVATE_SET,
-                FCT::T_PROTECTED_SET,
-                FCT::T_PUBLIC_SET,
-            ])) {
+
+            if (
+                $token->isComment()
+                || $token->isWhitespace()
+                || $token->isGivenKind([
+                    CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PRIVATE,
+                    CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PROTECTED,
+                    CT::T_CONSTRUCTOR_PROPERTY_PROMOTION_PUBLIC,
+                    FCT::T_READONLY,
+                    FCT::T_PRIVATE_SET,
+                    FCT::T_PROTECTED_SET,
+                    FCT::T_PUBLIC_SET,
+                ])
+            ) {
                 continue;
             }
 

@@ -38,17 +38,11 @@ final class NoClosingTagFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return \count($tokens) >= 2 && $tokens->isMonolithicPhp() && $tokens->isTokenKindFound(\T_CLOSE_TAG);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $closeTags = $tokens->findGivenKind(\T_CLOSE_TAG);

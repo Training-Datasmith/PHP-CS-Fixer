@@ -131,9 +131,6 @@ final class OrderedClassElementsFixer extends AbstractFixer implements Configura
      */
     private array $typePosition;
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
@@ -285,9 +282,6 @@ Custom values:
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($i = 1, $count = $tokens->count(); $i < $count; ++$i) {
@@ -328,7 +322,7 @@ Custom values:
                                 return true;
                             }
 
-                            if (str_starts_with($value, 'method:')) {
+                            if ('method:' === substr($value, 0, 7)) {
                                 return true;
                             }
                         }
@@ -367,7 +361,6 @@ Custom values:
 
     /**
      * @return list<_ClassElement>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getElements(Tokens $tokens, int $startIndex): array
     {
@@ -453,7 +446,6 @@ Custom values:
 
     /**
      * @return list{string, string}|string type or array of type and name
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function detectElementType(Tokens $tokens, int $index)
     {
@@ -505,9 +497,6 @@ Custom values:
         return str_starts_with($nameToken->getContent(), '__') ? 'magic' : 'method';
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function findElementEnd(Tokens $tokens, int $index): int
     {
         $index = $tokens->getNextTokenOfKind($index, ['(', '{', ';', [CT::T_PROPERTY_HOOK_BRACE_OPEN]]);
@@ -627,7 +616,6 @@ Custom values:
 
     /**
      * @param list<_ClassElement> $elements
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function sortTokens(Tokens $tokens, int $startIndex, int $endIndex, array $elements): void
     {

@@ -413,20 +413,20 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractPhpUnitFixer i
 
     public function getDefinition(): FixerDefinitionInterface
     {
-        $codeSample = <<<'PHP_WRAP'
-        <?php
-        final class MyTest extends \PHPUnit_Framework_TestCase
-        {
-            public function testMe()
+        $codeSample = <<<'PHP'
+            <?php
+            final class MyTest extends \PHPUnit_Framework_TestCase
             {
-                $this->assertSame(1, 2);
-                self::assertSame(1, 2);
-                static::assertSame(1, 2);
-                static::assertTrue(false);
+                public function testMe()
+                {
+                    $this->assertSame(1, 2);
+                    self::assertSame(1, 2);
+                    static::assertSame(1, 2);
+                    static::assertTrue(false);
+                }
             }
-        }
-        
-        PHP_WRAP;
+
+            PHP;
 
         return new FixerDefinition(
             'Calls to `PHPUnit\Framework\TestCase` static methods (like assertions) must all be of the same type, either `$this->`, `self::` or `static::`.',
@@ -543,9 +543,6 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractPhpUnitFixer i
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $analyzer = new TokensAnalyzer($tokens);
@@ -579,10 +576,8 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractPhpUnitFixer i
                     }
                 }
             }
-            if (!$tokens[$index]->isGivenKind(\T_STRING)) {
-                continue;
-            }
-            if (!isset(self::METHODS[$tokens[$index]->getContent()])) {
+
+            if (!$tokens[$index]->isGivenKind(\T_STRING) || !isset(self::METHODS[$tokens[$index]->getContent()])) {
                 continue;
             }
 
@@ -616,9 +611,6 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractPhpUnitFixer i
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function needsConversion(Tokens $tokens, int $index, int $referenceIndex, string $callType): bool
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -627,9 +619,6 @@ final class PhpUnitTestCaseStaticMethodCallsFixer extends AbstractPhpUnitFixer i
             && !$tokens[$referenceIndex]->equals($this->conversionMap[$callType][1], false);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function findEndOfNextBlock(Tokens $tokens, int $index): int
     {
         $nextIndex = $tokens->getNextTokenOfKind($index, [';', '{']);

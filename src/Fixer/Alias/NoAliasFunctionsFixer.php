@@ -232,9 +232,6 @@ final class NoAliasFunctionsFixer extends AbstractFixer implements ConfigurableF
         return 40;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -264,9 +261,6 @@ final class NoAliasFunctionsFixer extends AbstractFixer implements ConfigurableF
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();

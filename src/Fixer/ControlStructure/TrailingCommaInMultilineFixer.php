@@ -109,9 +109,6 @@ final class TrailingCommaInMultilineFixer extends AbstractFixer implements Confi
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_ARRAY, CT::T_ARRAY_SQUARE_BRACE_OPEN, '(', CT::T_DESTRUCTURING_SQUARE_BRACE_OPEN]);
@@ -140,9 +137,6 @@ final class TrailingCommaInMultilineFixer extends AbstractFixer implements Confi
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $configuredElements = $this->configuration['elements'];
@@ -221,9 +215,6 @@ final class TrailingCommaInMultilineFixer extends AbstractFixer implements Confi
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixBlock(Tokens $tokens, int $startIndex): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);

@@ -99,6 +99,7 @@ final class EchoTagSyntaxFixer extends AbstractFixer implements ConfigurableFixe
                 new CodeSample($sample, [self::OPTION_FORMAT => self::FORMAT_SHORT]),
                 new CodeSample($sample, [self::OPTION_FORMAT => self::FORMAT_SHORT, self::OPTION_SHORTEN_SIMPLE_STATEMENTS_ONLY => false]),
             ],
+            null,
         );
     }
 
@@ -113,9 +114,6 @@ final class EchoTagSyntaxFixer extends AbstractFixer implements ConfigurableFixe
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         if (self::FORMAT_SHORT === $this->configuration[self::OPTION_FORMAT]) {
@@ -143,9 +141,6 @@ final class EchoTagSyntaxFixer extends AbstractFixer implements ConfigurableFixe
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         if (self::FORMAT_SHORT === $this->configuration[self::OPTION_FORMAT]) {
@@ -155,9 +150,6 @@ final class EchoTagSyntaxFixer extends AbstractFixer implements ConfigurableFixe
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function longToShort(Tokens $tokens): void
     {
         $count = $tokens->count();
@@ -191,9 +183,6 @@ final class EchoTagSyntaxFixer extends AbstractFixer implements ConfigurableFixe
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function shortToLong(Tokens $tokens): void
     {
         if (self::LONG_FUNCTION_PRINT === $this->configuration[self::OPTION_LONG_FUNCTION]) {
@@ -232,7 +221,6 @@ final class EchoTagSyntaxFixer extends AbstractFixer implements ConfigurableFixe
      * @example `<?php echo 1 ?>` is false (not complex)
      * @example `<?php echo 'hello' . 'world'; ?>` is false (not "complex")
      * @example `<?php echo 2; $set = 3 ?>` is true ("complex")
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isComplexCode(Tokens $tokens, int $index): bool
     {
@@ -259,7 +247,6 @@ final class EchoTagSyntaxFixer extends AbstractFixer implements ConfigurableFixe
      * Builds the list of tokens that replace a long echo sequence.
      *
      * @return non-empty-list<Token>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function buildLongToShortTokens(Tokens $tokens, int $openTagIndex, int $echoTagIndex): array
     {

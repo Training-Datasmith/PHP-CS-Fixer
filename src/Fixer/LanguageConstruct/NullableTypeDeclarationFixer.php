@@ -99,9 +99,6 @@ final class NullableTypeDeclarationFixer extends AbstractFixer implements Config
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return \PHP_VERSION_ID >= 8_00_00 && $tokens->isTokenKindFound($this->candidateTokenKind);
@@ -135,9 +132,6 @@ final class NullableTypeDeclarationFixer extends AbstractFixer implements Config
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -158,7 +152,6 @@ final class NullableTypeDeclarationFixer extends AbstractFixer implements Config
      * @return array<int, string>
      *
      * @phpstan-return array<int, 'function'|'property'>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getElements(Tokens $tokens): array
     {
@@ -184,9 +177,6 @@ final class NullableTypeDeclarationFixer extends AbstractFixer implements Config
         return $elements;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function collectTypeAnalysis(Tokens $tokens, int $startIndex, int $endIndex): ?TypeAnalysis
     {
         $type = '';
@@ -194,12 +184,10 @@ final class NullableTypeDeclarationFixer extends AbstractFixer implements Config
         $typeEndIndex = $typeStartIndex;
 
         for ($i = $typeStartIndex; $i < $endIndex; ++$i) {
-            if ($tokens[$i]->isWhitespace()) {
+            if ($tokens[$i]->isWhitespace() || $tokens[$i]->isComment()) {
                 continue;
             }
-            if ($tokens[$i]->isComment()) {
-                continue;
-            }
+
             $type .= $tokens[$i]->getContent();
             $typeEndIndex = $i;
         }
@@ -226,9 +214,6 @@ final class NullableTypeDeclarationFixer extends AbstractFixer implements Config
         return 1 === substr_count($type, '|') && Preg::match('/(?:\|null$|^null\|)/i', $type);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function normalizePropertyType(Tokens $tokens, int $index): void
     {
         $propertyEndIndex = $index;
@@ -245,17 +230,12 @@ final class NullableTypeDeclarationFixer extends AbstractFixer implements Config
         $this->normalizeNullableType($tokens, $propertyType);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function normalizeMethodArgumentType(FunctionsAnalyzer $functionsAnalyzer, Tokens $tokens, int $index): void
     {
         foreach (array_reverse($functionsAnalyzer->getFunctionArguments($tokens, $index), true) as $argumentInfo) {
             $argumentType = $argumentInfo->getTypeAnalysis();
-            if (null === $argumentType) {
-                continue;
-            }
-            if (!$this->isTypeNormalizable($argumentType)) {
+
+            if (null === $argumentType || !$this->isTypeNormalizable($argumentType)) {
                 continue;
             }
 
@@ -263,9 +243,6 @@ final class NullableTypeDeclarationFixer extends AbstractFixer implements Config
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function normalizeMethodReturnType(FunctionsAnalyzer $functionsAnalyzer, Tokens $tokens, int $index): void
     {
         $returnType = $functionsAnalyzer->getFunctionReturnType($tokens, $index);
@@ -277,9 +254,6 @@ final class NullableTypeDeclarationFixer extends AbstractFixer implements Config
         $this->normalizeNullableType($tokens, $returnType);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function normalizeNullableType(Tokens $tokens, TypeAnalysis $typeAnalysis): void
     {
         $type = $typeAnalysis->getName();

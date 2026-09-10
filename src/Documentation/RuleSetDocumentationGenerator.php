@@ -86,8 +86,8 @@ final class RuleSetDocumentationGenerator
         if ([] === $rules) {
             $doc .= "\n\nThis is an empty set.";
         } else {
-            $enabledRules = array_filter($rules, static fn ($config): bool => false !== $config);
-            $disabledRules = array_filter($rules, static fn ($config): bool => false === $config);
+            $enabledRules = array_filter($rules, static fn ($config) => false !== $config);
+            $disabledRules = array_filter($rules, static fn ($config) => false === $config);
 
             $listRules = function (array $rules) use (&$doc, $fixerNames): void {
                 foreach ($rules as $rule => $config) {

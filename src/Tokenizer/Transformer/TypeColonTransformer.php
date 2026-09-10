@@ -43,9 +43,6 @@ final class TypeColonTransformer extends AbstractTransformer
         return 7_00_00;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function process(Tokens $tokens, Token $token, int $index): void
     {
         if (!$token->equals(':')) {

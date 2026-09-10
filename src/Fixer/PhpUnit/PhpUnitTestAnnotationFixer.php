@@ -98,9 +98,6 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
         return 10;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         if ('annotation' === $this->configuration['style']) {
@@ -120,9 +117,6 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function applyTestAnnotation(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($i = $endIndex - 1; $i > $startIndex; --$i) {
@@ -153,9 +147,6 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function applyTestPrefix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($i = $endIndex - 1; $i > $startIndex; --$i) {
@@ -186,9 +177,6 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isTestMethod(Tokens $tokens, int $index): bool
     {
         // Check if we are dealing with a (non-abstract, non-lambda) function
@@ -212,9 +200,6 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
             && str_contains($tokens[$docBlockIndex]->getContent(), '@test');
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isMethod(Tokens $tokens, int $index): bool
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -227,9 +212,6 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
         return str_starts_with($functionName, 'test');
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function hasProperTestAnnotation(Tokens $tokens, int $index): bool
     {
         $docBlockIndex = $this->getDocBlockIndex($tokens, $index);
@@ -256,7 +238,6 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
 
     /**
      * @return list<Line>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function updateDocBlock(Tokens $tokens, int $docBlockIndex): array
     {
@@ -270,7 +251,6 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
      * @param list<Line> $lines
      *
      * @return list<Line>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function updateLines(array $lines, Tokens $tokens, int $docBlockIndex): array
     {
@@ -313,7 +293,6 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
      * @param non-empty-list<Line> $lines
      *
      * @return non-empty-list<Line>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function splitUpDocBlock(array $lines, Tokens $tokens, int $docBlockIndex): array
     {
@@ -413,7 +392,6 @@ final class PhpUnitTestAnnotationFixer extends AbstractPhpUnitFixer implements C
      * @param list<Line> $lines
      *
      * @return list<Line>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function addTestAnnotation(array $lines, Tokens $tokens, int $docBlockIndex): array
     {

@@ -48,9 +48,6 @@ final class ElseifFixer extends AbstractFixer
         return 40;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_IF, \T_ELSE]);
@@ -60,7 +57,6 @@ final class ElseifFixer extends AbstractFixer
      * Replace all `else if` (T_ELSE T_IF) with `elseif` (T_ELSEIF).
      *
      * {@inheritdoc}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {

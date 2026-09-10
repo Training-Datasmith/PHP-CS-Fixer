@@ -23,9 +23,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class WhitespacesAnalyzer
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public static function detectIndent(Tokens $tokens, int $index): string
     {
         while (true) {
@@ -43,7 +40,7 @@ final class WhitespacesAnalyzer
 
             $prevToken = $tokens[$whitespaceIndex - 1];
 
-            if ($prevToken->isGivenKind([\T_OPEN_TAG, \T_COMMENT]) && str_ends_with($prevToken->getContent(), "\n")) {
+            if ($prevToken->isGivenKind([\T_OPEN_TAG, \T_COMMENT]) && "\n" === substr($prevToken->getContent(), -1)) {
                 break;
             }
 

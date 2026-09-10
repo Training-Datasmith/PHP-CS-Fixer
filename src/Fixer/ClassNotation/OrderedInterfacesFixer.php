@@ -137,20 +137,12 @@ final class OrderedInterfacesFixer extends AbstractFixer implements Configurable
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
-        if ($tokens->isTokenKindFound(\T_IMPLEMENTS)) {
-            return true;
-        }
-        return $tokens->isAllTokenKindsFound([\T_INTERFACE, \T_EXTENDS]);
+        return $tokens->isTokenKindFound(\T_IMPLEMENTS)
+            || $tokens->isAllTokenKindsFound([\T_INTERFACE, \T_EXTENDS]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -261,7 +253,6 @@ final class OrderedInterfacesFixer extends AbstractFixer implements Configurable
 
     /**
      * @return array<int, list<Token>>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getInterfaces(Tokens $tokens, int $implementsStart, int $implementsEnd): array
     {

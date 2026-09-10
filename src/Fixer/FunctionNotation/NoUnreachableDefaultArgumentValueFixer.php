@@ -59,9 +59,6 @@ final class NoUnreachableDefaultArgumentValueFixer extends AbstractFixer
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_FUNCTION, \T_FN]);
@@ -72,9 +69,6 @@ final class NoUnreachableDefaultArgumentValueFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionKinds = [\T_FUNCTION, \T_FN];
@@ -88,9 +82,6 @@ final class NoUnreachableDefaultArgumentValueFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixFunctionDefinition(Tokens $tokens, int $startIndex): void
     {
         $removeDefaultArgument = false;
@@ -127,9 +118,6 @@ final class NoUnreachableDefaultArgumentValueFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function removeDefaultValue(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($i = $tokens->getNextMeaningfulToken($startIndex); $i <= $endIndex;) {
@@ -139,9 +127,6 @@ final class NoUnreachableDefaultArgumentValueFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getDefaultValueEnd(Tokens $tokens, int $index): int
     {
         while (null !== $index = $tokens->getNextMeaningfulToken($index)) {
@@ -158,9 +143,6 @@ final class NoUnreachableDefaultArgumentValueFixer extends AbstractFixer
         return $tokens->getPrevMeaningfulToken($index);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function clearWhitespacesBeforeIndex(Tokens $tokens, int $index): void
     {
         $prevIndex = $tokens->getNonEmptySibling($index, -1);

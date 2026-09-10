@@ -43,7 +43,7 @@ final class ParallelConfig
         int $filesPerProcess = self::DEFAULT_FILES_PER_PROCESS,
         int $processTimeout = self::DEFAULT_PROCESS_TIMEOUT
     ) {
-        if ($processTimeout <= 0) {
+        if ($maxProcesses <= 0 || $filesPerProcess <= 0 || $processTimeout <= 0) {
             throw new \InvalidArgumentException('Invalid parallelisation configuration: only positive integers are allowed');
         }
 

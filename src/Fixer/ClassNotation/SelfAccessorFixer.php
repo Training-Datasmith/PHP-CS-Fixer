@@ -58,9 +58,6 @@ final class SelfAccessorFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_CLASS, \T_INTERFACE]);
@@ -81,21 +78,16 @@ final class SelfAccessorFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
 
         foreach ($tokens->getNamespaceDeclarations() as $namespace) {
             for ($index = $namespace->getScopeStartIndex(); $index < $namespace->getScopeEndIndex(); ++$index) {
-                if (!$tokens[$index]->isGivenKind([\T_CLASS, \T_INTERFACE])) {
+                if (!$tokens[$index]->isGivenKind([\T_CLASS, \T_INTERFACE]) || $tokensAnalyzer->isAnonymousClass($index)) {
                     continue;
                 }
-                if ($tokensAnalyzer->isAnonymousClass($index)) {
-                    continue;
-                }
+
                 $nameIndex = $tokens->getNextTokenOfKind($index, [[\T_STRING]]);
                 $startIndex = $tokens->getNextTokenOfKind($nameIndex, ['{']);
                 $endIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $startIndex);
@@ -111,7 +103,6 @@ final class SelfAccessorFixer extends AbstractFixer
 
     /**
      * Replace occurrences of the name of the classy element by "self" (if possible).
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function replaceNameOccurrences(Tokens $tokens, string $namespace, string $name, int $startIndex, int $endIndex): void
     {
@@ -172,10 +163,7 @@ final class SelfAccessorFixer extends AbstractFixer
                 }
                 $prevToken = $tokens[$tokens->getPrevMeaningfulToken($classStartIndex)];
             }
-            if ($prevToken->isGivenKind(\T_STRING)) {
-                continue;
-            }
-            if ($prevToken->isObjectOperator()) {
+            if ($prevToken->isGivenKind(\T_STRING) || $prevToken->isObjectOperator()) {
                 continue;
             }
 
@@ -196,9 +184,6 @@ final class SelfAccessorFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getClassStart(Tokens $tokens, int $index, string $namespace): ?int
     {
         $namespace = ('' !== $namespace ? '\\'.$namespace : '').'\\';

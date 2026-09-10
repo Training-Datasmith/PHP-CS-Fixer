@@ -56,17 +56,11 @@ final class ClassReferenceNameCasingFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $namespaceUsesAnalyzer = new NamespaceUsesAnalyzer();
@@ -92,7 +86,6 @@ final class ClassReferenceNameCasingFixer extends AbstractFixer
 
     /**
      * @return iterable<int>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getClassReference(Tokens $tokens, NamespaceAnalysis $namespace): iterable
     {

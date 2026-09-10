@@ -121,7 +121,7 @@ final class FixerOptionBuilder
         );
 
         if (null !== $this->deprecationMessage) {
-            return new DeprecatedFixerOption($option, $this->deprecationMessage);
+            $option = new DeprecatedFixerOption($option, $this->deprecationMessage);
         }
 
         return $option;

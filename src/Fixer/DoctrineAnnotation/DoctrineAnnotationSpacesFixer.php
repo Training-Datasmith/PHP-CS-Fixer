@@ -129,9 +129,6 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $doctrineAnnotationTokens
-     */
     protected function fixAnnotations(Tokens $doctrineAnnotationTokens): void
     {
         if (true === $this->configuration['around_parentheses']) {
@@ -154,9 +151,6 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
-     */
     private function fixSpacesAroundParentheses(Tokens $tokens): void
     {
         $inAnnotationUntilIndex = null;
@@ -206,9 +200,6 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
-     */
     private function fixSpacesAroundCommas(Tokens $tokens): void
     {
         $inAnnotationUntilIndex = null;
@@ -248,9 +239,6 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
-     */
     private function fixAroundAssignments(Tokens $tokens): void
     {
         $beforeArguments = $this->configuration['before_argument_assignments'];
@@ -304,25 +292,16 @@ final class DoctrineAnnotationSpacesFixer extends AbstractDoctrineAnnotationFixe
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
-     */
     private function updateSpacesAfter(Tokens $tokens, int $index, ?bool $insert): void
     {
         $this->updateSpacesAt($tokens, $index + 1, $index + 1, $insert);
     }
 
-    /**
-     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
-     */
     private function updateSpacesBefore(Tokens $tokens, int $index, ?bool $insert): void
     {
         $this->updateSpacesAt($tokens, $index - 1, $index, $insert);
     }
 
-    /**
-     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $tokens
-     */
     private function updateSpacesAt(Tokens $tokens, int $index, int $insertIndex, ?bool $insert): void
     {
         if (null === $insert) {

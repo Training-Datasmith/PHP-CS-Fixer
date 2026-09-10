@@ -43,17 +43,11 @@ final class NoSpaceAroundDoubleColonFixer extends AbstractFixer
         return 1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOUBLE_COLON);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = \count($tokens) - 2; $index > 1; --$index) {
@@ -66,7 +60,6 @@ final class NoSpaceAroundDoubleColonFixer extends AbstractFixer
 
     /**
      * @param -1|1 $direction
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function removeSpace(Tokens $tokens, int $index, int $direction): void
     {

@@ -27,7 +27,6 @@ final class NamespacesAnalyzer
 {
     /**
      * @return list<NamespaceAnalysis>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function getDeclarations(Tokens $tokens): array
     {
@@ -82,9 +81,6 @@ final class NamespacesAnalyzer
         return $namespaces;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function getNamespaceAt(Tokens $tokens, int $index): NamespaceAnalysis
     {
         if (!$tokens->offsetExists($index)) {
@@ -102,7 +98,6 @@ final class NamespacesAnalyzer
 
     /**
      * @return array{NamespaceAnalysis, array<string, NamespaceUseAnalysis>}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public static function collectNamespaceAnalysis(Tokens $tokens, int $startIndex): array
     {

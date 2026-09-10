@@ -61,17 +61,11 @@ final class PhpdocSummaryFixer extends AbstractFixer implements WhitespacesAware
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -90,7 +84,7 @@ final class PhpdocSummaryFixer extends AbstractFixer implements WhitespacesAware
                     // final line of Description is NOT properly formatted
                     !$this->isCorrectlyFormatted($content)
                     // and first line  of Description, if different than final line, does NOT indicate a list
-                    && (1 === $end || ($doc->isMultiLine() && !str_ends_with(rtrim($doc->getLine(1)->getContent()), ':')))
+                    && (1 === $end || ($doc->isMultiLine() && ':' !== substr(rtrim($doc->getLine(1)->getContent()), -1)))
                 ) {
                     $line->setContent($content.'.'.$this->whitespacesConfig->getLineEnding());
                     $tokens[$index] = new Token([\T_DOC_COMMENT, $doc->getContent()]);

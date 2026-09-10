@@ -123,9 +123,6 @@ final class PhpUnitDataProviderStaticFixer extends AbstractPhpUnitFixer implemen
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $dataProviderAnalyzer = new DataProviderAnalyzer();

@@ -84,9 +84,6 @@ final class GroupImportFixer extends AbstractFixer implements ConfigurableFixerI
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_USE);
@@ -119,9 +116,6 @@ final class GroupImportFixer extends AbstractFixer implements ConfigurableFixerI
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $useWithSameNamespaces = $this->getSameNamespacesByType($tokens);
@@ -159,7 +153,6 @@ final class GroupImportFixer extends AbstractFixer implements ConfigurableFixerI
      * Gets namespace use analyzers with same namespaces.
      *
      * @return array<NamespaceUseAnalysis::TYPE_*, non-empty-list<NamespaceUseAnalysis>>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getSameNamespacesByType(Tokens $tokens): array
     {
@@ -204,7 +197,6 @@ final class GroupImportFixer extends AbstractFixer implements ConfigurableFixerI
 
     /**
      * @param list<NamespaceUseAnalysis> $statements
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function removeSingleUseStatements(array $statements, Tokens $tokens): void
     {
@@ -236,7 +228,6 @@ final class GroupImportFixer extends AbstractFixer implements ConfigurableFixerI
 
     /**
      * @param list<NamespaceUseAnalysis> $statements
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function addGroupUseStatements(array $statements, Tokens $tokens): void
     {
@@ -301,7 +292,6 @@ final class GroupImportFixer extends AbstractFixer implements ConfigurableFixerI
 
     /**
      * Insert use with alias to the group.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function insertToGroupUseWithAlias(Tokens $tokens, int $insertIndex, NamespaceUseAnalysis $useDeclaration): int
     {
@@ -319,7 +309,6 @@ final class GroupImportFixer extends AbstractFixer implements ConfigurableFixerI
 
     /**
      * Creates new use statement group.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function createNewGroup(Tokens $tokens, int $insertIndex, NamespaceUseAnalysis $useDeclaration, string $currentNamespace): int
     {

@@ -91,9 +91,6 @@ final class NoUnneededFinalMethodFixer extends AbstractFixer implements Configur
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         if (!$tokens->isAllTokenKindsFound([\T_FINAL, \T_FUNCTION])) {
@@ -108,9 +105,6 @@ final class NoUnneededFinalMethodFixer extends AbstractFixer implements Configur
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($this->getMethods($tokens) as $element) {
@@ -121,13 +115,8 @@ final class NoUnneededFinalMethodFixer extends AbstractFixer implements Configur
 
                 continue;
             }
-            if (!$element['method_is_private']) {
-                continue;
-            }
-            if (false === $this->configuration['private_methods']) {
-                continue;
-            }
-            if ($element['method_is_constructor']) {
+
+            if (!$element['method_is_private'] || false === $this->configuration['private_methods'] || $element['method_is_constructor']) {
                 continue;
             }
 
@@ -156,7 +145,6 @@ final class NoUnneededFinalMethodFixer extends AbstractFixer implements Configur
      *     method_is_private: bool,
      *     method_of_enum: bool
      * }>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getMethods(Tokens $tokens): iterable
     {
@@ -213,9 +201,6 @@ final class NoUnneededFinalMethodFixer extends AbstractFixer implements Configur
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function clearFinal(Tokens $tokens, ?int $index): void
     {
         if (null === $index) {

@@ -123,9 +123,6 @@ final class OrderedAttributesFixer extends AbstractFixer implements Configurable
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(FCT::T_ATTRIBUTE);
@@ -166,9 +163,6 @@ final class OrderedAttributesFixer extends AbstractFixer implements Configurable
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $fullyQualifiedNameAnalyzer = new FullyQualifiedNameAnalyzer($tokens);
@@ -205,7 +199,6 @@ final class OrderedAttributesFixer extends AbstractFixer implements Configurable
 
     /**
      * @param _AttributeItems $attributes
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function sortAttributes(FullyQualifiedNameAnalyzer $fullyQualifiedNameAnalyzer, Tokens $tokens, int $index, array $attributes): string
     {
@@ -265,7 +258,6 @@ final class OrderedAttributesFixer extends AbstractFixer implements Configurable
 
     /**
      * @param _AttributeItems $elements
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function sortTokens(Tokens $tokens, int $startIndex, int $endIndex, array $elements, ?Token $delimiter = null): void
     {

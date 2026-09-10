@@ -65,9 +65,6 @@ final class ConstantCaseFixer extends AbstractFixer implements ConfigurableFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -94,9 +91,6 @@ final class ConstantCaseFixer extends AbstractFixer implements ConfigurableFixer
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         static $forbiddenPrevKinds = null;
@@ -124,10 +118,7 @@ final class ConstantCaseFixer extends AbstractFixer implements ConfigurableFixer
             }
 
             $nextIndex = $tokens->getNextMeaningfulToken($index);
-            if ($tokens[$nextIndex]->isGivenKind([\T_PAAMAYIM_NEKUDOTAYIM, \T_NS_SEPARATOR])) {
-                continue;
-            }
-            if ($tokens[$nextIndex]->equals('=', false)) {
+            if ($tokens[$nextIndex]->isGivenKind([\T_PAAMAYIM_NEKUDOTAYIM, \T_NS_SEPARATOR]) || $tokens[$nextIndex]->equals('=', false)) {
                 continue;
             }
 

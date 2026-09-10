@@ -95,9 +95,6 @@ final class ControlStructureContinuationPositionFixer extends AbstractFixer impl
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(self::CONTROL_CONTINUATION_TOKENS);
@@ -123,17 +120,11 @@ final class ControlStructureContinuationPositionFixer extends AbstractFixer impl
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->fixControlContinuationBraces($tokens);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixControlContinuationBraces(Tokens $tokens): void
     {
         for ($index = \count($tokens) - 1; 0 < $index; --$index) {

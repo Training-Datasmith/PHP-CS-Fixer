@@ -45,9 +45,6 @@ final class NoRedundantReadonlyPropertyFixer extends AbstractFixer
         return 3;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return \PHP_VERSION_ID >= 8_02_00 && $tokens->isAnyTokenKindsFound([\T_CLASS]);
@@ -73,9 +70,6 @@ final class NoRedundantReadonlyPropertyFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);

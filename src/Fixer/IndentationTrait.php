@@ -26,9 +26,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 trait IndentationTrait
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getLineIndentation(Tokens $tokens, int $index): string
     {
         $newlineTokenIndex = $this->getPreviousNewlineTokenIndex($tokens, $index);
@@ -49,9 +46,6 @@ trait IndentationTrait
         return '';
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getPreviousNewlineTokenIndex(Tokens $tokens, int $index): ?int
     {
         while ($index > 0) {
@@ -69,23 +63,17 @@ trait IndentationTrait
         return null;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function computeNewLineContent(Tokens $tokens, int $index): string
     {
         $content = $tokens[$index]->getContent();
 
         if (0 !== $index && $tokens[$index - 1]->isGivenKind([\T_OPEN_TAG, \T_CLOSE_TAG])) {
-            return Preg::replace('/\S/', '', $tokens[$index - 1]->getContent()).$content;
+            $content = Preg::replace('/\S/', '', $tokens[$index - 1]->getContent()).$content;
         }
 
         return $content;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isNewLineToken(Tokens $tokens, int $index): bool
     {
         $token = $tokens[$index];

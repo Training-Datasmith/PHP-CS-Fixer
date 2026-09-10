@@ -200,9 +200,6 @@ final class NativeFunctionInvocationFixer extends AbstractFixer implements Confi
         return 1;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -218,9 +215,6 @@ final class NativeFunctionInvocationFixer extends AbstractFixer implements Confi
         $this->functionFilter = $this->getFunctionFilter();
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         if ('all' === $this->configuration['scope']) {
@@ -293,9 +287,6 @@ final class NativeFunctionInvocationFixer extends AbstractFixer implements Confi
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixFunctionCalls(Tokens $tokens, callable $functionFilter, int $start, int $end, bool $tryToRemove): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();

@@ -22,9 +22,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 abstract class AbstractIncrementOperatorFixer extends AbstractFixer
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     final protected function findStart(Tokens $tokens, int $index): int
     {
         do {

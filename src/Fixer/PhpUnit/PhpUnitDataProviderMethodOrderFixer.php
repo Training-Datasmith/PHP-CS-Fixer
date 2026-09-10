@@ -105,9 +105,6 @@ final class PhpUnitDataProviderMethodOrderFixer extends AbstractPhpUnitFixer imp
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $elements = $this->getElements($tokens, $startIndex);
@@ -167,18 +164,16 @@ final class PhpUnitDataProviderMethodOrderFixer extends AbstractPhpUnitFixer imp
 
     /**
      * @return list<_ClassElement>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getElements(Tokens $tokens, int $startIndex): array
     {
         $methodOrderFixer = new OrderedClassElementsFixer();
 
-        return \Closure::bind(static fn (): array => $methodOrderFixer->getElements($tokens, $startIndex), null, OrderedClassElementsFixer::class)();
+        return \Closure::bind(static fn () => $methodOrderFixer->getElements($tokens, $startIndex), null, OrderedClassElementsFixer::class)();
     }
 
     /**
      * @param list<_ClassElement> $elements
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function sortTokens(Tokens $tokens, int $startIndex, int $endIndex, array $elements): void
     {
@@ -234,7 +229,6 @@ final class PhpUnitDataProviderMethodOrderFixer extends AbstractPhpUnitFixer imp
      *   array{int, string},
      *   non-empty-array<int, array{int, string, int}>
      * }>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getDataProvidersWithUsagePairs(Tokens $tokens, int $startIndex, int $endIndex): array
     {

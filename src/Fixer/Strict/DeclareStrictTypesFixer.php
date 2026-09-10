@@ -97,9 +97,6 @@ final class DeclareStrictTypesFixer extends AbstractFixer implements Configurabl
         return 2;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isMonolithicPhp() && !$tokens->isTokenKindFound(\T_OPEN_TAG_WITH_ECHO);
@@ -151,9 +148,6 @@ final class DeclareStrictTypesFixer extends AbstractFixer implements Configurabl
         unset($this->configuration['preserve_existing_declaration']);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $openTagIndex = $tokens[0]->isGivenKind(\T_INLINE_HTML) ? 1 : 0;
@@ -179,7 +173,6 @@ final class DeclareStrictTypesFixer extends AbstractFixer implements Configurabl
 
     /**
      * @return null|array{declare_index: int, open_parenthesis: int, close_parenthesis: int, sequence: array<int, Token>}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getStrictTypesDeclaration(Tokens $tokens): ?array
     {
@@ -205,7 +198,6 @@ final class DeclareStrictTypesFixer extends AbstractFixer implements Configurabl
 
     /**
      * @param array{declare_index: int, open_parenthesis: int, close_parenthesis: int, sequence: array<int, Token>} $declaration
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function removeStrictTypesDeclaration(Tokens $tokens, array $declaration): void
     {
@@ -254,7 +246,6 @@ final class DeclareStrictTypesFixer extends AbstractFixer implements Configurabl
 
     /**
      * @param array<int, true> $sequenceIndexMap
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function hasOtherDeclareOptions(Tokens $tokens, int $openParenthesis, int $closeParenthesis, array $sequenceIndexMap): bool
     {
@@ -270,9 +261,6 @@ final class DeclareStrictTypesFixer extends AbstractFixer implements Configurabl
         return false;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function removeDeclareStatement(Tokens $tokens, int $declareIndex, int $closeParenthesis): void
     {
         $semicolonIndex = $tokens->getNextMeaningfulToken($closeParenthesis);
@@ -291,7 +279,6 @@ final class DeclareStrictTypesFixer extends AbstractFixer implements Configurabl
 
     /**
      * @param array<int, Token> $sequence
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixStrictTypesCasingAndValue(Tokens $tokens, array $sequence): void
     {
@@ -310,9 +297,6 @@ final class DeclareStrictTypesFixer extends AbstractFixer implements Configurabl
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function insertSequence(int $openTagIndex, Tokens $tokens): void
     {
         $sequence = [

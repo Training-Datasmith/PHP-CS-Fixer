@@ -56,28 +56,28 @@ final class PhpdocOrderByValueFixer extends AbstractFixer implements Configurabl
             'Order PHPDoc tags by value.',
             [
                 new CodeSample(
-                    <<<'PHP_WRAP'
-                    <?php
-                    /**
-                     * @covers Foo
-                     * @covers Bar
-                     */
-                    final class MyTest extends \PHPUnit_Framework_TestCase
-                    {}
-                    
-                    PHP_WRAP,
+                    <<<'PHP'
+                        <?php
+                        /**
+                         * @covers Foo
+                         * @covers Bar
+                         */
+                        final class MyTest extends \PHPUnit_Framework_TestCase
+                        {}
+
+                        PHP,
                 ),
                 new CodeSample(
-                    <<<'PHP_WRAP'
-                    <?php
-                    /**
-                     * @author Bob
-                     * @author Alice
-                     */
-                    final class MyTest extends \PHPUnit_Framework_TestCase
-                    {}
-                    
-                    PHP_WRAP,
+                    <<<'PHP'
+                        <?php
+                        /**
+                         * @author Bob
+                         * @author Alice
+                         */
+                        final class MyTest extends \PHPUnit_Framework_TestCase
+                        {}
+
+                        PHP,
                     [
                         'annotations' => [
                             'author',
@@ -99,17 +99,11 @@ final class PhpdocOrderByValueFixer extends AbstractFixer implements Configurabl
         return -10;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_CLASS, \T_DOC_COMMENT]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         if ([] === $this->configuration['annotations']) {
@@ -123,10 +117,11 @@ final class PhpdocOrderByValueFixer extends AbstractFixer implements Configurabl
                     $type,
                     $type,
                 );
-                if (!$tokens[$index]->isGivenKind(\T_DOC_COMMENT)) {
-                    continue;
-                }
-                if (!Preg::match($findPattern, $tokens[$index]->getContent())) {
+
+                if (
+                    !$tokens[$index]->isGivenKind(\T_DOC_COMMENT)
+                    || !Preg::match($findPattern, $tokens[$index]->getContent())
+                ) {
                     continue;
                 }
 

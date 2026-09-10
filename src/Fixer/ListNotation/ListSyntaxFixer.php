@@ -72,9 +72,6 @@ final class ListSyntaxFixer extends AbstractFixer implements ConfigurableFixerIn
         return 2;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound($this->candidateTokenKind);
@@ -85,9 +82,6 @@ final class ListSyntaxFixer extends AbstractFixer implements ConfigurableFixerIn
         $this->candidateTokenKind = 'long' === $this->configuration['syntax'] ? CT::T_DESTRUCTURING_SQUARE_BRACE_OPEN : \T_LIST;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; 0 <= $index; --$index) {
@@ -111,9 +105,6 @@ final class ListSyntaxFixer extends AbstractFixer implements ConfigurableFixerIn
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixToLongSyntax(Tokens $tokens, int $index): void
     {
         $closeIndex = $tokens->getNextTokenOfKind($index, [
@@ -129,9 +120,6 @@ final class ListSyntaxFixer extends AbstractFixer implements ConfigurableFixerIn
         $tokens->insertAt($index, new Token([\T_LIST, 'list']));
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixToShortSyntax(Tokens $tokens, int $index): void
     {
         $openIndex = $tokens->getNextTokenOfKind($index, ['(']);

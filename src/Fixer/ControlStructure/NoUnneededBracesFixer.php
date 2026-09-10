@@ -88,17 +88,11 @@ final class NoUnneededBracesFixer extends AbstractFixer implements ConfigurableF
         return 40;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(['}', CT::T_GROUP_IMPORT_BRACE_CLOSE]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($this->findBraceOpen($tokens) as $index) {
@@ -124,7 +118,6 @@ final class NoUnneededBracesFixer extends AbstractFixer implements ConfigurableF
 
     /**
      * @param int $openIndex index of `{` token
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clearOverCompleteBraces(Tokens $tokens, int $openIndex): void
     {
@@ -138,7 +131,6 @@ final class NoUnneededBracesFixer extends AbstractFixer implements ConfigurableF
 
     /**
      * @return iterable<int>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findBraceOpen(Tokens $tokens): iterable
     {
@@ -151,7 +143,6 @@ final class NoUnneededBracesFixer extends AbstractFixer implements ConfigurableF
 
     /**
      * @param int $index index of `{` token
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isOverComplete(Tokens $tokens, int $index): bool
     {
@@ -169,9 +160,6 @@ final class NoUnneededBracesFixer extends AbstractFixer implements ConfigurableF
         return $tokens[$tokens->getPrevMeaningfulToken($index)]->equalsAny(['{', '}', [\T_OPEN_TAG], ':', ';']);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function clearIfIsOverCompleteNamespaceBlock(Tokens $tokens): void
     {
         if (1 !== $tokens->countTokenKind(\T_NAMESPACE)) {

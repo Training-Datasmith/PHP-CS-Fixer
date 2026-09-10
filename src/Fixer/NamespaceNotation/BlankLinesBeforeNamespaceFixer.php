@@ -65,9 +65,6 @@ final class BlankLinesBeforeNamespaceFixer extends AbstractFixer implements Whit
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_NAMESPACE);
@@ -124,9 +121,6 @@ final class BlankLinesBeforeNamespaceFixer extends AbstractFixer implements Whit
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; $index >= 0; --$index) {
@@ -148,7 +142,6 @@ final class BlankLinesBeforeNamespaceFixer extends AbstractFixer implements Whit
      *
      * @param int $expectedMin min. # of line breaks
      * @param int $expectedMax max. # of line breaks
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     protected function fixLinesBeforeNamespace(Tokens $tokens, int $index, int $expectedMin, int $expectedMax): void
     {

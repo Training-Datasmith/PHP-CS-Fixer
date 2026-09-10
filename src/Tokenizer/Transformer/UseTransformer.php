@@ -46,9 +46,6 @@ final class UseTransformer extends AbstractTransformer
         return 5_03_00;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function process(Tokens $tokens, Token $token, int $index): void
     {
         if ($token->isGivenKind(\T_USE) && $this->isUseForLambda($tokens, $index)) {
@@ -93,7 +90,6 @@ final class UseTransformer extends AbstractTransformer
 
     /**
      * Check if token under given index is `use` statement for lambda function.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isUseForLambda(Tokens $tokens, int $index): bool
     {

@@ -233,17 +233,11 @@ final class OrderedImportsFixer extends AbstractFixer implements ConfigurableFix
         return -30;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_USE);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -377,12 +371,14 @@ final class OrderedImportsFixer extends AbstractFixer implements ConfigurableFix
         $secondNamespaceLength = \strlen($secondNamespace);
 
         if ($firstNamespaceLength === $secondNamespaceLength) {
-            return true === $this->configuration['case_sensitive']
+            $sortResult = true === $this->configuration['case_sensitive']
                 ? $firstNamespace <=> $secondNamespace
                 : strcasecmp($firstNamespace, $secondNamespace);
+        } else {
+            $sortResult = $firstNamespaceLength > $secondNamespaceLength ? 1 : -1;
         }
 
-        return $firstNamespaceLength > $secondNamespaceLength ? 1 : -1;
+        return $sortResult;
     }
 
     private function prepareNamespace(string $namespace): string
@@ -394,7 +390,6 @@ final class OrderedImportsFixer extends AbstractFixer implements ConfigurableFix
      * @param list<int> $uses
      *
      * @return array<int, _UseImportInfo>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getNewOrder(array $uses, Tokens $tokens): array
     {
@@ -596,7 +591,6 @@ final class OrderedImportsFixer extends AbstractFixer implements ConfigurableFix
 
     /**
      * @param array<int, _UseImportInfo> $usesOrder
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function setNewOrder(Tokens $tokens, array $usesOrder): void
     {
@@ -639,9 +633,6 @@ final class OrderedImportsFixer extends AbstractFixer implements ConfigurableFix
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private static function fixCommaToUse(Tokens $tokens, int $index): void
     {
         if (!$tokens[$index]->equals(',')) {

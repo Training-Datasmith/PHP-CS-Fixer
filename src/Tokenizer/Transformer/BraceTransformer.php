@@ -45,9 +45,6 @@ final class BraceTransformer extends AbstractTransformer
         return 5_00_00;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function process(Tokens $tokens, Token $token, int $index): void
     {
         $this->transformIntoCurlyCloseBrace($tokens, $index);
@@ -84,7 +81,6 @@ final class BraceTransformer extends AbstractTransformer
      * Transform closing `}` for T_CURLY_OPEN into CT::T_CURLY_CLOSE.
      *
      * This should be done at very beginning of curly braces transformations.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function transformIntoCurlyCloseBrace(Tokens $tokens, int $index): void
     {
@@ -109,9 +105,6 @@ final class BraceTransformer extends AbstractTransformer
         $tokens[$index] = new Token([CT::T_CURLY_CLOSE, '}']);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function transformIntoDollarCloseBrace(Tokens $tokens, int $index): void
     {
         $token = $tokens[$index];
@@ -122,9 +115,6 @@ final class BraceTransformer extends AbstractTransformer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function transformIntoDynamicPropBraces(Tokens $tokens, int $index): void
     {
         $token = $tokens[$index];
@@ -144,9 +134,6 @@ final class BraceTransformer extends AbstractTransformer
         $tokens[$closeIndex] = new Token([CT::T_DYNAMIC_PROP_BRACE_CLOSE, '}']);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function transformIntoDynamicVarBraces(Tokens $tokens, int $index): void
     {
         $token = $tokens[$index];
@@ -173,9 +160,6 @@ final class BraceTransformer extends AbstractTransformer
         $tokens[$closeIndex] = new Token([CT::T_DYNAMIC_VAR_BRACE_CLOSE, '}']);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function transformIntoPropertyHookBraces(Tokens $tokens, int $index): void
     {
         if (\PHP_VERSION_ID < 8_04_00) {
@@ -223,9 +207,6 @@ final class BraceTransformer extends AbstractTransformer
         $tokens[$closeIndex] = new Token([CT::T_PROPERTY_HOOK_BRACE_CLOSE, '}']);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function transformIntoCurlyIndexBraces(Tokens $tokens, int $index): void
     {
         // Support for fetching array index with braces syntax (`$arr{$index}`)
@@ -277,9 +258,6 @@ final class BraceTransformer extends AbstractTransformer
         $tokens[$closeIndex] = new Token([CT::T_ARRAY_INDEX_CURLY_BRACE_CLOSE, '}']);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function transformIntoGroupUseBraces(Tokens $tokens, int $index): void
     {
         $token = $tokens[$index];
@@ -300,9 +278,6 @@ final class BraceTransformer extends AbstractTransformer
         $tokens[$closeIndex] = new Token([CT::T_GROUP_IMPORT_BRACE_CLOSE, '}']);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function transformIntoDynamicClassConstantFetchBraces(Tokens $tokens, int $index): void
     {
         if (\PHP_VERSION_ID < 8_03_00) {
@@ -348,7 +323,6 @@ final class BraceTransformer extends AbstractTransformer
      * We do not want to rely on `$tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $index)` here,
      * as it relies on block types that are assuming that `}` tokens are already transformed to Custom Tokens that are allowing to distinguish different block types.
      * As we are just about to transform `{` and `}` into Custom Tokens by this transformer, thus we need to compare those tokens manually by content without using `Tokens::findBlockEnd`.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function naivelyFindCurlyBlockEnd(Tokens $tokens, int $startIndex): int
     {

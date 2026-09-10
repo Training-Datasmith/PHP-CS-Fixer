@@ -34,7 +34,6 @@ final class RangeAnalyzer
      *
      * @param array{start: int, end: int} $range1
      * @param array{start: int, end: int} $range2
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public static function rangeEqualsRange(Tokens $tokens, array $range1, array $range2): bool
     {

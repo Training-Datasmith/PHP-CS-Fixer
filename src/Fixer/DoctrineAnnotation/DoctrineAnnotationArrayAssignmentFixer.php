@@ -86,9 +86,6 @@ final class DoctrineAnnotationArrayAssignmentFixer extends AbstractDoctrineAnnot
         return new FixerConfigurationResolver($options);
     }
 
-    /**
-     * @param \PhpCsFixer\Doctrine\Annotation\Tokens<\PhpCsFixer\Doctrine\Annotation\Token> $doctrineAnnotationTokens
-     */
     protected function fixAnnotations(Tokens $doctrineAnnotationTokens): void
     {
         $scopes = [];

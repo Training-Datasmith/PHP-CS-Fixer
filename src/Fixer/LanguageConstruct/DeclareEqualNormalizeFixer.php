@@ -66,17 +66,11 @@ final class DeclareEqualNormalizeFixer extends AbstractFixer implements Configur
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DECLARE);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = 0, $count = $tokens->count(); $index < $count - 6; ++$index) {
@@ -111,7 +105,6 @@ final class DeclareEqualNormalizeFixer extends AbstractFixer implements Configur
 
     /**
      * @param int $index of `=` token
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function ensureWhitespaceAroundToken(Tokens $tokens, int $index): void
     {
@@ -134,7 +127,6 @@ final class DeclareEqualNormalizeFixer extends AbstractFixer implements Configur
 
     /**
      * @param int $index of `=` token
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function removeWhitespaceAroundToken(Tokens $tokens, int $index): void
     {

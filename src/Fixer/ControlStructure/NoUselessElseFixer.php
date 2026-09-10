@@ -26,9 +26,6 @@ use PhpCsFixer\Tokenizer\TokensAnalyzer;
  */
 final class NoUselessElseFixer extends AbstractNoUselessElseFixer
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_ELSE);
@@ -55,9 +52,6 @@ final class NoUselessElseFixer extends AbstractNoUselessElseFixer
         return parent::getPriority();
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -90,7 +84,6 @@ final class NoUselessElseFixer extends AbstractNoUselessElseFixer
      * Remove tokens part of an `else` statement if not empty (i.e. no meaningful tokens inside).
      *
      * @param int $index T_ELSE index
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixEmptyElse(Tokens $tokens, int $index): void
     {
@@ -116,7 +109,6 @@ final class NoUselessElseFixer extends AbstractNoUselessElseFixer
 
     /**
      * @param int $index index of T_ELSE
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clearElse(Tokens $tokens, int $index): void
     {
@@ -135,7 +127,6 @@ final class NoUselessElseFixer extends AbstractNoUselessElseFixer
 
     /**
      * @param int $index index of T_ELSE
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function containsNamedSymbolDeclaration(Tokens $tokens, int $index): bool
     {

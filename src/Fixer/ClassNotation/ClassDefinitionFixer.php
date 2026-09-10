@@ -156,17 +156,11 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
         return 36;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         // -4, one for count to index, 3 because min. of tokens for a classy location.
@@ -205,7 +199,6 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
 
     /**
      * @param int $classyIndex Class definition token start index
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixClassyDefinition(Tokens $tokens, int $classyIndex): void
     {
@@ -265,7 +258,6 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
      * @param _ClassReferenceInfo $classExtendsInfo
      *
      * @return _ClassReferenceInfo
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixClassyDefinitionExtends(Tokens $tokens, int $classOpenIndex, array $classExtendsInfo): array
     {
@@ -289,7 +281,6 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
      * @param _ClassReferenceInfo $classImplementsInfo
      *
      * @return _ClassReferenceInfo
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixClassyDefinitionImplements(Tokens $tokens, int $classOpenIndex, array $classImplementsInfo): array
     {
@@ -311,7 +302,6 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
 
     /**
      * @param _ClassyDefinitionInfo $classDefInfo
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixClassyDefinitionOpenSpacing(Tokens $tokens, array $classDefInfo): int
     {
@@ -348,7 +338,6 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
 
     /**
      * @return _ClassyDefinitionInfo
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getClassyDefinitionInfo(Tokens $tokens, int $classyIndex): array
     {
@@ -399,7 +388,6 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
 
     /**
      * @return _ClassReferenceInfo
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getClassyInheritanceInfo(Tokens $tokens, int $startIndex): array
     {
@@ -423,30 +411,21 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
         return $implementsInfo;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function makeClassyDefinitionSingleLine(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($i = $endIndex; $i >= $startIndex; --$i) {
             if ($tokens[$i]->isWhitespace()) {
                 if (str_contains($tokens[$i]->getContent(), "\n")) {
-                    if ($tokens[$i - 1]->isGivenKind(CT::T_ATTRIBUTE_CLOSE)) {
+                    if ($tokens[$i - 1]->isGivenKind(CT::T_ATTRIBUTE_CLOSE) || $tokens[$i + 1]->isGivenKind(FCT::T_ATTRIBUTE)) {
                         continue;
                     }
-                    if ($tokens[$i + 1]->isGivenKind(FCT::T_ATTRIBUTE)) {
+                    if (($tokens[$i - 1]->isComment() && str_ends_with($tokens[$i - 1]->getContent(), ']'))
+                        || ($tokens[$i + 1]->isComment() && str_starts_with($tokens[$i + 1]->getContent(), '#['))
+                    ) {
                         continue;
                     }
-                    if ($tokens[$i - 1]->isComment() && str_ends_with($tokens[$i - 1]->getContent(), ']')) {
-                        continue;
-                    }
-                    if ($tokens[$i + 1]->isComment() && str_starts_with($tokens[$i + 1]->getContent(), '#[')) {
-                        continue;
-                    }
-                    if ($tokens[$i - 1]->isGivenKind(\T_DOC_COMMENT)) {
-                        continue;
-                    }
-                    if ($tokens[$i + 1]->isGivenKind(\T_DOC_COMMENT)) {
+
+                    if ($tokens[$i - 1]->isGivenKind(\T_DOC_COMMENT) || $tokens[$i + 1]->isGivenKind(\T_DOC_COMMENT)) {
                         continue;
                     }
                 }
@@ -516,9 +495,6 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function makeClassyInheritancePartMultiLine(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($i = $endIndex; $i > $startIndex; --$i) {
@@ -564,7 +540,6 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
      *     abstract: false|int,
      *     readonly: false|int,
      * } $classDefInfo
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function sortClassModifiers(Tokens $tokens, array $classDefInfo): void
     {
@@ -575,12 +550,10 @@ final class ClassDefinitionFixer extends AbstractFixer implements ConfigurableFi
         $readonlyIndex = $classDefInfo['readonly'];
 
         foreach (['final', 'abstract'] as $accessModifier) {
-            if (false === $classDefInfo[$accessModifier]) {
+            if (false === $classDefInfo[$accessModifier] || $classDefInfo[$accessModifier] < $readonlyIndex) {
                 continue;
             }
-            if ($classDefInfo[$accessModifier] < $readonlyIndex) {
-                continue;
-            }
+
             $accessModifierIndex = $classDefInfo[$accessModifier];
 
             $readonlyToken = clone $tokens[$readonlyIndex];

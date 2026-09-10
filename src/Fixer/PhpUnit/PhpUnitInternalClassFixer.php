@@ -84,9 +84,6 @@ final class PhpUnitInternalClassFixer extends AbstractPhpUnitFixer implements Wh
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $classIndex = $tokens->getPrevTokenOfKind($startIndex, [[\T_CLASS]]);
@@ -109,9 +106,6 @@ final class PhpUnitInternalClassFixer extends AbstractPhpUnitFixer implements Wh
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isAllowedByConfiguration(Tokens $tokens, int $index): bool
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);

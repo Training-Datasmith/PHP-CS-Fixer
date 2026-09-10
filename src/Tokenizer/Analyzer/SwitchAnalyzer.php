@@ -27,9 +27,6 @@ final class SwitchAnalyzer
     /** @var array<non-empty-string, list<int>> */
     private static array $cache = [];
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public static function belongsToSwitch(Tokens $tokens, int $index): bool
     {
         if (!$tokens[$index]->equals(':')) {
@@ -49,7 +46,6 @@ final class SwitchAnalyzer
 
     /**
      * @return list<int>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function getColonIndicesForSwitch(Tokens $tokens): array
     {

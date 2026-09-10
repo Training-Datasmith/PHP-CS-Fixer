@@ -34,9 +34,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 trait DocBlockAnnotationTrait
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     final protected function getDocBlockIndex(Tokens $tokens, int $index): int
     {
         do {
@@ -53,7 +50,6 @@ trait DocBlockAnnotationTrait
     /**
      * @param list<string>                     $preventingAnnotations
      * @param list<non-empty-lowercase-string> $preventingAttributes
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     final protected function ensureIsDocBlockWithAnnotation(
         Tokens $tokens,
@@ -75,9 +71,6 @@ trait DocBlockAnnotationTrait
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function createDocBlock(Tokens $tokens, int $docBlockIndex, string $annotation): void
     {
         $lineEnd = $this->whitespacesConfig->getLineEnding();
@@ -104,7 +97,6 @@ trait DocBlockAnnotationTrait
 
     /**
      * @param list<string> $preventingAnnotations
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function updateDocBlockIfNeeded(
         Tokens $tokens,
@@ -129,7 +121,6 @@ trait DocBlockAnnotationTrait
 
     /**
      * @param list<lowercase-string> $preventingAttributes
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isPreventedByAttribute(Tokens $tokens, int $index, array $preventingAttributes): bool
     {
@@ -160,7 +151,6 @@ trait DocBlockAnnotationTrait
 
     /**
      * @return non-empty-list<Line>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function addAnnotation(
         DocBlock $docBlock,
@@ -176,9 +166,6 @@ trait DocBlockAnnotationTrait
         return $lines;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function makeDocBlockMultiLineIfNeeded(
         DocBlock $doc,
         Tokens $tokens,

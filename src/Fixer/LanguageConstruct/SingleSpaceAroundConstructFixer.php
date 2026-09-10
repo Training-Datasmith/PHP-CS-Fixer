@@ -244,9 +244,6 @@ final class SingleSpaceAroundConstructFixer extends AbstractFixer implements Con
         return 36;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         $tokenKinds = [
@@ -291,9 +288,6 @@ final class SingleSpaceAroundConstructFixer extends AbstractFixer implements Con
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokenKindsContainASingleSpace = array_values($this->fixTokenMapContainASingleSpace);
@@ -379,10 +373,10 @@ final class SingleSpaceAroundConstructFixer extends AbstractFixer implements Con
 
             if ($tokens[$whitespaceTokenIndex]->isWhitespace() && str_contains($tokens[$whitespaceTokenIndex]->getContent(), "\n")) {
                 $nextNextToken = $tokens[$whitespaceTokenIndex + 1];
-                if ($nextNextToken->isGivenKind(FCT::T_ATTRIBUTE)) {
-                    continue;
-                }
-                if ($nextNextToken->isComment() && str_starts_with($nextNextToken->getContent(), '#[')) {
+                if (
+                    $nextNextToken->isGivenKind(FCT::T_ATTRIBUTE)
+                    || $nextNextToken->isComment() && str_starts_with($nextNextToken->getContent(), '#[')
+                ) {
                     continue;
                 }
 
@@ -420,9 +414,6 @@ final class SingleSpaceAroundConstructFixer extends AbstractFixer implements Con
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isMultiLineReturn(Tokens $tokens, int $index): bool
     {
         ++$index;
@@ -454,9 +445,6 @@ final class SingleSpaceAroundConstructFixer extends AbstractFixer implements Con
         return false;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isMultilineExtendsOrImplementsWithMoreThanOneAncestor(Tokens $tokens, int $index): bool
     {
         $hasMoreThanOneAncestor = false;
@@ -483,9 +471,6 @@ final class SingleSpaceAroundConstructFixer extends AbstractFixer implements Con
         return LogicException('Not reachable code was reached.'); // @phpstan-ignore deadCode.unreachable
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isMultilineCommaSeparatedConstant(Tokens $tokens, int $constantIndex): bool
     {
         $isMultilineConstant = false;
@@ -510,9 +495,6 @@ final class SingleSpaceAroundConstructFixer extends AbstractFixer implements Con
         return $hasMoreThanOneConstant && $isMultilineConstant;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isFullLineCommentBefore(Tokens $tokens, int $index): bool
     {
         $beforeIndex = $tokens->getPrevNonWhitespace($index);

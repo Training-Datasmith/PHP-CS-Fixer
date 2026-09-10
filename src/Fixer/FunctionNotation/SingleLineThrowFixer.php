@@ -43,9 +43,6 @@ final class SingleLineThrowFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_THROW);
@@ -61,9 +58,6 @@ final class SingleLineThrowFixer extends AbstractFixer
         return 36;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = 0, $count = $tokens->count(); $index < $count; ++$index) {
@@ -91,9 +85,6 @@ final class SingleLineThrowFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function trimNewLines(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($index = $startIndex; $index < $endIndex; ++$index) {
@@ -148,17 +139,11 @@ final class SingleLineThrowFixer extends AbstractFixer
 
     private function isPreviousTokenToClear(Token $token): bool
     {
-        if ($token->equalsAny([...self::REMOVE_WHITESPACE_AFTER_TOKENS, ...self::REMOVE_WHITESPACE_AROUND_TOKENS])) {
-            return true;
-        }
-        return $token->isObjectOperator();
+        return $token->equalsAny([...self::REMOVE_WHITESPACE_AFTER_TOKENS, ...self::REMOVE_WHITESPACE_AROUND_TOKENS]) || $token->isObjectOperator();
     }
 
     private function isNextTokenToClear(Token $token): bool
     {
-        if ($token->equalsAny([...self::REMOVE_WHITESPACE_AROUND_TOKENS, ...self::REMOVE_WHITESPACE_BEFORE_TOKENS])) {
-            return true;
-        }
-        return $token->isObjectOperator();
+        return $token->equalsAny([...self::REMOVE_WHITESPACE_AROUND_TOKENS, ...self::REMOVE_WHITESPACE_BEFORE_TOKENS]) || $token->isObjectOperator();
     }
 }

@@ -56,9 +56,6 @@ final class CommentsAnalyzer
         FCT::T_PRIVATE_SET,
     ];
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isHeaderComment(Tokens $tokens, int $index): bool
     {
         if (!$tokens[$index]->isGivenKind([\T_COMMENT, \T_DOC_COMMENT])) {
@@ -93,7 +90,6 @@ final class CommentsAnalyzer
      * Check if comment at given index precedes structural element.
      *
      * @see https://github.com/php-fig/fig-standards/blob/master/proposed/phpdoc.md#3-definitions
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function isBeforeStructuralElement(Tokens $tokens, int $index): bool
     {
@@ -134,7 +130,6 @@ final class CommentsAnalyzer
 
     /**
      * Check if comment at given index precedes return statement.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function isBeforeReturn(Tokens $tokens, int $index): bool
     {
@@ -157,7 +152,6 @@ final class CommentsAnalyzer
      * @param int $index T_COMMENT index
      *
      * @return non-empty-list<int>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function getCommentBlockIndices(Tokens $tokens, int $index): array
     {
@@ -196,7 +190,6 @@ final class CommentsAnalyzer
 
     /**
      * @see https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#3-definitions
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isStructuralElement(Tokens $tokens, int $index): bool
     {
@@ -230,7 +223,6 @@ final class CommentsAnalyzer
      *
      * @param Token $docsToken    docs Token
      * @param int   $controlIndex index of control structure Token
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isValidControl(Tokens $tokens, Token $docsToken, int $controlIndex): bool
     {
@@ -267,7 +259,6 @@ final class CommentsAnalyzer
      *
      * @param Token $docsToken              docs Token
      * @param int   $languageConstructIndex index of variable Token
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isValidVariableAssignment(Tokens $tokens, Token $docsToken, int $languageConstructIndex): bool
     {
@@ -303,7 +294,6 @@ final class CommentsAnalyzer
      * Checks variable assignments for correct docblock usage.
      *
      * @param int $index index of variable Token
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isValidVariable(Tokens $tokens, int $index): bool
     {
@@ -347,9 +337,6 @@ final class CommentsAnalyzer
         return self::TYPE_DOUBLE_SLASH;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getLineBreakCount(Tokens $tokens, int $whiteStart, int $whiteEnd): int
     {
         $lineCount = 0;
@@ -360,9 +347,6 @@ final class CommentsAnalyzer
         return $lineCount;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getNextTokenIndex(Tokens $tokens, int $startIndex): ?int
     {
         $nextIndex = $startIndex;

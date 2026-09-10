@@ -55,9 +55,6 @@ final class DateTimeCreateFromFormatCallFixer extends AbstractFixer
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOUBLE_COLON);
@@ -68,9 +65,6 @@ final class DateTimeCreateFromFormatCallFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();
@@ -148,7 +142,6 @@ final class DateTimeCreateFromFormatCallFixer extends AbstractFixer
 
     /**
      * @param array<int, int> $arguments
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getFirstArgumentTokenIndex(Tokens $tokens, array $arguments): ?int
     {

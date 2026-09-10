@@ -180,7 +180,7 @@ final class ConfigurationResolver
     /**
      * @var null|ProgressOutputType::*
      */
-    private ?string $progress = null;
+    private $progress;
 
     private ?RuleSet $ruleSet = null;
 
@@ -517,7 +517,9 @@ final class ConfigurationResolver
         if (null === $this->isUnsupportedPhpVersionAllowed) {
             if (null === $this->options['allow-unsupported-php-version']) {
                 $config = $this->getConfig();
-                $this->isUnsupportedPhpVersionAllowed = $config instanceof UnsupportedPhpVersionAllowedConfigInterface && $config->getUnsupportedPhpVersionAllowed();
+                $this->isUnsupportedPhpVersionAllowed = $config instanceof UnsupportedPhpVersionAllowedConfigInterface
+                    ? $config->getUnsupportedPhpVersionAllowed()
+                    : false;
             } else {
                 $this->isUnsupportedPhpVersionAllowed = $this->resolveOptionBooleanValue('allow-unsupported-php-version');
             }
@@ -1043,15 +1045,9 @@ final class ConfigurationResolver
 
     private function isCachingAllowedForRuntime(): bool
     {
-        if ($this->toolInfo->isInstalledAsPhar()) {
-            return true;
-        }
-        if ($this->toolInfo->isInstalledByComposer()) {
-            return true;
-        }
-        if ($this->toolInfo->isRunInsideDocker()) {
-            return true;
-        }
-        return filter_var(getenv('PHP_CS_FIXER_ENFORCE_CACHE'), \FILTER_VALIDATE_BOOL);
+        return $this->toolInfo->isInstalledAsPhar()
+            || $this->toolInfo->isInstalledByComposer()
+            || $this->toolInfo->isRunInsideDocker()
+            || filter_var(getenv('PHP_CS_FIXER_ENFORCE_CACHE'), \FILTER_VALIDATE_BOOL);
     }
 }

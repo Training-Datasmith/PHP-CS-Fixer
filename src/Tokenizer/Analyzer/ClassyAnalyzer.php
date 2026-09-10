@@ -24,9 +24,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class ClassyAnalyzer
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isClassyInvocation(Tokens $tokens, int $index): bool
     {
         $token = $tokens[$index];

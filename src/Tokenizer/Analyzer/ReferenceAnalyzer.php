@@ -26,9 +26,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class ReferenceAnalyzer
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isReference(Tokens $tokens, int $index): bool
     {
         if ($tokens[$index]->isGivenKind(CT::T_RETURN_REF)) {

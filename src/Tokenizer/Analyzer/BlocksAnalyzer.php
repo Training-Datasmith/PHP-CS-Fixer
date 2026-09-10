@@ -26,9 +26,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class BlocksAnalyzer
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isBlock(Tokens $tokens, int $openIndex, int $closeIndex): bool
     {
         if (!$tokens->offsetExists($openIndex)) {

@@ -31,7 +31,6 @@ final class PhpUnitTestCaseAnalyzer
      * mitigate risk of not visiting whole collections (final indices).
      *
      * @return iterable<array{0: int, 1: int}> array of [int start, int end] indices from later to earlier classes
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function findPhpUnitClasses(Tokens $tokens): iterable
     {
@@ -49,9 +48,6 @@ final class PhpUnitTestCaseAnalyzer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isPhpUnitClass(Tokens $tokens, int $index): bool
     {
         if (!$tokens[$index]->isGivenKind(\T_CLASS)) {

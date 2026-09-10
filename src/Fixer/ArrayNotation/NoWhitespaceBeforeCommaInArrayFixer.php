@@ -68,17 +68,11 @@ final class NoWhitespaceBeforeCommaInArrayFixer extends AbstractFixer implements
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_ARRAY, CT::T_ARRAY_SQUARE_BRACE_OPEN]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; $index > 0; --$index) {
@@ -100,7 +94,6 @@ final class NoWhitespaceBeforeCommaInArrayFixer extends AbstractFixer implements
 
     /**
      * Method to fix spacing in array declaration.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixSpacing(int $index, Tokens $tokens): void
     {
@@ -128,7 +121,6 @@ final class NoWhitespaceBeforeCommaInArrayFixer extends AbstractFixer implements
 
     /**
      * Method to move index over the non-array elements like function calls or function declarations.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function skipNonArrayElements(int $index, Tokens $tokens): int
     {
@@ -151,9 +143,6 @@ final class NoWhitespaceBeforeCommaInArrayFixer extends AbstractFixer implements
         return $index;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function commaIsPartOfImplementsList(int $index, Tokens $tokens): bool
     {
         do {

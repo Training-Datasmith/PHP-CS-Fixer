@@ -178,9 +178,6 @@ final class ModifierKeywordsFixer extends AbstractFixer implements ConfigurableF
         return 56;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound(Token::getClassyTokenKinds());
@@ -213,9 +210,6 @@ final class ModifierKeywordsFixer extends AbstractFixer implements ConfigurableF
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -305,9 +299,6 @@ final class ModifierKeywordsFixer extends AbstractFixer implements ConfigurableF
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isKeywordPlacedProperly(Tokens $tokens, int $keywordIndex, int $comparedIndex): bool
     {
         return ' ' === $tokens[$keywordIndex + 1]->getContent()
@@ -317,9 +308,6 @@ final class ModifierKeywordsFixer extends AbstractFixer implements ConfigurableF
                 );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function moveTokenAndEnsureSingleSpaceFollows(Tokens $tokens, int $fromIndex, int $toIndex): void
     {
         $tokens->insertAt($toIndex, [$tokens[$fromIndex], new Token([\T_WHITESPACE, ' '])]);

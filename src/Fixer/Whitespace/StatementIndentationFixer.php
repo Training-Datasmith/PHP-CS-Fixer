@@ -161,9 +161,6 @@ final class StatementIndentationFixer extends AbstractFixer implements Configura
         return -3;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return true;
@@ -179,9 +176,6 @@ final class StatementIndentationFixer extends AbstractFixer implements Configura
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $this->alternativeSyntaxAnalyzer = new AlternativeSyntaxAnalyzer();
@@ -573,10 +567,8 @@ final class StatementIndentationFixer extends AbstractFixer implements Configura
 
                 --$currentScope;
             }
-            if ($token->isComment()) {
-                continue;
-            }
-            if ($token->equalsAny([';', ',', '}', [\T_OPEN_TAG], [\T_CLOSE_TAG], [CT::T_ATTRIBUTE_CLOSE]])) {
+
+            if ($token->isComment() || $token->equalsAny([';', ',', '}', [\T_OPEN_TAG], [\T_CLOSE_TAG], [CT::T_ATTRIBUTE_CLOSE]])) {
                 continue;
             }
 
@@ -600,9 +592,6 @@ final class StatementIndentationFixer extends AbstractFixer implements Configura
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function findStatementEndIndex(Tokens $tokens, int $index, int $parentScopeEndIndex): int
     {
         $endIndex = null;
@@ -684,7 +673,6 @@ final class StatementIndentationFixer extends AbstractFixer implements Configura
 
     /**
      * @return array{int, bool}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findCaseBlockEnd(Tokens $tokens, int $index): array
     {
@@ -724,9 +712,6 @@ final class StatementIndentationFixer extends AbstractFixer implements Configura
         throw new \LogicException('End of case block not found.');
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getLineIndentationWithBracesCompatibility(Tokens $tokens, int $index, string $regularIndent): string
     {
         if (
@@ -746,7 +731,6 @@ final class StatementIndentationFixer extends AbstractFixer implements Configura
     /**
      * Returns whether the token at given index is the last token in a property
      * declaration before the type or the name of that property.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isPropertyStart(Tokens $tokens, int $index): bool
     {
@@ -777,7 +761,6 @@ final class StatementIndentationFixer extends AbstractFixer implements Configura
      * Indentation of a comment is not changed when the comment is part of a
      * multi-line message whose lines are all single-line comments and at least
      * one line has meaningful content.
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isCommentWithFixableIndentation(Tokens $tokens, int $index): bool
     {
@@ -828,9 +811,6 @@ final class StatementIndentationFixer extends AbstractFixer implements Configura
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getSiblingContinuousSingleLineComment(Tokens $tokens, int $index, bool $after): ?int
     {
         $siblingIndex = $index;

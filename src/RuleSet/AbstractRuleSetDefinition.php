@@ -21,6 +21,8 @@ namespace PhpCsFixer\RuleSet;
  */
 abstract class AbstractRuleSetDefinition implements RuleSetDefinitionInterface
 {
+    public function __construct() {}
+
     public function getName(): string
     {
         $name = substr(static::class, 1 + (int) strrpos(static::class, '\\'), -3);

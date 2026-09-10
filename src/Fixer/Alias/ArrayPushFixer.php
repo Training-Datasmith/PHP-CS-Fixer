@@ -38,9 +38,6 @@ final class ArrayPushFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING) && $tokens->count() > 7;
@@ -51,9 +48,6 @@ final class ArrayPushFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -86,10 +80,8 @@ final class ArrayPushFixer extends AbstractFixer
 
             $openBraceIndex = $tokens->getNextMeaningfulToken($callIndex);
             $blockType = Tokens::detectBlockType($tokens[$openBraceIndex]);
-            if (null === $blockType) {
-                continue;
-            }
-            if (Tokens::BLOCK_TYPE_PARENTHESIS_BRACE !== $blockType['type']) {
+
+            if (null === $blockType || Tokens::BLOCK_TYPE_PARENTHESIS_BRACE !== $blockType['type']) {
                 continue;
             }
 
@@ -150,9 +142,6 @@ final class ArrayPushFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getFirstArgumentEnd(Tokens $tokens, int $index): int
     {
         $nextIndex = $tokens->getNextMeaningfulToken($index);
@@ -195,7 +184,6 @@ final class ArrayPushFixer extends AbstractFixer
 
     /**
      * @param int $endIndex boundary, i.e. tokens index of `)`
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getSecondArgumentEnd(Tokens $tokens, int $index, int $endIndex): ?int
     {

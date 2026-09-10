@@ -111,9 +111,6 @@ final class SingleLineCommentStyleFixer extends AbstractFixer implements Configu
         return -31;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_COMMENT);
@@ -125,9 +122,6 @@ final class SingleLineCommentStyleFixer extends AbstractFixer implements Configu
         $this->hashEnabled = \in_array('hash', $this->configuration['comment_types'], true);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -149,26 +143,20 @@ final class SingleLineCommentStyleFixer extends AbstractFixer implements Configu
 
                 continue;
             }
-            if (!$this->asteriskEnabled) {
-                continue;
-            }
-            if (str_contains($commentContent, '?>')) {
-                continue;
-            }
-            if (!str_starts_with($content, '/*')) {
-                continue;
-            }
-            if (Preg::match('/[^\s\*].*\R.*[^\s\*]/s', $commentContent)) {
+
+            if (
+                !$this->asteriskEnabled
+                || str_contains($commentContent, '?>')
+                || !str_starts_with($content, '/*')
+                || Preg::match('/[^\s\*].*\R.*[^\s\*]/s', $commentContent)
+            ) {
                 continue;
             }
 
             $nextTokenIndex = $index + 1;
             if (isset($tokens[$nextTokenIndex])) {
                 $nextToken = $tokens[$nextTokenIndex];
-                if (!$nextToken->isWhitespace()) {
-                    continue;
-                }
-                if (!Preg::match('/\R/', $nextToken->getContent())) {
+                if (!$nextToken->isWhitespace() || !Preg::match('/\R/', $nextToken->getContent())) {
                     continue;
                 }
 

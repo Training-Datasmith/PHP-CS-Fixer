@@ -81,7 +81,7 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
      *     function?: list<non-empty-string>
      * }
      */
-    private ?array $discoveredSymbols = null;
+    private ?array $discoveredSymbols;
 
     /**
      * @var array{
@@ -239,9 +239,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
         return 7;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([
@@ -307,9 +304,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $namespaceUsesAnalyzer = new NamespaceUsesAnalyzer();
@@ -584,7 +578,7 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
                 $useByShortNameLower[strtolower($useShortName)] = true;
             }
 
-            uasort($discoveredSymbols, static function ($a, $b): int {
+            uasort($discoveredSymbols, static function ($a, $b) {
                 $res = str_starts_with($a, '\\') <=> str_starts_with($b, '\\');
                 if (0 !== $res) {
                     return $res;
@@ -640,7 +634,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Uses $uses
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixFunction(FunctionsAnalyzer $functionsAnalyzer, Tokens $tokens, int $index, array $uses, string $namespaceName): void
     {
@@ -663,7 +656,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Uses $uses
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixPhpDoc(Tokens $tokens, int $index, array $uses, string $namespaceName): void
     {
@@ -686,7 +678,7 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
         if (\in_array('see', $allowedTags, true)) {
             $phpDocContentNew = Preg::replaceCallback(
                 '/([*{]\h*)@see(\h+)('.self::REGEX_CLASS.')(::(?:\$\w+|\w+\(\)))(?!(?!\})\S)/',
-                fn ($matches): string => $matches[1].'@see'.$matches[2].$this->fixPhpDocType($matches[3], $uses, $namespaceName).$matches[5],
+                fn ($matches) => $matches[1].'@see'.$matches[2].$this->fixPhpDocType($matches[3], $uses, $namespaceName).$matches[5],
                 $phpDocContentNew,
             );
         }
@@ -703,7 +695,7 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
     {
         $typeExpression = new TypeExpression($type, null, []);
 
-        $typeExpression = $typeExpression->mapTypes(function (TypeExpression $type) use ($uses, $namespaceName): \PhpCsFixer\DocBlock\TypeExpression {
+        $typeExpression = $typeExpression->mapTypes(function (TypeExpression $type) use ($uses, $namespaceName) {
             $currentTypeValue = $type->toString();
 
             if ($type->isCompositeType() || !Preg::match('/^'.self::REGEX_CLASS.'$/', $currentTypeValue) || \in_array($currentTypeValue, ['min', 'max'], true)) {
@@ -718,7 +710,7 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
             }
 
             $newTypeValue = implode('', array_map(
-                static fn (Token $token): string => $token->getContent(),
+                static fn (Token $token) => $token->getContent(),
                 $shortTokens,
             ));
 
@@ -732,7 +724,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Uses $uses
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixExtendsImplements(Tokens $tokens, int $index, array $uses, string $namespaceName): void
     {
@@ -766,7 +757,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Uses $uses
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixCatch(Tokens $tokens, int $index, array $uses, string $namespaceName): void
     {
@@ -801,7 +791,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Uses $uses
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixAttribute(Tokens $tokens, int $index, array $uses, string $namespaceName): void
     {
@@ -818,7 +807,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Uses $uses
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixPrevName(Tokens $tokens, int $index, array $uses, string $namespaceName): void
     {
@@ -848,7 +836,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Uses $uses
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixNextName(Tokens $tokens, int $index, array $uses, string $namespaceName): void
     {
@@ -875,7 +862,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Uses $uses
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function shortenClassIfPossible(Tokens $tokens, int $typeStartIndex, int $typeEndIndex, array $uses, string $namespaceName): int
     {
@@ -893,7 +879,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
 
     /**
      * @param _Uses $uses
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function replaceByShortType(Tokens $tokens, TypeAnalysis $type, array $uses, string $namespaceName): void
     {
@@ -945,7 +930,6 @@ final class FullyQualifiedStrictTypesFixer extends AbstractFixer implements Conf
 
     /**
      * @return iterable<array{int, int}>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getTypes(Tokens $tokens, int $index, int $endIndex): iterable
     {

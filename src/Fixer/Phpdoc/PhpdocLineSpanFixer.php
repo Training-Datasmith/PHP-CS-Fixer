@@ -123,9 +123,6 @@ final class PhpdocLineSpanFixer extends AbstractFixer implements WhitespacesAwar
         return 7;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
@@ -165,9 +162,6 @@ final class PhpdocLineSpanFixer extends AbstractFixer implements WhitespacesAwar
         ]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $analyzer = new TokensAnalyzer($tokens);
@@ -216,9 +210,6 @@ final class PhpdocLineSpanFixer extends AbstractFixer implements WhitespacesAwar
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getDocBlockIndex(Tokens $tokens, int $index): ?int
     {
         do {
@@ -232,9 +223,6 @@ final class PhpdocLineSpanFixer extends AbstractFixer implements WhitespacesAwar
         return $tokens[$index]->isGivenKind(\T_DOC_COMMENT) ? $index : null;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function fixDocBlock(Tokens $tokens, int $docIndex, string $type): void
     {
         if (!isset($this->configuration[$type])) {

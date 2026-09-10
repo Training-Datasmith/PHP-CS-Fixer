@@ -50,17 +50,11 @@ final class ReturnAssignmentFixer extends AbstractFixer
         return -15;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_FUNCTION, \T_RETURN, \T_VARIABLE]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokenCount = \count($tokens);
@@ -109,7 +103,6 @@ final class ReturnAssignmentFixer extends AbstractFixer
      * @param int $functionCloseIndex token index of the closing brace token of the function
      *
      * @return int >= 0 number of tokens inserted into the Tokens collection
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixFunction(Tokens $tokens, int $functionIndex, int $functionOpenIndex, int $functionCloseIndex): int
     {
@@ -305,7 +298,6 @@ final class ReturnAssignmentFixer extends AbstractFixer
 
     /**
      * @return int >= 0 number of tokens inserted into the Tokens collection
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function simplifyReturnStatement(
         Tokens $tokens,
@@ -367,9 +359,6 @@ final class ReturnAssignmentFixer extends AbstractFixer
         return $inserted;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function clearIfSave(Tokens $tokens, int $index): void
     {
         if ($tokens[$index]->isComment()) {
@@ -387,7 +376,6 @@ final class ReturnAssignmentFixer extends AbstractFixer
      * @param int $index open brace index
      *
      * @return null|int index of the first token of a definition (lambda, anonymous class or match) or `null` if not an anonymous
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isCloseBracePartOfDefinition(Tokens $tokens, int $index): ?int
     {
@@ -407,7 +395,6 @@ final class ReturnAssignmentFixer extends AbstractFixer
      * @param int $index open brace index
      *
      * @return null|int index of T_NEW of anonymous class or `null` if not an anonymous
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isOpenBraceOfAnonymousClass(Tokens $tokens, int $index): ?int
     {
@@ -431,7 +418,6 @@ final class ReturnAssignmentFixer extends AbstractFixer
      * @param int $index open brace index
      *
      * @return null|int index of T_FUNCTION or T_STATIC of lambda or `null` if not a lambda
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isOpenBraceOfLambda(Tokens $tokens, int $index): ?int
     {
@@ -467,7 +453,6 @@ final class ReturnAssignmentFixer extends AbstractFixer
      * @param int $index open brace index
      *
      * @return null|int index of T_MATCH or `null` if not a `match`
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isOpenBraceOfMatch(Tokens $tokens, int $index): ?int
     {
@@ -487,9 +472,6 @@ final class ReturnAssignmentFixer extends AbstractFixer
         return $tokens[$index]->isGivenKind(\T_MATCH) ? $index : null;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isUsedInCatchOrFinally(Tokens $tokens, int $returnVarIndex, int $functionOpenIndex, int $functionCloseIndex): bool
     {
         // Find try

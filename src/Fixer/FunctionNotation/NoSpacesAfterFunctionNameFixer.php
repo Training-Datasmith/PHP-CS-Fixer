@@ -70,17 +70,11 @@ final class NoSpacesAfterFunctionNameFixer extends AbstractFixer
         return 3;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_STRING, ...self::FUNCTIONY_TOKEN_KINDS]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -140,7 +134,7 @@ final class NoSpacesAfterFunctionNameFixer extends AbstractFixer
     /**
      * Fixes whitespaces around braces of a function(y) call.
      *
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens tokens to handle
+     * @param Tokens $tokens tokens to handle
      * @param int    $index  index of token
      */
     private function fixFunctionCall(Tokens $tokens, int $index): void

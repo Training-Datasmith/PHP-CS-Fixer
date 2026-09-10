@@ -184,17 +184,11 @@ final class NoSuperfluousPhpdocTagsFixer extends AbstractFixer implements Config
         return 6;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -295,7 +289,6 @@ final class NoSuperfluousPhpdocTagsFixer extends AbstractFixer implements Config
 
     /**
      * @return null|_DocumentElement
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findDocumentedElement(Tokens $tokens, int $docCommentIndex): ?array
     {
@@ -366,7 +359,6 @@ final class NoSuperfluousPhpdocTagsFixer extends AbstractFixer implements Config
      * @param _DocumentElement&array{type: 'function'} $element
      * @param null|non-empty-string                    $namespace
      * @param array<string, string>                    $shortNames
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixFunctionDocComment(
         string $content,
@@ -424,7 +416,6 @@ final class NoSuperfluousPhpdocTagsFixer extends AbstractFixer implements Config
      * @param _DocumentElement&array{type: 'property'} $element
      * @param null|non-empty-string                    $namespace
      * @param array<string, string>                    $shortNames
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixPropertyDocComment(
         string $content,
@@ -465,7 +456,6 @@ final class NoSuperfluousPhpdocTagsFixer extends AbstractFixer implements Config
 
     /**
      * @return array<non-empty-string, _TypeInfo>
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getArgumentsInfo(Tokens $tokens, int $start, int $end): array
     {
@@ -515,7 +505,6 @@ final class NoSuperfluousPhpdocTagsFixer extends AbstractFixer implements Config
 
     /**
      * @return _TypeInfo
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getReturnTypeInfo(Tokens $tokens, int $closingParenthesisIndex): array
     {
@@ -530,7 +519,6 @@ final class NoSuperfluousPhpdocTagsFixer extends AbstractFixer implements Config
      * @param int $index The index of the first token of the type hint
      *
      * @return _TypeInfo
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function parseTypeHint(Tokens $tokens, int $index): array
     {
@@ -691,7 +679,7 @@ final class NoSuperfluousPhpdocTagsFixer extends AbstractFixer implements Config
                 }
 
                 if (null !== $namespace && !(new TypeAnalysis($type))->isReservedType()) {
-                    return strtolower($namespace).'\\'.$type;
+                    $type = strtolower($namespace).'\\'.$type;
                 }
 
                 return $type;

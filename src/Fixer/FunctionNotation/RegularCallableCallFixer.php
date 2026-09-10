@@ -72,9 +72,6 @@ final class RegularCallableCallFixer extends AbstractFixer
         return 2;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -85,9 +82,6 @@ final class RegularCallableCallFixer extends AbstractFixer
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -116,7 +110,6 @@ final class RegularCallableCallFixer extends AbstractFixer
 
     /**
      * @param non-empty-array<int, int> $arguments
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function processCall(Tokens $tokens, int $index, array $arguments): void
     {
@@ -210,10 +203,6 @@ final class RegularCallableCallFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $newCallTokens
-     */
     private function replaceCallUserFuncWithCallback(Tokens $tokens, int $callIndex, Tokens $newCallTokens, int $firstArgStartIndex, int $firstArgEndIndex): void
     {
         $tokens->clearRange($firstArgStartIndex, $firstArgEndIndex);
@@ -241,9 +230,6 @@ final class RegularCallableCallFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function getTokensSubcollection(Tokens $tokens, int $indexStart, int $indexEnd): Tokens
     {
         $size = $indexEnd - $indexStart + 1;

@@ -40,9 +40,6 @@ final class StrictParamFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -63,9 +60,6 @@ final class StrictParamFixer extends AbstractFixer
         return 31;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -101,7 +95,6 @@ final class StrictParamFixer extends AbstractFixer
 
     /**
      * @param list<?Token> $functionParams
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixFunction(Tokens $tokens, int $functionIndex, array $functionParams): void
     {

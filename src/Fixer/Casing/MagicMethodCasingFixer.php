@@ -77,17 +77,11 @@ final class MagicMethodCasingFixer extends AbstractFixer
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING) && $tokens->isAnyTokenKindsFound([\T_FUNCTION, \T_DOUBLE_COLON, ...Token::getObjectOperatorKinds()]);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $inClass = 0;
@@ -160,9 +154,6 @@ final class MagicMethodCasingFixer extends AbstractFixer
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isFunctionSignature(Tokens $tokens, int $index): bool
     {
         $prevIndex = $tokens->getPrevMeaningfulToken($index);
@@ -173,9 +164,6 @@ final class MagicMethodCasingFixer extends AbstractFixer
         return $tokens[$tokens->getNextMeaningfulToken($index)]->equals('(');
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isMethodCall(Tokens $tokens, int $index): bool
     {
         $prevIndex = $tokens->getPrevMeaningfulToken($index);
@@ -186,9 +174,6 @@ final class MagicMethodCasingFixer extends AbstractFixer
         return $tokens[$tokens->getNextMeaningfulToken($index)]->equals('(');
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isStaticMethodCall(Tokens $tokens, int $index): bool
     {
         $prevIndex = $tokens->getPrevMeaningfulToken($index);
@@ -217,9 +202,6 @@ final class MagicMethodCasingFixer extends AbstractFixer
         return self::MAGIC_NAMES[$name];
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function setTokenToCorrectCasing(Tokens $tokens, int $index, string $nameInCorrectCasing): void
     {
         $tokens[$index] = new Token([\T_STRING, $nameInCorrectCasing]);

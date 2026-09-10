@@ -173,7 +173,7 @@ final class InitCommand extends Command
 
         $rules = array_merge(
             $rules,
-            array_unique(array_filter($sets, static fn ($item): bool => 'none' !== $item)),
+            array_unique(array_filter($sets, static fn ($item) => 'none' !== $item)),
         );
 
         $readResult = @file_get_contents(__DIR__.'/../../../resources/.php-cs-fixer.dist.php.template');
@@ -191,7 +191,7 @@ final class InitCommand extends Command
                 "[\n".implode(
                     ",\n",
                     array_map(
-                        static fn ($item): string => "        '{$item}' => true",
+                        static fn ($item) => "        '{$item}' => true",
                         $rules,
                     ),
                 )."\n    ]",

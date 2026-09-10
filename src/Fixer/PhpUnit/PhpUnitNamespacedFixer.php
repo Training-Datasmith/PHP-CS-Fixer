@@ -63,17 +63,17 @@ final class PhpUnitNamespacedFixer extends AbstractFixer implements Configurable
 
     public function getDefinition(): FixerDefinitionInterface
     {
-        $codeSample = <<<'PHP_WRAP'
-        <?php
-        final class MyTest extends \PHPUnit_Framework_TestCase
-        {
-            public function testSomething()
+        $codeSample = <<<'PHP'
+            <?php
+            final class MyTest extends \PHPUnit_Framework_TestCase
             {
-                PHPUnit_Framework_Assert::assertTrue(true);
+                public function testSomething()
+                {
+                    PHPUnit_Framework_Assert::assertTrue(true);
+                }
             }
-        }
-        
-        PHP_WRAP;
+
+            PHP;
 
         return new FixerDefinition(
             'PHPUnit classes MUST be used in namespaced version, e.g. `\PHPUnit\Framework\TestCase` instead of `\PHPUnit_Framework_TestCase`.',
@@ -89,9 +89,6 @@ final class PhpUnitNamespacedFixer extends AbstractFixer implements Configurable
         );
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_STRING);
@@ -155,9 +152,6 @@ final class PhpUnitNamespacedFixer extends AbstractFixer implements Configurable
         }
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $importedOriginalClassesMap = [];
@@ -242,9 +236,6 @@ final class PhpUnitNamespacedFixer extends AbstractFixer implements Configurable
         return Tokens::fromArray($tokensArray);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function isImport(Tokens $tokens, int $currIndex): bool
     {
         $prevIndex = $tokens->getPrevMeaningfulToken($currIndex);

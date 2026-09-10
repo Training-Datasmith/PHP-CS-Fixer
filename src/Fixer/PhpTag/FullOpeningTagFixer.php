@@ -45,12 +45,12 @@ final class FullOpeningTagFixer extends AbstractFixer
                         PHP,
                 ),
                 new CodeSample(
-                    <<<'PHP_WRAP'
-                    <?PHP
-                    
-                    echo "Hello!";
-                    
-                    PHP_WRAP,
+                    <<<'PHP'
+                        <?PHP
+
+                        echo "Hello!";
+
+                        PHP,
                 ),
             ],
         );
@@ -62,17 +62,11 @@ final class FullOpeningTagFixer extends AbstractFixer
         return 98;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return true;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $content = $tokens->generateCode();
@@ -98,7 +92,7 @@ final class FullOpeningTagFixer extends AbstractFixer
                 $tokenContent = $token->getContent();
                 $possibleOpenContent = substr($content, $tokensOldContentLength, 5);
 
-                if ('<?php' !== strtolower($possibleOpenContent)) { /** @phpstan-ignore-line as pre PHP 8.0 `false` might be returned by substr @TODO clean up when PHP8+ is required */
+                if (false === $possibleOpenContent || '<?php' !== strtolower($possibleOpenContent)) { /** @phpstan-ignore-line as pre PHP 8.0 `false` might be returned by substr @TODO clean up when PHP8+ is required */
                     $tokenContent = '<? ';
                 }
 

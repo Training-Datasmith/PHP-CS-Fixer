@@ -28,9 +28,6 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 abstract class AbstractShortOperatorFixer extends AbstractFixer
 {
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $alternativeSyntaxAnalyzer = new AlternativeSyntaxAnalyzer();
@@ -89,15 +86,11 @@ abstract class AbstractShortOperatorFixer extends AbstractFixer
 
     abstract protected function getReplacementToken(Token $token): Token;
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     abstract protected function isOperatorTokenCandidate(Tokens $tokens, int $index): bool;
 
     /**
      * @param array{start: int, end: int} $assignRange
      * @param array{start: int, end: int} $operatorRange
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function shortenOperation(
         Tokens $tokens,
@@ -123,7 +116,6 @@ abstract class AbstractShortOperatorFixer extends AbstractFixer
 
     /**
      * @return array{start: int, end: int}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getAfterOperatorRange(Tokens $tokens, int $index): array
     {
@@ -159,7 +151,6 @@ abstract class AbstractShortOperatorFixer extends AbstractFixer
 
     /**
      * @return array{start: int, end: int}
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getBeforeOperatorRange(Tokens $tokens, int $index): array
     {
@@ -226,7 +217,6 @@ abstract class AbstractShortOperatorFixer extends AbstractFixer
 
     /**
      * @param array{start: int, end: int} $range
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clearMeaningfulFromRange(Tokens $tokens, array $range): void
     {
@@ -255,9 +245,6 @@ abstract class AbstractShortOperatorFixer extends AbstractFixer
         throw new \InvalidArgumentException(\sprintf('Not supported operator "%s".', $operatorToken->toJson()));
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     private function belongsToSwitchOrAlternativeSyntax(AlternativeSyntaxAnalyzer $alternativeSyntaxAnalyzer, Tokens $tokens, int $index): bool
     {
         $candidate = $index;

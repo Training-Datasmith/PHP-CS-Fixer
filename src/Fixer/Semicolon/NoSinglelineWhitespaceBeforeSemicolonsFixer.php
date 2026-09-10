@@ -45,26 +45,18 @@ final class NoSinglelineWhitespaceBeforeSemicolonsFixer extends AbstractFixer
         return 0;
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(';');
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
-            if (!$token->equals(';')) {
+            if (!$token->equals(';') || !$tokens[$index - 1]->isWhitespace(" \t")) {
                 continue;
             }
-            if (!$tokens[$index - 1]->isWhitespace(" \t")) {
-                continue;
-            }
+
             if ($tokens[$index - 2]->equals(';')) {
                 // do not remove all whitespace before the semicolon because it is also whitespace after another semicolon
                 $tokens->ensureWhitespaceAtIndex($index - 1, 0, ' ');
