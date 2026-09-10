@@ -1252,9 +1252,10 @@ class Tokens extends \SplFixedArray
         if (1 !== ($this->countTokenKind(\T_OPEN_TAG) + $this->countTokenKind(\T_OPEN_TAG_WITH_ECHO))) {
             return false;
         }
-
-        return 0 === $this->countTokenKind(\T_INLINE_HTML)
-            || (1 === $this->countTokenKind(\T_INLINE_HTML) && Preg::match('/^#!.+$/', $this[0]->getContent()));
+        if (0 === $this->countTokenKind(\T_INLINE_HTML)) {
+            return true;
+        }
+        return 1 === $this->countTokenKind(\T_INLINE_HTML) && Preg::match('/^#!.+$/', $this[0]->getContent());
     }
 
     /**
@@ -1518,7 +1519,7 @@ class Tokens extends \SplFixedArray
 
     /**
      * @param non-empty-string $key   item key
-     * @param Tokens           $value item value
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $value item value
      */
     private static function setCache(string $key, self $value): void
     {
@@ -1590,8 +1591,10 @@ class Tokens extends \SplFixedArray
             if (!$this->offsetExists($index)) {
                 return null;
             }
-
-            if ($this->isEmptyAt($index) || $filter($index)) {
+            if ($this->isEmptyAt($index)) {
+                continue;
+            }
+            if ($filter($index)) {
                 continue;
             }
 

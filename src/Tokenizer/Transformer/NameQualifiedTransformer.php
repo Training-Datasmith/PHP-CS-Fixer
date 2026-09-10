@@ -39,6 +39,9 @@ final class NameQualifiedTransformer extends AbstractTransformer
         return 8_00_00;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function process(Tokens $tokens, Token $token, int $index): void
     {
         if ($token->isGivenKind([FCT::T_NAME_QUALIFIED, FCT::T_NAME_FULLY_QUALIFIED])) {
@@ -53,6 +56,9 @@ final class NameQualifiedTransformer extends AbstractTransformer
         return [];
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function transformQualified(Tokens $tokens, Token $token, int $index): void
     {
         $newTokens = ImportProcessor::tokenizeName($token->getContent());
@@ -60,6 +66,9 @@ final class NameQualifiedTransformer extends AbstractTransformer
         $tokens->overrideRange($index, $index, $newTokens);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function transformRelative(Tokens $tokens, Token $token, int $index): void
     {
         $newTokens = ImportProcessor::tokenizeName($token->getContent());
