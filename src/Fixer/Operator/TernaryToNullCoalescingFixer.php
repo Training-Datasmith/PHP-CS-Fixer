@@ -50,11 +50,17 @@ final class TernaryToNullCoalescingFixer extends AbstractFixer
         return 0;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_ISSET);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $issetIndices = array_keys($tokens->findGivenKind(\T_ISSET));
@@ -66,6 +72,7 @@ final class TernaryToNullCoalescingFixer extends AbstractFixer
 
     /**
      * @param int $index of `T_ISSET` token
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixIsset(Tokens $tokens, int $index): void
     {
@@ -133,6 +140,7 @@ final class TernaryToNullCoalescingFixer extends AbstractFixer
      *
      * @param int $start start index
      * @param int $end   end index
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getMeaningfulSequence(Tokens $tokens, int $start, int $end): Tokens
     {
@@ -158,51 +166,52 @@ final class TernaryToNullCoalescingFixer extends AbstractFixer
      */
     private function isHigherPrecedenceAssociativityOperator(Token $token): bool
     {
-        return
-            $token->isGivenKind([
-                \T_ARRAY_CAST,
-                \T_BOOLEAN_AND,
-                \T_BOOLEAN_OR,
-                \T_BOOL_CAST,
-                \T_COALESCE,
-                \T_DEC,
-                \T_DOUBLE_CAST,
-                \T_INC,
-                \T_INT_CAST,
-                \T_IS_EQUAL,
-                \T_IS_GREATER_OR_EQUAL,
-                \T_IS_IDENTICAL,
-                \T_IS_NOT_EQUAL,
-                \T_IS_NOT_IDENTICAL,
-                \T_IS_SMALLER_OR_EQUAL,
-                \T_OBJECT_CAST,
-                \T_POW,
-                \T_SL,
-                \T_SPACESHIP,
-                \T_SR,
-                \T_STRING_CAST,
-                \T_UNSET_CAST,
-            ])
-            || $token->equalsAny([
-                '!',
-                '%',
-                '&',
-                '*',
-                '+',
-                '-',
-                '/',
-                ':',
-                '^',
-                '|',
-                '~',
-                '.',
-            ]);
+        if ($token->isGivenKind([
+            \T_ARRAY_CAST,
+            \T_BOOLEAN_AND,
+            \T_BOOLEAN_OR,
+            \T_BOOL_CAST,
+            \T_COALESCE,
+            \T_DEC,
+            \T_DOUBLE_CAST,
+            \T_INC,
+            \T_INT_CAST,
+            \T_IS_EQUAL,
+            \T_IS_GREATER_OR_EQUAL,
+            \T_IS_IDENTICAL,
+            \T_IS_NOT_EQUAL,
+            \T_IS_NOT_IDENTICAL,
+            \T_IS_SMALLER_OR_EQUAL,
+            \T_OBJECT_CAST,
+            \T_POW,
+            \T_SL,
+            \T_SPACESHIP,
+            \T_SR,
+            \T_STRING_CAST,
+            \T_UNSET_CAST,
+        ])) {
+            return true;
+        }
+        return $token->equalsAny([
+            '!',
+            '%',
+            '&',
+            '*',
+            '+',
+            '-',
+            '/',
+            ':',
+            '^',
+            '|',
+            '~',
+            '.',
+        ]);
     }
 
     /**
      * Check if the `isset()` content may change if called multiple times.
      *
-     * @param Tokens $tokens The original token list
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens The original token list
      */
     private function hasChangingContent(Tokens $tokens): bool
     {

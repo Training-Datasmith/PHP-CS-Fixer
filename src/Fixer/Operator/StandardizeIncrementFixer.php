@@ -62,11 +62,17 @@ final class StandardizeIncrementFixer extends AbstractIncrementOperatorFixer
         return 16;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_PLUS_EQUAL, \T_MINUS_EQUAL]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; $index > 0; --$index) {
@@ -77,7 +83,10 @@ final class StandardizeIncrementFixer extends AbstractIncrementOperatorFixer
 
             $numberIndex = $tokens->getPrevMeaningfulToken($index);
             $number = $tokens[$numberIndex];
-            if (!$number->isGivenKind(\T_LNUMBER) || '1' !== $number->getContent()) {
+            if (!$number->isGivenKind(\T_LNUMBER)) {
+                continue;
+            }
+            if ('1' !== $number->getContent()) {
                 continue;
             }
 
@@ -104,6 +113,7 @@ final class StandardizeIncrementFixer extends AbstractIncrementOperatorFixer
 
     /**
      * Clear tokens in the given range unless they are comments.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function clearRangeLeaveComments(Tokens $tokens, int $indexStart, int $indexEnd): void
     {

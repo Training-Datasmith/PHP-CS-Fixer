@@ -82,6 +82,9 @@ final class IncrementStyleFixer extends AbstractIncrementOperatorFixer implement
         return 15;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_INC, \T_DEC]);
@@ -97,6 +100,9 @@ final class IncrementStyleFixer extends AbstractIncrementOperatorFixer implement
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -140,6 +146,9 @@ final class IncrementStyleFixer extends AbstractIncrementOperatorFixer implement
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function findEnd(Tokens $tokens, int $index): int
     {
         $nextIndex = $tokens->getNextMeaningfulToken($index);

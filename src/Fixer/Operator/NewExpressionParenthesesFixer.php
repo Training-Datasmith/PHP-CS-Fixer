@@ -84,6 +84,9 @@ final class NewExpressionParenthesesFixer extends AbstractFixer implements Confi
         return 29;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return \PHP_VERSION_ID >= 8_04_00 && $tokens->isTokenKindFound(\T_NEW);
@@ -99,6 +102,9 @@ final class NewExpressionParenthesesFixer extends AbstractFixer implements Confi
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $useParentheses = $this->configuration['use_parentheses'];
@@ -161,6 +167,9 @@ final class NewExpressionParenthesesFixer extends AbstractFixer implements Confi
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function ensureWrappedInParentheses(Tokens $tokens, int $exprStartIndex, int $exprEndIndex): void
     {
         $prevIndex = $tokens->getPrevMeaningfulToken($exprStartIndex);
@@ -180,6 +189,9 @@ final class NewExpressionParenthesesFixer extends AbstractFixer implements Confi
         $tokens->insertAt($exprEndIndex + 2, [new Token([CT::T_BRACE_CLASS_INSTANTIATION_CLOSE, ')'])]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function ensureNotWrappedInParentheses(Tokens $tokens, int $exprStartIndex, int $exprEndIndex): void
     {
         $prevIndex = $tokens->getPrevMeaningfulToken($exprStartIndex);
@@ -201,6 +213,9 @@ final class NewExpressionParenthesesFixer extends AbstractFixer implements Confi
         $tokens->clearTokenAndMergeSurroundingWhitespace($nextIndex);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function findClassEndIndex(Tokens $tokens, int $index): ?int
     {
         // (expression) class name

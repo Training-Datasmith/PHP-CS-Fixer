@@ -75,11 +75,17 @@ final class ConcatSpaceFixer extends AbstractFixer implements ConfigurableFixerI
         return 0;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound('.');
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; $index >= 0; --$index) {
@@ -105,6 +111,7 @@ final class ConcatSpaceFixer extends AbstractFixer implements ConfigurableFixerI
 
     /**
      * @param int $index index of concatenation '.' token
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixConcatenationToNoSpace(Tokens $tokens, int $index): void
     {
@@ -121,6 +128,7 @@ final class ConcatSpaceFixer extends AbstractFixer implements ConfigurableFixerI
 
     /**
      * @param int $index index of concatenation '.' token
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixConcatenationToSingleSpace(Tokens $tokens, int $index): void
     {
@@ -131,6 +139,7 @@ final class ConcatSpaceFixer extends AbstractFixer implements ConfigurableFixerI
     /**
      * @param int $index  index of concatenation '.' token
      * @param int $offset 1 or -1
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixWhiteSpaceAroundConcatToken(Tokens $tokens, int $index, int $offset): void
     {
