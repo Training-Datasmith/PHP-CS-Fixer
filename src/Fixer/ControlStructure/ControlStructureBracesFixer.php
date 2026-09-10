@@ -50,6 +50,9 @@ final class ControlStructureBracesFixer extends AbstractFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return true;
@@ -65,6 +68,9 @@ final class ControlStructureBracesFixer extends AbstractFixer
         return 1;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $alternativeSyntaxAnalyzer = new AlternativeSyntaxAnalyzer();
@@ -132,6 +138,9 @@ final class ControlStructureBracesFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function findParenthesisEnd(Tokens $tokens, int $structureTokenIndex): int
     {
         $nextIndex = $tokens->getNextMeaningfulToken($structureTokenIndex);
@@ -144,6 +153,9 @@ final class ControlStructureBracesFixer extends AbstractFixer
         return $tokens->findBlockEnd(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $nextIndex);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function findStatementEnd(Tokens $tokens, int $parenthesisEndIndex): int
     {
         $nextIndex = $tokens->getNextMeaningfulToken($parenthesisEndIndex);

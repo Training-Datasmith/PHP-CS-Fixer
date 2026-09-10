@@ -27,6 +27,9 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class NoSuperfluousElseifFixer extends AbstractNoUselessElseFixer
 {
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_ELSE, \T_ELSEIF]);
@@ -53,6 +56,9 @@ final class NoSuperfluousElseifFixer extends AbstractNoUselessElseFixer
         return parent::getPriority();
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -62,13 +68,20 @@ final class NoSuperfluousElseifFixer extends AbstractNoUselessElseFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function isElseif(Tokens $tokens, int $index): bool
     {
-        return
-            $tokens[$index]->isGivenKind(\T_ELSEIF)
-            || ($tokens[$index]->isGivenKind(\T_ELSE) && $tokens[$tokens->getNextMeaningfulToken($index)]->isGivenKind(\T_IF));
+        if ($tokens[$index]->isGivenKind(\T_ELSEIF)) {
+            return true;
+        }
+        return $tokens[$index]->isGivenKind(\T_ELSE) && $tokens[$tokens->getNextMeaningfulToken($index)]->isGivenKind(\T_IF);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function convertElseifToIf(Tokens $tokens, int $index): void
     {
         if ($tokens[$index]->isGivenKind(\T_ELSE)) {

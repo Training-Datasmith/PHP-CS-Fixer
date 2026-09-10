@@ -54,6 +54,9 @@ final class CommentToPhpdocFixer extends AbstractFixer implements ConfigurableFi
      */
     private array $ignoredTags = [];
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_COMMENT);
@@ -107,6 +110,9 @@ final class CommentToPhpdocFixer extends AbstractFixer implements ConfigurableFi
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $commentsAnalyzer = new CommentsAnalyzer();
@@ -142,6 +148,7 @@ final class CommentToPhpdocFixer extends AbstractFixer implements ConfigurableFi
 
     /**
      * @param list<int> $indices
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function isCommentCandidate(Tokens $tokens, array $indices): bool
     {
@@ -163,6 +170,7 @@ final class CommentToPhpdocFixer extends AbstractFixer implements ConfigurableFi
 
     /**
      * @param non-empty-list<int> $indices
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixComment(Tokens $tokens, array $indices): void
     {
@@ -173,6 +181,9 @@ final class CommentToPhpdocFixer extends AbstractFixer implements ConfigurableFi
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixCommentSingleLine(Tokens $tokens, int $index): void
     {
         $message = $this->getMessage($tokens[$index]->getContent());
@@ -190,6 +201,7 @@ final class CommentToPhpdocFixer extends AbstractFixer implements ConfigurableFi
 
     /**
      * @param non-empty-list<int> $indices
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixCommentMultiLine(Tokens $tokens, array $indices): void
     {

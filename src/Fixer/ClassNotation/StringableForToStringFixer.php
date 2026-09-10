@@ -63,11 +63,17 @@ final class StringableForToStringFixer extends AbstractFixer
         return 37;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return \PHP_VERSION_ID >= 8_00_00 && $tokens->isAllTokenKindsFound([\T_CLASS, \T_STRING]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $useDeclarations = (new NamespaceUsesAnalyzer())->getDeclarationsFromTokens($tokens);
@@ -137,6 +143,9 @@ final class StringableForToStringFixer extends AbstractFixer
         return strtolower($useDeclaration->getShortName());
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private static function doesHaveToStringMethod(Tokens $tokens, int $classStartIndex, int $classEndIndex): bool
     {
         $index = $classStartIndex;
@@ -167,6 +176,7 @@ final class StringableForToStringFixer extends AbstractFixer
 
     /**
      * @param list<string> $stringableInterfaces
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function doesImplementStringable(
         Tokens $tokens,
@@ -193,6 +203,7 @@ final class StringableForToStringFixer extends AbstractFixer
 
     /**
      * @return list<string>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private static function getInterfaces(Tokens $tokens, int $classKeywordIndex, int $classOpenBraceIndex): array
     {
@@ -222,6 +233,9 @@ final class StringableForToStringFixer extends AbstractFixer
         return $interfaces;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private static function addStringableInterface(Tokens $tokens, int $classIndex): void
     {
         $implementsIndex = $tokens->getNextTokenOfKind($classIndex, ['{', [\T_IMPLEMENTS]]);
