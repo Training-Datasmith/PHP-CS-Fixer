@@ -34,6 +34,7 @@ final class ArgumentsAnalyzer
 
     /**
      * Count amount of parameters in a function/method reference.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function countArguments(Tokens $tokens, int $openParenthesis, int $closeParenthesis): int
     {
@@ -49,6 +50,7 @@ final class ArgumentsAnalyzer
      * tokens like '(', ',' and ')'.
      *
      * @return array<int, int>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     public function getArguments(Tokens $tokens, int $openParenthesis, int $closeParenthesis): array
     {
@@ -90,6 +92,9 @@ final class ArgumentsAnalyzer
         return $arguments;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function getArgumentInfo(Tokens $tokens, int $argumentStart, int $argumentEnd): ArgumentAnalysis
     {
         $info = [
@@ -117,13 +122,16 @@ final class ArgumentsAnalyzer
 
                 continue;
             }
-
-            if (
-                $token->isComment()
-                || $token->isWhitespace()
-                || $token->isGivenKind(self::ARGUMENT_INFO_SKIP_TYPES)
-                || $token->equals('&')
-            ) {
+            if ($token->isComment()) {
+                continue;
+            }
+            if ($token->isWhitespace()) {
+                continue;
+            }
+            if ($token->isGivenKind(self::ARGUMENT_INFO_SKIP_TYPES)) {
+                continue;
+            }
+            if ($token->equals('&')) {
                 continue;
             }
 
