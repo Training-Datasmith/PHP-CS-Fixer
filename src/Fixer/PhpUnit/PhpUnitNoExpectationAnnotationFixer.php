@@ -61,48 +61,48 @@ final class PhpUnitNoExpectationAnnotationFixer extends AbstractPhpUnitFixer imp
             'Usages of `@expectedException*` annotations MUST be replaced by `->setExpectedException*` methods.',
             [
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        /**
+                         * @expectedException FooException
+                         * @expectedExceptionMessageRegExp /foo.*$/
+                         * @expectedExceptionCode 123
+                         */
+                        function testAaa()
                         {
-                            /**
-                             * @expectedException FooException
-                             * @expectedExceptionMessageRegExp /foo.*$/
-                             * @expectedExceptionCode 123
-                             */
-                            function testAaa()
-                            {
-                                aaa();
-                            }
+                            aaa();
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                 ),
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        /**
+                         * @expectedException FooException
+                         * @expectedExceptionCode 123
+                         */
+                        function testBbb()
                         {
-                            /**
-                             * @expectedException FooException
-                             * @expectedExceptionCode 123
-                             */
-                            function testBbb()
-                            {
-                                bbb();
-                            }
-
-                            /**
-                             * @expectedException FooException
-                             * @expectedExceptionMessageRegExp /foo.*$/
-                             */
-                            function testCcc()
-                            {
-                                ccc();
-                            }
+                            bbb();
                         }
-
-                        PHP,
+                    
+                        /**
+                         * @expectedException FooException
+                         * @expectedExceptionMessageRegExp /foo.*$/
+                         */
+                        function testCcc()
+                        {
+                            ccc();
+                        }
+                    }
+                    
+                    PHP_WRAP,
                     ['target' => PhpUnitTargetVersion::VERSION_3_2],
                 ),
             ],
@@ -146,15 +146,20 @@ final class PhpUnitNoExpectationAnnotationFixer extends AbstractPhpUnitFixer imp
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
 
         for ($i = $endIndex - 1; $i > $startIndex; --$i) {
-            if (!$tokens[$i]->isGivenKind(\T_FUNCTION) || $tokensAnalyzer->isLambda($i)) {
+            if (!$tokens[$i]->isGivenKind(\T_FUNCTION)) {
                 continue;
             }
-
+            if ($tokensAnalyzer->isLambda($i)) {
+                continue;
+            }
             $functionIndex = $i;
             $docBlockIndex = $i;
 

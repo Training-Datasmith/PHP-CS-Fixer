@@ -54,34 +54,34 @@ final class PhpUnitMockFixer extends AbstractPhpUnitFixer implements Configurabl
             'Usages of `->getMock` and `->getMockWithoutInvokingTheOriginalConstructor` methods MUST be replaced by `->createMock` or `->createPartialMock` methods.',
             [
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        public function testFoo()
                         {
-                            public function testFoo()
-                            {
-                                $mock = $this->getMockWithoutInvokingTheOriginalConstructor("Foo");
-                                $mock1 = $this->getMock("Foo");
-                                $mock1 = $this->getMock("Bar", ["aaa"]);
-                                $mock1 = $this->getMock("Baz", ["aaa"], ["argument"]); // version with more than 2 params is not supported
-                            }
+                            $mock = $this->getMockWithoutInvokingTheOriginalConstructor("Foo");
+                            $mock1 = $this->getMock("Foo");
+                            $mock1 = $this->getMock("Bar", ["aaa"]);
+                            $mock1 = $this->getMock("Baz", ["aaa"], ["argument"]); // version with more than 2 params is not supported
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                 ),
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        public function testFoo()
                         {
-                            public function testFoo()
-                            {
-                                $mock1 = $this->getMock("Foo");
-                                $mock1 = $this->getMock("Bar", ["aaa"]); // version with multiple params is not supported
-                            }
+                            $mock1 = $this->getMock("Foo");
+                            $mock1 = $this->getMock("Bar", ["aaa"]); // version with multiple params is not supported
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                     ['target' => PhpUnitTargetVersion::VERSION_5_4],
                 ),
             ],
@@ -100,6 +100,9 @@ final class PhpUnitMockFixer extends AbstractPhpUnitFixer implements Configurabl
         $this->fixCreatePartialMock = PhpUnitTargetVersion::fulfills($this->configuration['target'], PhpUnitTargetVersion::VERSION_5_5);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $argumentsAnalyzer = new ArgumentsAnalyzer();

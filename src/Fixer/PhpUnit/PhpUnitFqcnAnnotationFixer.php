@@ -35,22 +35,22 @@ final class PhpUnitFqcnAnnotationFixer extends AbstractPhpUnitFixer
             'PHPUnit annotations should be a FQCNs including a root namespace.',
             [
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        /**
+                         * @expectedException InvalidArgumentException
+                         * @covers Project\NameSpace\Something
+                         * @coversDefaultClass Project\Default
+                         * @uses Project\Test\Util
+                         */
+                        public function testSomeTest()
                         {
-                            /**
-                             * @expectedException InvalidArgumentException
-                             * @covers Project\NameSpace\Something
-                             * @coversDefaultClass Project\Default
-                             * @uses Project\Test\Util
-                             */
-                            public function testSomeTest()
-                            {
-                            }
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                 ),
             ],
         );
@@ -66,6 +66,9 @@ final class PhpUnitFqcnAnnotationFixer extends AbstractPhpUnitFixer
         return -9;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $prevDocCommentIndex = $tokens->getPrevTokenOfKind($startIndex, [[\T_DOC_COMMENT]]);
@@ -77,6 +80,9 @@ final class PhpUnitFqcnAnnotationFixer extends AbstractPhpUnitFixer
         $this->fixPhpUnitClass($tokens, $startIndex, $endIndex);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixPhpUnitClass(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         for ($index = $startIndex; $index < $endIndex; ++$index) {

@@ -106,6 +106,9 @@ final class AlignMultilineCommentFixer extends AbstractFixer implements Configur
         return 27;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound($this->tokenKinds);
@@ -119,6 +122,9 @@ final class AlignMultilineCommentFixer extends AbstractFixer implements Configur
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $lineEnding = $this->whitespacesConfig->getLineEnding();

@@ -89,29 +89,29 @@ final class PhpUnitMethodCasingFixer extends AbstractPhpUnitFixer implements Con
                     ['case' => self::SNAKE_CASE],
                 ),
                 new VersionSpecificCodeSample(
-                    <<<'PHP'
-                        <?php
-                        use \PHPUnit\Framework\Attributes\Test;
-                        class MyTest extends \PhpUnit\FrameWork\TestCase
-                        {
-                            #[PHPUnit\Framework\Attributes\Test]
-                            public function test_my_code() {}
-                        }
-
-                        PHP,
+                    <<<'PHP_WRAP'
+                    <?php
+                    use \PHPUnit\Framework\Attributes\Test;
+                    class MyTest extends \PhpUnit\FrameWork\TestCase
+                    {
+                        #[PHPUnit\Framework\Attributes\Test]
+                        public function test_my_code() {}
+                    }
+                    
+                    PHP_WRAP,
                     new VersionSpecification(8_00_00),
                 ),
                 new VersionSpecificCodeSample(
-                    <<<'PHP'
-                        <?php
-                        use \PHPUnit\Framework\Attributes\Test;
-                        class MyTest extends \PhpUnit\FrameWork\TestCase
-                        {
-                            #[PHPUnit\Framework\Attributes\Test]
-                            public function testMyCode() {}
-                        }
-
-                        PHP,
+                    <<<'PHP_WRAP'
+                    <?php
+                    use \PHPUnit\Framework\Attributes\Test;
+                    class MyTest extends \PhpUnit\FrameWork\TestCase
+                    {
+                        #[PHPUnit\Framework\Attributes\Test]
+                        public function testMyCode() {}
+                    }
+                    
+                    PHP_WRAP,
                     new VersionSpecification(8_00_00),
                     ['case' => self::SNAKE_CASE],
                 ),
@@ -139,6 +139,9 @@ final class PhpUnitMethodCasingFixer extends AbstractPhpUnitFixer implements Con
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $existingFunctionNamesLowercase = [];
@@ -201,6 +204,9 @@ final class PhpUnitMethodCasingFixer extends AbstractPhpUnitFixer implements Con
         return implode('::', $parts);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function isTestMethod(Tokens $tokens, int $index): bool
     {
         // Check if we are dealing with a (non-abstract, non-lambda) function
@@ -227,6 +233,9 @@ final class PhpUnitMethodCasingFixer extends AbstractPhpUnitFixer implements Con
             && str_contains($tokens[$docBlockIndex]->getContent(), '@test');
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function isMethod(Tokens $tokens, int $index): bool
     {
         $tokensAnalyzer = new TokensAnalyzer($tokens);
@@ -234,6 +243,9 @@ final class PhpUnitMethodCasingFixer extends AbstractPhpUnitFixer implements Con
         return $tokens[$index]->isGivenKind(\T_FUNCTION) && !$tokensAnalyzer->isLambda($index);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function updateDocBlock(Tokens $tokens, int $docBlockIndex): void
     {
         $doc = new DocBlock($tokens[$docBlockIndex]->getContent());

@@ -45,22 +45,22 @@ final class PhpUnitMockShortWillReturnFixer extends AbstractPhpUnitFixer
             'Usage of PHPUnit\'s mock e.g. `->will($this->returnValue(..))` must be replaced by its shorter equivalent such as `->willReturn(...)`.',
             [
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        public function testSomeTest()
                         {
-                            public function testSomeTest()
-                            {
-                                $someMock = $this->createMock(Some::class);
-                                $someMock->method("some")->will($this->returnSelf());
-                                $someMock->method("some")->will($this->returnValue("example"));
-                                $someMock->method("some")->will($this->returnArgument(2));
-                                $someMock->method("some")->will($this->returnCallback("str_rot13"));
-                                $someMock->method("some")->will($this->returnValueMap(["a","b","c"]));
-                            }
+                            $someMock = $this->createMock(Some::class);
+                            $someMock->method("some")->will($this->returnSelf());
+                            $someMock->method("some")->will($this->returnValue("example"));
+                            $someMock->method("some")->will($this->returnArgument(2));
+                            $someMock->method("some")->will($this->returnCallback("str_rot13"));
+                            $someMock->method("some")->will($this->returnValueMap(["a","b","c"]));
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                 ),
             ],
             null,
@@ -73,6 +73,9 @@ final class PhpUnitMockShortWillReturnFixer extends AbstractPhpUnitFixer
         return true;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();

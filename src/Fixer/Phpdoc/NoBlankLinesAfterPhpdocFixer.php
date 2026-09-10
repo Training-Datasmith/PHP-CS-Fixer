@@ -28,6 +28,9 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class NoBlankLinesAfterPhpdocFixer extends AbstractFixer
 {
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
@@ -66,6 +69,9 @@ final class NoBlankLinesAfterPhpdocFixer extends AbstractFixer
         return -20;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -99,6 +105,7 @@ final class NoBlankLinesAfterPhpdocFixer extends AbstractFixer
 
     /**
      * Cleanup a whitespace token.
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixWhitespace(Tokens $tokens, int $index): void
     {

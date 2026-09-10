@@ -58,32 +58,32 @@ final class PhpUnitConstructFixer extends AbstractPhpUnitFixer implements Config
             'PHPUnit assertion method calls like `->assertSame(true, $foo)` should be written with dedicated method like `->assertTrue($foo)`.',
             [
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class FooTest extends \PHPUnit_Framework_TestCase {
-                            public function testSomething() {
-                                $this->assertEquals(false, $b);
-                                $this->assertSame(true, $a);
-                                $this->assertNotEquals(null, $c);
-                                $this->assertNotSame(null, $d);
-                            }
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class FooTest extends \PHPUnit_Framework_TestCase {
+                        public function testSomething() {
+                            $this->assertEquals(false, $b);
+                            $this->assertSame(true, $a);
+                            $this->assertNotEquals(null, $c);
+                            $this->assertNotSame(null, $d);
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                 ),
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class FooTest extends \PHPUnit_Framework_TestCase {
-                            public function testSomething() {
-                                $this->assertEquals(false, $b);
-                                $this->assertSame(true, $a);
-                                $this->assertNotEquals(null, $c);
-                                $this->assertNotSame(null, $d);
-                            }
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class FooTest extends \PHPUnit_Framework_TestCase {
+                        public function testSomething() {
+                            $this->assertEquals(false, $b);
+                            $this->assertSame(true, $a);
+                            $this->assertNotEquals(null, $c);
+                            $this->assertNotSame(null, $d);
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                     ['assertions' => ['assertSame', 'assertNotSame']],
                 ),
             ],
@@ -105,6 +105,7 @@ final class PhpUnitConstructFixer extends AbstractPhpUnitFixer implements Config
     /**
      * @uses fixAssertNegative()
      * @uses fixAssertPositive()
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
@@ -147,6 +148,9 @@ final class PhpUnitConstructFixer extends AbstractPhpUnitFixer implements Config
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixAssertNegative(Tokens $tokens, int $index, string $method): ?int
     {
         return $this->fixAssert([
@@ -156,6 +160,9 @@ final class PhpUnitConstructFixer extends AbstractPhpUnitFixer implements Config
         ], $tokens, $index, $method);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixAssertPositive(Tokens $tokens, int $index, string $method): ?int
     {
         return $this->fixAssert([
@@ -167,6 +174,7 @@ final class PhpUnitConstructFixer extends AbstractPhpUnitFixer implements Config
 
     /**
      * @param array<string, string> $map
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixAssert(array $map, Tokens $tokens, int $index, string $method): ?int
     {

@@ -35,17 +35,17 @@ final class PhpUnitTestClassRequiresCoversFixer extends AbstractPhpUnitFixer imp
             'Adds a default `@coversNothing` annotation to PHPUnit test classes that have no `@covers*` annotation.',
             [
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        final class MyTest extends \PHPUnit_Framework_TestCase
+                    <<<'PHP_WRAP'
+                    <?php
+                    final class MyTest extends \PHPUnit_Framework_TestCase
+                    {
+                        public function testSomeTest()
                         {
-                            public function testSomeTest()
-                            {
-                                $this->assertSame(a(), b());
-                            }
+                            $this->assertSame(a(), b());
                         }
-
-                        PHP,
+                    }
+                    
+                    PHP_WRAP,
                 ),
             ],
         );
@@ -61,6 +61,9 @@ final class PhpUnitTestClassRequiresCoversFixer extends AbstractPhpUnitFixer imp
         return 9;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $classIndex = $tokens->getPrevTokenOfKind($startIndex, [[\T_CLASS]]);

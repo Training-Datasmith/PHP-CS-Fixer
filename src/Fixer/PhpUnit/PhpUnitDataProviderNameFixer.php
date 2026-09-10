@@ -144,6 +144,9 @@ final class PhpUnitDataProviderNameFixer extends AbstractPhpUnitFixer implements
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyPhpUnitClassFix(Tokens $tokens, int $startIndex, int $endIndex): void
     {
         $dataProviders = (new DataProviderAnalyzer())->getDataProviders($tokens, $startIndex, $endIndex);
@@ -191,6 +194,9 @@ final class PhpUnitDataProviderNameFixer extends AbstractPhpUnitFixer implements
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function getDataProviderNameForUsageIndex(Tokens $tokens, int $index): string
     {
         do {
@@ -206,7 +212,7 @@ final class PhpUnitDataProviderNameFixer extends AbstractPhpUnitFixer implements
 
         if ('' === $this->configuration['prefix']) {
             $name = lcfirst($name);
-        } elseif ('_' !== substr($this->configuration['prefix'], -1)) {
+        } elseif (!str_ends_with($this->configuration['prefix'], '_')) {
             $name = ucfirst($name);
         }
 
