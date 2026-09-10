@@ -34,6 +34,9 @@ final class PhpdocParamOrderFixer extends AbstractFixer
 {
     private const PARAM_TAG = 'param';
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
@@ -73,6 +76,9 @@ final class PhpdocParamOrderFixer extends AbstractFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {
@@ -108,6 +114,7 @@ final class PhpdocParamOrderFixer extends AbstractFixer
 
     /**
      * @return list<Token>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getFunctionParamNames(Tokens $tokens, int $paramBlockStart): array
     {
@@ -146,10 +153,12 @@ final class PhpdocParamOrderFixer extends AbstractFixer
         $paramsEnd = end($paramAnnotations)->getEnd();
 
         foreach ($doc->getAnnotations() as $annotation) {
-            if ($annotation->getStart() < $paramsStart || $annotation->getEnd() > $paramsEnd) {
+            if ($annotation->getStart() < $paramsStart) {
                 continue;
             }
-
+            if ($annotation->getEnd() > $paramsEnd) {
+                continue;
+            }
             $annotation->remove();
             $doc
                 ->getLine($annotation->getStart())
@@ -213,10 +222,12 @@ final class PhpdocParamOrderFixer extends AbstractFixer
 
         $otherAnnotations = [];
         foreach ($doc->getAnnotations() as $annotation) {
-            if ($annotation->getStart() < $paramsStart || $annotation->getEnd() > $paramsEnd) {
+            if ($annotation->getStart() < $paramsStart) {
                 continue;
             }
-
+            if ($annotation->getEnd() > $paramsEnd) {
+                continue;
+            }
             if (self::PARAM_TAG !== $annotation->getTag()->getName()) {
                 $otherAnnotations[] = $annotation->getContent();
             }

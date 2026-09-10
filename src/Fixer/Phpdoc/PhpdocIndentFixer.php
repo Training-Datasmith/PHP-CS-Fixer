@@ -64,11 +64,17 @@ final class PhpdocIndentFixer extends AbstractFixer
         return 20;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; 0 <= $index; --$index) {
@@ -79,21 +85,24 @@ final class PhpdocIndentFixer extends AbstractFixer
             }
 
             $nextIndex = $tokens->getNextMeaningfulToken($index);
-
             // skip if there is no next token or if next token is block end `}`
-            if (null === $nextIndex || $tokens[$nextIndex]->equals('}')) {
+            if (null === $nextIndex) {
+                continue;
+            }
+            if ($tokens[$nextIndex]->equals('}')) {
                 continue;
             }
 
             $prevIndex = $index - 1;
             $prevToken = $tokens[$prevIndex];
-
             // ignore inline docblocks
-            if (
-                $prevToken->isGivenKind(\T_OPEN_TAG)
-                || ($prevToken->isWhitespace(" \t") && !$tokens[$index - 2]->isGivenKind(\T_OPEN_TAG))
-                || $prevToken->equalsAny([';', ',', '{', '('])
-            ) {
+            if ($prevToken->isGivenKind(\T_OPEN_TAG)) {
+                continue;
+            }
+            if ($prevToken->isWhitespace(" \t") && !$tokens[$index - 2]->isGivenKind(\T_OPEN_TAG)) {
+                continue;
+            }
+            if ($prevToken->equalsAny([';', ',', '{', '('])) {
                 continue;
             }
 

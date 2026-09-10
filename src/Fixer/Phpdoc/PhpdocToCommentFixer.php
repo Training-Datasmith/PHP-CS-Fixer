@@ -57,6 +57,9 @@ final class PhpdocToCommentFixer extends AbstractFixer implements ConfigurableFi
     private array $ignoredTags = [];
     private bool $allowBeforeReturnStatement = false;
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(\T_DOC_COMMENT);
@@ -96,21 +99,21 @@ final class PhpdocToCommentFixer extends AbstractFixer implements ConfigurableFi
                         PHP,
                 ),
                 new CodeSample(
-                    <<<'PHP'
-                        <?php
-                        $first = true;// needed because by default first docblock is never fixed.
-
-                        /** This should be a comment */
-                        foreach($connections as $key => $sqlite) {
-                            $sqlite->open($path);
-                        }
-
-                        /** @todo This should be a PHPDoc as the tag is on "ignored_tags" list */
-                        foreach($connections as $key => $sqlite) {
-                            $sqlite->open($path);
-                        }
-
-                        PHP,
+                    <<<'PHP_WRAP'
+                    <?php
+                    $first = true;// needed because by default first docblock is never fixed.
+                    
+                    /** This should be a comment */
+                    foreach($connections as $key => $sqlite) {
+                        $sqlite->open($path);
+                    }
+                    
+                    /** @todo This should be a PHPDoc as the tag is on "ignored_tags" list */
+                    foreach($connections as $key => $sqlite) {
+                        $sqlite->open($path);
+                    }
+                    
+                    PHP_WRAP,
                     ['ignored_tags' => ['todo']],
                 ),
                 new CodeSample(
@@ -159,6 +162,9 @@ final class PhpdocToCommentFixer extends AbstractFixer implements ConfigurableFi
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $commentsAnalyzer = new CommentsAnalyzer();
