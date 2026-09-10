@@ -51,7 +51,7 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurableFixerI
     /**
      * @var CT::T_ARRAY_SQUARE_BRACE_OPEN|T_ARRAY
      */
-    private $candidateTokenKind;
+    private ?int $candidateTokenKind = null;
 
     public function getDefinition(): FixerDefinitionInterface
     {
@@ -79,6 +79,9 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurableFixerI
         return 37;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound($this->candidateTokenKind);
@@ -89,6 +92,9 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurableFixerI
         $this->resolveCandidateTokenKind();
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         for ($index = $tokens->count() - 1; 0 <= $index; --$index) {
@@ -112,6 +118,9 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurableFixerI
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixToLongArraySyntax(Tokens $tokens, int $index): void
     {
         $closeIndex = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_ARRAY_SQUARE_BRACE, $index);
@@ -122,6 +131,9 @@ final class ArraySyntaxFixer extends AbstractFixer implements ConfigurableFixerI
         $tokens->insertAt($index, new Token([\T_ARRAY, 'array']));
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixToShortArraySyntax(Tokens $tokens, int $index): void
     {
         $openIndex = $tokens->getNextTokenOfKind($index, ['(']);

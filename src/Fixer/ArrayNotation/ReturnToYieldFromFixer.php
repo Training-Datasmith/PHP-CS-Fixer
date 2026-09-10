@@ -46,6 +46,9 @@ final class ReturnToYieldFromFixer extends AbstractFixer
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAllTokenKindsFound([\T_FUNCTION, \T_RETURN]) && $tokens->isAnyTokenKindsFound([\T_ARRAY, CT::T_ARRAY_SQUARE_BRACE_OPEN]);
@@ -62,6 +65,9 @@ final class ReturnToYieldFromFixer extends AbstractFixer
         return 1;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens->findGivenKind(\T_RETURN) as $index => $token) {
@@ -73,6 +79,9 @@ final class ReturnToYieldFromFixer extends AbstractFixer
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function shouldBeFixed(Tokens $tokens, int $returnIndex): bool
     {
         $arrayStartIndex = $tokens->getNextMeaningfulToken($returnIndex);

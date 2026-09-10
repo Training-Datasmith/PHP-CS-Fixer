@@ -28,6 +28,9 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
 {
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         // minimal candidate to fix is seven tokens: pow(x,y);
@@ -58,6 +61,9 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
         return 32;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $candidates = $this->findPowCalls($tokens);
@@ -101,6 +107,7 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
 
     /**
      * @return list<array{int, int, int}>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function findPowCalls(Tokens $tokens): array
     {
@@ -128,6 +135,7 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
      * @param array<int, int> $arguments
      *
      * @return int number of tokens added to the collection
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function fixPowToExponentiation(Tokens $tokens, int $functionNameIndex, int $openParenthesisIndex, int $closeParenthesisIndex, array $arguments): int
     {
@@ -167,6 +175,9 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
         return $added;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function isParenthesisNeeded(Tokens $tokens, int $argumentStartIndex, int $argumentEndIndex): bool
     {
         static $allowedKinds = null;
@@ -176,10 +187,12 @@ final class PowToExponentiationFixer extends AbstractFunctionReferenceFixer
         }
 
         for ($i = $argumentStartIndex; $i <= $argumentEndIndex; ++$i) {
-            if ($tokens[$i]->isGivenKind($allowedKinds) || $tokens->isEmptyAt($i)) {
+            if ($tokens[$i]->isGivenKind($allowedKinds)) {
                 continue;
             }
-
+            if ($tokens->isEmptyAt($i)) {
+                continue;
+            }
             $blockType = Tokens::detectBlockType($tokens[$i]);
 
             if (null !== $blockType) {

@@ -61,6 +61,9 @@ final class AttributeEmptyParenthesesFixer extends AbstractFixer implements Conf
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound(FCT::T_ATTRIBUTE);
@@ -76,6 +79,9 @@ final class AttributeEmptyParenthesesFixer extends AbstractFixer implements Conf
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $index = 0;
@@ -108,6 +114,9 @@ final class AttributeEmptyParenthesesFixer extends AbstractFixer implements Conf
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function ensureParenthesesAt(Tokens $tokens, int $index): void
     {
         if ($tokens[$index]->equals('(')) {
@@ -120,6 +129,9 @@ final class AttributeEmptyParenthesesFixer extends AbstractFixer implements Conf
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function ensureNoParenthesesAt(Tokens $tokens, int $index): void
     {
         if (!$tokens[$index]->equals('(')) {

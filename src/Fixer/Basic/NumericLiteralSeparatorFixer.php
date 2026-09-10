@@ -100,6 +100,9 @@ final class NumericLiteralSeparatorFixer extends AbstractFixer implements Config
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_DNUMBER, \T_LNUMBER]);
@@ -125,6 +128,9 @@ final class NumericLiteralSeparatorFixer extends AbstractFixer implements Config
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         foreach ($tokens as $index => $token) {

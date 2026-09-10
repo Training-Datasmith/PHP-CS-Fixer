@@ -58,6 +58,9 @@ final class WhitespaceAfterCommaInArrayFixer extends AbstractFixer implements Co
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([\T_ARRAY, CT::T_ARRAY_SQUARE_BRACE_OPEN]);
@@ -73,6 +76,9 @@ final class WhitespaceAfterCommaInArrayFixer extends AbstractFixer implements Co
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $tokensToInsert = [];
@@ -117,6 +123,7 @@ final class WhitespaceAfterCommaInArrayFixer extends AbstractFixer implements Co
      * Method to move index over the non-array elements like function calls or function declarations.
      *
      * @return int New index
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function skipNonArrayElements(int $index, Tokens $tokens): int
     {
@@ -139,6 +146,9 @@ final class WhitespaceAfterCommaInArrayFixer extends AbstractFixer implements Co
         return $index;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function commaIsPartOfImplementsList(int $index, Tokens $tokens): bool
     {
         do {
