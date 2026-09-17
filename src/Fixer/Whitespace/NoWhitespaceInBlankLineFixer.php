@@ -47,11 +47,17 @@ final class NoWhitespaceInBlankLineFixer extends AbstractFixer implements Whites
         return -99;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return true;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         // skip first as it cannot be a white space token
@@ -62,6 +68,9 @@ final class NoWhitespaceInBlankLineFixer extends AbstractFixer implements Whites
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function fixWhitespaceToken(Tokens $tokens, int $index): void
     {
         $content = $tokens[$index]->getContent();
@@ -77,7 +86,7 @@ final class NoWhitespaceInBlankLineFixer extends AbstractFixer implements Whites
             $lMax = isset($tokens[$index + 1]) ? $lineCount - 1 : $lineCount;
 
             $lStart = 1;
-            if ($tokens[$index - 1]->isGivenKind(\T_OPEN_TAG) && "\n" === substr($tokens[$index - 1]->getContent(), -1)) {
+            if ($tokens[$index - 1]->isGivenKind(\T_OPEN_TAG) && str_ends_with($tokens[$index - 1]->getContent(), "\n")) {
                 $lStart = 0;
             }
 
