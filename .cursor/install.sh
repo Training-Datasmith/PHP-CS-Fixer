@@ -64,12 +64,14 @@ ensure_extension redis
 ensure_extension mysqli
 php -m | grep -Ei '^(redis|mysqli)$'
 
-if ! command -v composer >/dev/null 2>&1; then
-  ensure_ondrej
-  export DEBIAN_FRONTEND=noninteractive
-  sudo apt-get install -y --no-install-recommends composer || {
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-  }
+# Ubuntu's apt Composer is too old for PHP 8.5 (stream_context_create callback TypeError).
+install_composer() {
+  curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+  sudo chmod +x /usr/local/bin/composer
+}
+
+if ! command -v composer >/dev/null 2>&1 || ! composer --version 2>/dev/null | grep -qE 'Composer version 2\.(1[0-9]|[2-9][0-9])'; then
+  install_composer
 fi
 
 cd "$repo_root"
