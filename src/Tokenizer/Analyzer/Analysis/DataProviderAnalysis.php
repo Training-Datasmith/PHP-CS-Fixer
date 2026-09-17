@@ -35,7 +35,7 @@ final class DataProviderAnalysis
      */
     public function __construct(string $name, int $nameIndex, array $usageIndices)
     {
-        if ([] === $usageIndices || !array_is_list($usageIndices)) {
+        if (!array_is_list($usageIndices)) {
             throw new \InvalidArgumentException(
                 'Parameter "usageIndices" should be a non-empty-list.',
             );
