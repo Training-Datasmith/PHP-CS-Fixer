@@ -119,6 +119,9 @@ final class TypeDeclarationSpacesFixer extends AbstractFixer implements Configur
         );
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isAnyTokenKindsFound([...Token::getClassyTokenKinds(), \T_FN, \T_FUNCTION]);
@@ -137,6 +140,9 @@ final class TypeDeclarationSpacesFixer extends AbstractFixer implements Configur
         ]);
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     protected function applyFix(\SplFileInfo $file, Tokens $tokens): void
     {
         $functionsAnalyzer = new FunctionsAnalyzer();
@@ -166,6 +172,7 @@ final class TypeDeclarationSpacesFixer extends AbstractFixer implements Configur
      * @return array<int, string>
      *
      * @phpstan-return array<int, 'method'|'property'|'const'>
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
      */
     private function getElements(Tokens $tokens): array
     {
@@ -191,6 +198,9 @@ final class TypeDeclarationSpacesFixer extends AbstractFixer implements Configur
         return $elements;
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function ensureSingleSpaceAtFunctionArgumentTypehint(FunctionsAnalyzer $functionsAnalyzer, Tokens $tokens, int $index): void
     {
         foreach (array_reverse($functionsAnalyzer->getFunctionArguments($tokens, $index)) as $argumentInfo) {
@@ -204,6 +214,9 @@ final class TypeDeclarationSpacesFixer extends AbstractFixer implements Configur
         }
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function ensureSingleSpaceAtPropertyTypehint(Tokens $tokens, int $index): void
     {
         $propertyIndex = $index;
@@ -221,6 +234,9 @@ final class TypeDeclarationSpacesFixer extends AbstractFixer implements Configur
         $tokens->ensureWhitespaceAtIndex($propertyType->getEndIndex() + 1, 0, ' ');
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function ensureSingleSpaceAtConstantTypehint(Tokens $tokens, int $index): void
     {
         $constIndex = $index;
@@ -245,6 +261,9 @@ final class TypeDeclarationSpacesFixer extends AbstractFixer implements Configur
         $tokens->ensureWhitespaceAtIndex($typeEndIndex + 1, 0, ' ');
     }
 
+    /**
+     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
+     */
     private function collectTypeAnalysis(Tokens $tokens, int $startIndex, int $endIndex): ?TypeAnalysis
     {
         $type = '';
@@ -252,10 +271,12 @@ final class TypeDeclarationSpacesFixer extends AbstractFixer implements Configur
         $typeEndIndex = $typeStartIndex;
 
         for ($i = $typeStartIndex; $i < $endIndex; ++$i) {
-            if ($tokens[$i]->isWhitespace() || $tokens[$i]->isComment()) {
+            if ($tokens[$i]->isWhitespace()) {
                 continue;
             }
-
+            if ($tokens[$i]->isComment()) {
+                continue;
+            }
             $type .= $tokens[$i]->getContent();
             $typeEndIndex = $i;
         }

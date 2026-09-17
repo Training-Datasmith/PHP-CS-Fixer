@@ -76,9 +76,6 @@ final class NoSpacesInsideParenthesisFixer extends AbstractProxyFixer implements
         return array_keys($this->proxyFixers);
     }
 
-    /**
-     * @param \PhpCsFixer\Tokenizer\Tokens<\PhpCsFixer\Tokenizer\Token> $tokens
-     */
     public function isCandidate(Tokens $tokens): bool
     {
         return $tokens->isTokenKindFound('(');
